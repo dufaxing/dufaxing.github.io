@@ -1,12 +1,12 @@
 # About this Cool Concise Jekyll Blog Theme 🤘🤘🤘
 
-[![GitHub stars](https://img.shields.io/github/stars/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/Gaohaoyang/gaohaoyang.github.io/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/Gaohaoyang/gaohaoyang.github.io/network)
-[![GitHub issues](https://img.shields.io/github/issues/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/Gaohaoyang/gaohaoyang.github.io/issues)
-[![GitHub release](https://img.shields.io/github/release/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/Gaohaoyang/gaohaoyang.github.io/releases)
+[![GitHub stars](https://img.shields.io/github/stars/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/dufaxing/dufaxing.github.io/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/dufaxing/dufaxing.github.io/network)
+[![GitHub issues](https://img.shields.io/github/issues/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/dufaxing/dufaxing.github.io/issues)
+[![GitHub release](https://img.shields.io/github/release/Gaohaoyang/gaohaoyang.github.io.svg)](https://github.com/dufaxing/dufaxing.github.io/releases)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Gaohaoyang/gaohaoyang.github.io/master/LICENSE)
 
-**[中文版 Chinese README 请点击这里 🇨🇳](https://github.com/Gaohaoyang/gaohaoyang.github.io/blob/master/README-zh-cn.md)**
+**[中文版 Chinese README 请点击这里 🇨🇳](https://github.com/dufaxing/dufaxing.github.io/blob/master/README-zh-cn.md)**
 
 With the escalation of jekyll version, but I also want to reconstruct my older blog theme, so I did reconstruction and added some features recently. My new blog theme will still be stored in this repository. I will also use this theme in the future. Now I have done basically, then I will focus on issues that users opend to make theme better.
 
@@ -353,13 +353,13 @@ Thanks these friends!!!
 
 ### 2017.2.28
 
-- `[^]` fix smoothScroll bug in Tencent webview like wechat and qq.  [#22](https://github.com/Gaohaoyang/gaohaoyang.github.io/issues/22), [#48](https://github.com/Gaohaoyang/gaohaoyang.github.io/issues/48)
+- `[^]` fix smoothScroll bug in Tencent webview like wechat and qq.  [#22](https://github.com/dufaxing/dufaxing.github.io/issues/22), [#48](https://github.com/dufaxing/dufaxing.github.io/issues/48)
 
 ### 2016.6.20
 
 * `[+]` Add next post and previous post link in post page.
 * `[^]` Change the sort of font-family to avoid full-width half-width characters mistake.
-* `[^]` Fix bug in tags cloud when division by zero. [#26](https://github.com/Gaohaoyang/gaohaoyang.github.io/issues/26), [#28](https://github.com/Gaohaoyang/gaohaoyang.github.io/issues/28), [#30](https://github.com/Gaohaoyang/gaohaoyang.github.io/issues/30)
+* `[^]` Fix bug in tags cloud when division by zero. [#26](https://github.com/dufaxing/dufaxing.github.io/issues/26), [#28](https://github.com/dufaxing/dufaxing.github.io/issues/28), [#30](https://github.com/dufaxing/dufaxing.github.io/issues/30)
 
 ### 2016.5.11 v2.0.1
 
@@ -393,4 +393,4 @@ About my old blog theme, I won't maintain any more. And I put the code at  [Gaoh
 
 ## License
 
-[MIT License](https://github.com/Gaohaoyang/gaohaoyang.github.io/blob/master/LICENSE.md)
+[MIT License](https://github.com/dufaxing/dufaxing.github.io/blob/master/LICENSE.md)
