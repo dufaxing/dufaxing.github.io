@@ -13,13 +13,13 @@ mathjax: true
 
 >Source Insight4.0环境下，配置注释宏，实现"Ctrl + /"快速注释代码。
 
-### 1:
+### step1:
 <br>打开source insight文件夹，utils.em文件
 ![](http://chuantu.biz/t6/57/1505961964x2890171582.png)
 
 ---
 
-### 2:
+### step2:
 <br>在utils.em中添加代码
 
 ```
@@ -61,7 +61,7 @@ macro MultiLineComment()
 
 ---
 
-### 3:
+### step3:
 **Options->KeyAssignments中你就可以看到这个宏了，宏的名字是MultiLineComments**
 ![](http://chuantu.biz/t6/57/1505962833x2890174154.png)
 
