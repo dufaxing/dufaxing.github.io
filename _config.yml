@@ -7,7 +7,7 @@
 
 # Site settings
 title: dufaxing
-brief-intro: Front-end Dev Engineer
+brief-intro: learn
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://dufaxing.github.io" # the base hostname & protocol for your site
 
