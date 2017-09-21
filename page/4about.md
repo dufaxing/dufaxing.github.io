@@ -11,14 +11,10 @@ type: page
 
 ## 关于我
 
-<iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
-
 ### A man who eating hot pot and singing songs
 
-* 
-* 
-* 
-* 
+<iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
+
 * 
 * 
 
