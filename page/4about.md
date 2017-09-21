@@ -30,9 +30,6 @@ type: page
 * email：dufaxing@qq.com
 * [Weibo](http://weibo.com/3829633687)
 * [知乎](https://www.zhihu.com/people/hyicl)
-#* [Facebook](https://www.facebook.com/gaohaoyang.water)
-#* [Twitter](https://twitter.com/gaohaoyang126)
-#* [豆瓣](https://www.douban.com/people/42525035/)
 * [网易云音乐@千克米每平方秒](http://music.163.com/)
 
 ## 关于本站
