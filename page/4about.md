@@ -11,7 +11,7 @@ type: page
 
 ## 关于我
 
-<iframe src="http://ww1.sinaimg.cn/mw690/e4439297gw1ek1gfzwu0qj20d40b0gmd.jpg" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder="0"></iframe>
+<iframe src="http://ww1.sinaimg.cn/mw690/e4439297gw1ek1gfzwu0qj20d40b0gmd.jpg" style="border: 0;height: 396px;width: 472px;overflow: hidden;" frameBorder="0"></iframe>
 
 
 
