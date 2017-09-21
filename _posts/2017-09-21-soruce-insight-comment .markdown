@@ -1,22 +1,18 @@
 ---
-title: "Source Insight 配置注释宏"
 layout: post
-date: 2017-09-21 10:00
-image: /assets/images/markdown.jpg
-headerImage: false
-tag:
-- Source Insight
-- tool
-category: blog
-author: dufaxing
-description: Source Insight4.0环境下，配置注释宏，实现‘Ctrl + /’快速注释代码
-# jemoji: '<img class="emoji" title=":ramen:" alt=":ramen:" src="https://assets.github.com/images/icons/emoji/unicode/1f35c.png" height="20" width="20" align="absmiddle">'
+title:  "Source Insight 配置注释宏"
+date:   2017-09-21 15:14:54
+categories: 工具 软件
+tags: 工具 软件
+excerpt: 
+mathjax: true
+---
 
 ---
 
 # 摘要
 
-[TOC]
+
 
 >Source Insight4.0环境下，配置注释宏，实现"Ctrl + /"快速注释代码。
 
