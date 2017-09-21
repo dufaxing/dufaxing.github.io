@@ -13,9 +13,7 @@ type: page
 
 <iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
 
-
-
-学习是一个非常愉快的过程。共同加油！
+### A man who eating hot pot and singing songs
 
 * 
 * 
