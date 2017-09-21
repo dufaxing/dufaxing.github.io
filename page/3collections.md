@@ -11,19 +11,19 @@ type: page
 
 ## 工具
 
-* [box-shadow generator](http://www.cssmatic.com/box-shadow)
+* [git](http://https://pan.baidu.com/s/1jIl9xAI)
 
-    生成 box-shadow 的工具。
+    git工具。
 
-* [gradient-generator](http://www.cssmatic.com/gradient-generator)
+* [QT](https://pan.baidu.com/s/1i5wuEw9)
 
-    渐变生成器。
+    QT。
 
-* [Ultimate CSS Gradient Generator](http://www.colorzilla.com/gradient-editor/)
+* [Altium Designer17](http://pan.baidu.com/s/1gfktF6z)
 
-    也是渐变生成器
+    AD17
 
-* [CSS Generators -CSSREFLEX](http://www.cssreflex.com/css-generators/)
+* [VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC)
 
     CSS3 生成器
 
@@ -31,19 +31,21 @@ type: page
 
     用于压缩 png 或 jpg 的在线工具
 
-* [图床 https://sm.ms/](https://sm.ms/)
+* [processon](https://www.processon.com/)
 
-    有 API 可用。
+    processon在线制作流程图
 
 * [新浪微博图床 Chrome扩展](https://github.com/Suxiaogang/WeiboPicBed)
 
 * [Unix 时间戳 Unix timestamp](http://tool.chinaz.com/Tools/unixtime.aspx)
 
-- [在线正则表达式匹配](https://regex101.com/)
-    - 这个功能更强大一点，能清楚的区分出贪婪和懒惰正则。
-- [http://regexr.com/](http://regexr.com/)
-- [google fonts](https://fonts.google.com/)
-  - [Google Fonts 加速代理](https://fengmk2.com/blog/2016/google-fonts-mirror)
+- [博客园](http://www.cnblogs.com/)
+    - 博客园
+- [知网](http://www.cnki.net/)
+
+- [维普网](http://www.cqvip.com/)
+
+- [http://www.51cto.com/](http://www.51cto.com/)
 
 ## 编程语言
 
