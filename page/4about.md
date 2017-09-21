@@ -26,7 +26,7 @@ type: page
 
 ## 联系我
 
-* GitHub：[Gaohaoyang](https://github.com/dufaxing)
+* GitHub：[dufaxing](https://github.com/dufaxing)
 * email：dufaxing@qq.com
 * [Weibo](http://weibo.com/3829633687)
 * [知乎](https://www.zhihu.com/people/hyicl)
