@@ -15,7 +15,7 @@ mathjax: true
 
 ### step1:
 <br>打开source insight文件夹，utils.em文件
-![](http://chuantu.biz/t6/57/1505961964x2890171582.png)
+![](http://wx3.sinaimg.cn/mw690/e4439297gy1fjri9r48hnj20rh0e9jsg.jpg)
 
 ---
 
@@ -57,12 +57,12 @@ macro MultiLineComment()
 ```
 
 
-![](http://chuantu.biz/t6/57/1505963258x2890191691.png)
+![](http://wx4.sinaimg.cn/mw690/e4439297gy1fjri9v1p3kj206a07eq2w.jpg)
 
 ---
 
 ### step3:
 **Options->KeyAssignments中你就可以看到这个宏了，宏的名字是MultiLineComments**
-![](http://chuantu.biz/t6/57/1505962833x2890174154.png)
+![](http://wx2.sinaimg.cn/mw690/e4439297gy1fjri9wkhjzj20fy0epq47.jpg)
 
 ---
