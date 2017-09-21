@@ -11,13 +11,16 @@ type: page
 
 ## 工具
 
-* [git](http://https://pan.baidu.com/s/1jIl9xAI)
+* [git](https://pan.baidu.com/s/1jIl9xAI)
 
-    git工具。
+    git工具
+* [GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)
 
+	git桌面
+	
 * [QT](https://pan.baidu.com/s/1i5wuEw9)
 
-    QT。
+    QT
 
 * [Altium Designer17](http://pan.baidu.com/s/1gfktF6z)
 
