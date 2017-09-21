@@ -43,7 +43,7 @@ type: page
 * [Unix 时间戳 Unix timestamp](http://tool.chinaz.com/Tools/unixtime.aspx)
 
 - [博客园](http://www.cnblogs.com/)
-    - 博客园
+  
 - [知网](http://www.cnki.net/)
 
 - [维普网](http://www.cqvip.com/)
