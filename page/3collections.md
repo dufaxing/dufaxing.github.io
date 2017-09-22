@@ -12,7 +12,7 @@ type: page
 ## 工具
 
 * [git](https://pan.baidu.com/s/1jIl9xAI)
-    >git工具
+    ** git工具
 	
 * [GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)
 	>git桌面	
