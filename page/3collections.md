@@ -11,15 +11,11 @@ type: page
 
 ## 工具
 
->[git](https://pan.baidu.com/s/1jIl9xAI)
+>[git](https://pan.baidu.com/s/1jIl9xAI) (git工具)
 
-    * git工具
+>[GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9) (git桌面)
 	
-* [GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)
-	>git桌面	
-	
-* [QT](https://pan.baidu.com/s/1i5wuEw9)
-    >QT，C++语言可以运行在Linux系统也可运行在Windows系统，可编写GUI程序。
+>[QT](https://pan.baidu.com/s/1i5wuEw9) (可以运行在Linux系统也可运行在Windows系统,可C++编写GUI程序)
 	
 * [Altium Designer17](http://pan.baidu.com/s/1gfktF6z)
     >AD17
