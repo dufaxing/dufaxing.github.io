@@ -31,7 +31,7 @@ type: page
 
 >[git](https://pan.baidu.com/s/1jIl9xAI)	*(git工具)*
 
->[GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)	*(git桌面)*
+>[GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)
 	
 >[QT](https://pan.baidu.com/s/1i5wuEw9)	*(可以运行在Linux系统也可运行在Windows系统,可C++编写GUI程序)*
 
