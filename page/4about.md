@@ -25,6 +25,7 @@ type: page
 * [Weibo](http://weibo.com/3829633687)
 * [知乎](https://www.zhihu.com/people/hyicl)
 * [网易云音乐@千克米每平方秒](http://music.163.com/)
+* [bilibili](https://space.bilibili.com/2517215/#!/)
 
 ## 关于本站
 
