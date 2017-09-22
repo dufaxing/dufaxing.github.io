@@ -34,8 +34,10 @@ type: page
 >[GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)	*(git桌面)*
 	
 >[QT](https://pan.baidu.com/s/1i5wuEw9)	*(可以运行在Linux系统也可运行在Windows系统,可C++编写GUI程序)*
+
+>[IAR8.0](http://pan.baidu.com/s/1i5oZpY1)
 	
->[Altium Designer17](http://pan.baidu.com/s/1gfktF6z)	*(PCB与原理图)*
+>[Altium Designer17](http://pan.baidu.com/s/1gfktF6z)
 	
 >[VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC)
 	
