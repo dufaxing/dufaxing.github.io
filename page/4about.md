@@ -34,8 +34,10 @@ type: page
 ~欢迎使用~
 
 
+## 我的朋友
 
 
+[zlujing](http://zlujing.com/)
 
 
 
