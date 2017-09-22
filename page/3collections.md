@@ -12,29 +12,29 @@ type: page
 ## 工具
 
 * [git](https://pan.baidu.com/s/1jIl9xAI)
-    git工具
+    **git工具
 	
 * [GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)
-	git桌面	
+	**git桌面	
 	
 * [QT](https://pan.baidu.com/s/1i5wuEw9)
-    QT，C++语言可以运行在Linux系统也可运行在Windows系统，可编写GUI程序。
+    **QT，C++语言可以运行在Linux系统也可运行在Windows系统，可编写GUI程序。
 	
 * [Altium Designer17](http://pan.baidu.com/s/1gfktF6z)
-    AD17
+    **AD17
 	
 * [VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC)
-    VS2013
+    **VS2013
 	
 * [STVD](http://pan.baidu.com/s/1i5aMn2X)
-	ST8编译器，*除了安装STVD之外，还要安装cosmic*否则编译不过。
+	**ST8编译器，*除了安装STVD之外，还要安装cosmic*否则编译不过。
 	
 * [新浪微博图床 Chrome扩展](https://github.com/Suxiaogang/WeiboPicBed)
 
 * [Unix 时间戳 Unix timestamp](http://tool.chinaz.com/Tools/unixtime.aspx)
 
 - [tiny png](https://tinypng.com/)
-    用于压缩 png 或 jpg 的在线工具
+    **用于压缩 png 或 jpg 的在线工具
 
 - [processon](https://www.processon.com/)
     processon在线制作流程图
