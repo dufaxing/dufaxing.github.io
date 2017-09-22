@@ -13,7 +13,7 @@ type: page
 
 - [百度](https://www.baidu.com/)
 
-- [processon](https://www.processon.com/)	*(在线制作流程图)*
+- [processon](https://www.processon.com/)	`(在线制作流程图)`
 
 - [博客园](http://www.cnblogs.com/)
   
