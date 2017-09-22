@@ -49,7 +49,7 @@ type: page
 
 ### C语言
 
-* [NULL](http://www.baidu.com)
+* [C语言中的不定参数](http://kmplayer.iteye.com/blog/842715)
 
 
 ### C++
