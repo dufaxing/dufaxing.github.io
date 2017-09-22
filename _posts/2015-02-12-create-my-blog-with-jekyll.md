@@ -4,13 +4,12 @@ title:  "Jekyll 搭建静态博客"
 date:   2015-02-15 22:14:54
 categories: jekyll
 tags: jekyll RubyGems
+excerpt: 一直以来都想搭建一个自己的博客。在知乎上看到一些相关的内容，于是选择了在github上用jekyll搭建博客。。
+mathjax: true
 ---
 
 * content
 {:toc}
-
-一直以来都想搭建一个自己的博客。在知乎上看到一些相关的内容，于是选择了在github上用jekyll搭建博客。
-
 
 
 
