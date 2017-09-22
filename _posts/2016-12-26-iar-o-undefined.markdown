@@ -20,11 +20,13 @@ mathjax: true
 
 ### IAR编译“长度为变量的数组”时报错  
 * 现象
+
 ![](http://wx1.sinaimg.cn/mw690/e4439297gy1fjsb1kz955j20f900ugle.jpg)
 
 ![](http://wx4.sinaimg.cn/mw690/e4439297gy1fjsb1lhv3dj20fb01st8h.jpg)
 
 * 原因
+
 C99支持数组长度下标为变量，C89不支持，在IAR设置Options->C/C++ Complier下的Language中，选择C99并勾选Allow VLA，即允许变量长度数组Variable length arrays，这样程序中的数组可以使用变量做下标了。
 注意：
 	* VLA只表示数组声明时长度可以是变量，一旦声明完毕数组长度不可变，并不能动态伸缩；
@@ -33,6 +35,7 @@ C99支持数组长度下标为变量，C89不支持，在IAR设置Options->C/C++
 
 
 * 解决办法
+
 ![](http://wx2.sinaimg.cn/mw690/e4439297gy1fjsb1lxdgqj20g80dxaaq.jpg)
 
 编译通过
