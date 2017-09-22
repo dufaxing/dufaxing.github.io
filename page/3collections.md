@@ -38,6 +38,8 @@ type: page
 >[IAR8.0](http://pan.baidu.com/s/1i5oZpY1)
 	
 >[Altium Designer17](http://pan.baidu.com/s/1gfktF6z)
+
+>[Source Insight 4.0](http://pan.baidu.com/s/1miaaawS)
 	
 >[VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC)
 	
