@@ -21,9 +21,9 @@ type: page
 
 - [51cto](http://www.51cto.com/)
 
-- [tiny png](https://tinypng.com/)	`用于压缩 png 或 jpg 的在线工具`
+- [tiny png](https://tinypng.com/)	*(用于压缩 png 或 jpg 的在线工具)*
 
-- [processon](https://www.processon.com/)	`在线制作流程图`
+- [processon](https://www.processon.com/)	*(在线制作流程图)*
 
 ## 工具
 
