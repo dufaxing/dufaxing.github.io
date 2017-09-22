@@ -25,6 +25,8 @@ type: page
 
 - [processon](https://www.processon.com/)	*(在线制作流程图)*
 
+---
+
 ## 工具
 
 >[git](https://pan.baidu.com/s/1jIl9xAI)	*(git工具)*
@@ -41,6 +43,7 @@ type: page
 	
 >[截图工具](http://pan.baidu.com/s/1i4OAOM5)
 
+---
 
 ## 编程语言 & 语法
 
@@ -57,6 +60,7 @@ type: page
 
 * [Markdown，你只需要掌握这几个](http://www.cnblogs.com/crazyant007/p/4220066.html)
 
+---
 
 ## 编辑器
 
@@ -91,11 +95,7 @@ type: page
 
 ### notepad++
 
-常用的主题：
-
-UI Theme: One Dark
-
-Syntax Theme: Atom Dark or One Dark
+---
 
 ## Blog相关
 
@@ -108,6 +108,7 @@ Syntax Theme: Atom Dark or One Dark
 
 - [COLORFUL xiaoa](http://www.xiaoa.name/)
 
+---
 
 ## Comments
 
