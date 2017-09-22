@@ -9,32 +9,11 @@ type: page
 * content
 {:toc}
 
-## 工具
+## 常用网址
 
->[git](https://pan.baidu.com/s/1jIl9xAI) (git工具)
+- [百度](https://www.baidu.com/)
 
->[GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9) (git桌面)
-	
->[QT](https://pan.baidu.com/s/1i5wuEw9) (可以运行在Linux系统也可运行在Windows系统,可C++编写GUI程序)
-	
-* [Altium Designer17](http://pan.baidu.com/s/1gfktF6z)
-    >AD17
-	
-* [VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC)
-    >VS2013
-	
-* [STVD](http://pan.baidu.com/s/1i5aMn2X)
-	>ST8编译器，**除了安装STVD之外，还要安装cosmic**否则编译不过。
-	
-* [新浪微博图床 Chrome扩展](https://github.com/Suxiaogang/WeiboPicBed)
-
-* [Unix 时间戳 Unix timestamp](http://tool.chinaz.com/Tools/unixtime.aspx)
-
-- [tiny png](https://tinypng.com/)
-    >用于压缩 png 或 jpg 的在线工具
-
-- [processon](https://www.processon.com/)
-    >processon在线制作流程图
+- [processon](https://www.processon.com/) (*在线制作流程图*)
 
 - [博客园](http://www.cnblogs.com/)
   
@@ -42,7 +21,26 @@ type: page
 
 - [维普网](http://www.cqvip.com/)
 
-- [http://www.51cto.com/](http://www.51cto.com/)
+- [51cto](http://www.51cto.com/)
+
+- [tiny png](https://tinypng.com/) (用于压缩 png 或 jpg 的在线工具)
+
+## 工具
+
+>[git](https://pan.baidu.com/s/1jIl9xAI)	*git工具*
+
+>[GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9)	*git桌面*
+	
+>[QT](https://pan.baidu.com/s/1i5wuEw9) (可以运行在Linux系统也可运行在Windows系统,可C++编写GUI程序)
+	
+>[Altium Designer17](http://pan.baidu.com/s/1gfktF6z) (PCB与原理图)
+	
+>[VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC)
+	
+>[STVD](http://pan.baidu.com/s/1i5aMn2X) (ST8编译器，**除了安装STVD之外，还要安装cosmic**否则编译不过。)
+	
+
+
 
 ## 编程语言
 
