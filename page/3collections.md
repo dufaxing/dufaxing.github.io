@@ -97,12 +97,14 @@ UI Theme: One Dark
 
 Syntax Theme: Atom Dark or One Dark
 
-## jekyll blog 主题
+## Blog相关
+
+### jekyll blog 主题
 
 * [jekyll themes](http://jekyllthemes.org/)
 
 
-## Other blogs
+### Other blogs
 
 - [COLORFUL xiaoa](http://www.xiaoa.name/)
 
