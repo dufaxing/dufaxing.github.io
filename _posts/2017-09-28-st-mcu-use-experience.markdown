@@ -24,9 +24,7 @@ mathjax: true
 某个引脚若要配置推挽输出，DDR寄存器置1，CR1寄存器置1，CR2寄存器置0.
 
 ```
-void   PORT_Init(void)
-{
-
+void   PORT_Init(void) {
 	GPIOD->ODR=0x00;//0000 0000
 	GPIOD->DDR=0x20;//0010 0000
 	GPIOD->DDR|=0x04;//0010 0100
@@ -37,10 +35,24 @@ void   PORT_Init(void)
 ```
 ---
 
-### 标题2:
+### 读取内存地址的值:
 
+```
+unsigned char read_port_PB4() {
+	unsigned char p;
+	p = *(unsigned char *)(0x5006);//PB_IDR
+	unsigned GPIO_PB4 = (p & 0x10)>>4;
+	return GPIO_PB4;
+}
 
+```
+在定义p时，定义为unsigned char 型，我一开始定义为`unsigned char p;p = *(unsigned char *)(0x5006);//PB_IDR`会读取到下一个内存地址的值。
 
+读取内存地址的值，可以用下面的方法来读取
+```
+int *p=(int *)0x123456;//addr
+int result=*p;
+```
 
 ---
 
