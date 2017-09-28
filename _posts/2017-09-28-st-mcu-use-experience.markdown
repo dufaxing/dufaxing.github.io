@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "一款STM8的使用记录"
-date:   2016-12-26 00:00:00
+date:   2017-09-28 00:00:00
 categories: 嵌入式
 tags: STM
 excerpt: 近几天工作中使用到了一款STM8的芯片，工程中没有使用库函数，甚至没有读取引脚电平的函数。
