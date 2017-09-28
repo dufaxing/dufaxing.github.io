@@ -68,7 +68,7 @@ type: page
 
 ## 编辑器
 
-### Atom 中常用插件
+### Atom
 
 
 ### source insight
