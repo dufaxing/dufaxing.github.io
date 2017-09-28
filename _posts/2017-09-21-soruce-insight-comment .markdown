@@ -2,8 +2,8 @@
 layout: post
 title:  "Source Insight 配置注释宏"
 date:   2017-09-21 15:14:54
-categories: 工具 软件
-tags: 工具 软件
+categories: 工具
+tags: 工具
 excerpt: Source Insight4.0环境下，配置注释宏，实现"Ctrl + /"快速注释代码。
 mathjax: true
 ---
