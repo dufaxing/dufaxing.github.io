@@ -80,10 +80,10 @@ type: page
 ## Blog相关
 
 ### jekyll blog 主题
-
-* [搭建教程](http://www.cnfeat.com/blog/2014/05/10/how-to-build-a-blog/)
 * [jekyll themes](http://jekyllthemes.org/)
 
+### 利用GitHub搭建博客
+* [搭建教程](http://www.cnfeat.com/blog/2014/05/10/how-to-build-a-blog/)
 
 ---
 
