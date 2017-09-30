@@ -47,6 +47,8 @@ type: page
 	
 >[截图工具](http://pan.baidu.com/s/1i4OAOM5)
 
+>[迅雷破解版](http://pan.baidu.com/s/1c2jKoqW)
+
 ---
 
 ## 编程语言 & 语法
