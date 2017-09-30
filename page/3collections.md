@@ -70,32 +70,8 @@ type: page
 
 ## 编辑器
 
-### Atom 中常用插件
+### Atom
 
-* auto-beautify
-* autoprefixer
-* block-comment
-* color-picker
-* docblockr
-* emmet
-* jquery-snippets
-* jshint
-* linter
-* linter-csslint
-* linter-htmlhint
-* minimap
-* minimap-git-diff
-* minimap-codeglance 滑过 minimap 显示代码
-* minimap-find-and-replace 在 minimap 中显示 `ctrl+D` 选中的内容
-* open-in-browser
-* uglify
-* active-power-mode
-* atom-terminal-panel
-* linter-scss-linter
-* atom-ternjs
-* file-icons 将图标变成彩色
-* autocomplete-paths 自动补充路径
-* symbols-tree-view A symbol treeview like taglist
 
 ### source insight
 
@@ -106,13 +82,10 @@ type: page
 ## Blog相关
 
 ### jekyll blog 主题
-
 * [jekyll themes](http://jekyllthemes.org/)
 
-
-### Other blogs
-
-- [COLORFUL xiaoa](http://www.xiaoa.name/)
+### 利用GitHub搭建博客
+* [搭建教程](http://www.cnfeat.com/blog/2014/05/10/how-to-build-a-blog/)
 
 ---
 
