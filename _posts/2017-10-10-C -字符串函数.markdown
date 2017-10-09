@@ -30,15 +30,10 @@ strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'
 > strcat(s1, s2);  <br/>
   连接字符串 s2 到字符串 s1 的末尾。
   
-- 原型
-extern char *strcat(char *dest, const char *src);  <br/>
-- 头文件
-在C中，函数原型存在 `<string.h>`头文件中。
-在C++中，则存在于`<cstring>`头文件中。  <br/>
-- 功能
-把src所指字符串添加到dest结尾处(覆盖dest结尾处的'\0')。  <br/>
-- 说明
-src和dest所指内存区域不可以重叠且dest必须有足够的空间来容纳src的字符串。  <br/>
+- 原型：extern char *strcat(char *dest, const char *src);  <br/>
+- 头文件：在C中，函数原型存在 `<string.h>`头文件中。在C++中，则存在于`<cstring>`头文件中。  <br/>
+- 功能：把src所指字符串添加到dest结尾处(覆盖dest结尾处的'\0')。  <br/>
+- 说明：src和dest所指内存区域不可以重叠且dest必须有足够的空间来容纳src的字符串。  <br/>
 返回指向dest的指针。
 
 
