@@ -13,6 +13,8 @@ mathjax: true
 
 
 ### strcpy
+> strcpy(s1, s2);  <br/>
+  复制字符串 s2 到字符串 s1。
 
 strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'\0'结束符的字符串复制到以dest开始的地址空间，返回值的类型为char*。  <br/>
 - 原型声明：char *strcpy(char* dest, const char *src);  <br/>
