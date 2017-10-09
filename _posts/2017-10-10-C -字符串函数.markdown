@@ -68,3 +68,99 @@ strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'
 
 ---
 
+### strchr
+> strchr(s1, ch);
+  返回一个指针，指向字符串 s1 中字符 ch 的第一次出现的位置。
+  
+- 原型：`char *strchr(const char* _Str,char _Val)`  <br/>
+- 头文件：`#include <string.h>`  <br/>
+- 功能：查找字符串_Str中首次出现字符_Val的位置  <br/>
+- 说明：返回首次出现_Val的位置的指针，返回的地址是被查找字符串指针开始的第一个与Val相同字符的指针，如果Str中不存在Val则返回NULL。  <br/>
+- 返回值：成功则返回要查找字符第一次出现的位置，失败返回NULL  <br/>
+
+**函数实现**
+```
+char* strchr(char *s, char c)
+{
+    while(*s != '\0' && *s != c)
+    {
+        ++s;
+    }
+    return *s==c ? s : NULL;
+}
+```
+
+---
+
+### strstr
+> strstr(s1, s2);
+  函数用于判断字符串s2是否是s1的子串。如果是，则该函数返回s2在s1中首次出现的地址；否则，返回NULL。
+  
+- 原型：`extern char *strstr(char *str1, const char *str2);`  <br/>
+- 头文件：`string.h`  <br/>
+
+**函数实现**  <br/>
+*Copyright 1986 - 1999 IAR Systems. All rights reserved*
+```
+char *strstr(constchar*s1,constchar*s2)
+{
+    int n;
+    if(*s2)
+    {
+        while(*s1)
+        {
+            for(n=0;*(s1+n)==*(s2+n);n++)
+            {
+                if(!*(s2+n+1))
+                    return(char*)s1;
+            }
+            s1++;
+        }
+        return NULL;
+    }
+    else
+        return (char*)s1;
+}
+```
+*GCC-4.8.0*
+```
+char *strstr(const char *s1,const char *s2)
+{
+    const char *p=s1;
+    const size_tlen=strlen(s2);
+    for(;(p=strchr(p,*s2))!=0;p++)
+    {
+        if(strncmp(p,s2,size_tlen)==0)
+            return (char*)p;
+    }
+    return(0);
+}
+```
+*常用经典实现方法*
+```
+char *strstr(const char *str1, const char *str2)
+{
+    char *cp = (char*)str1;
+    char *s1, *s2;
+ 
+    if (!*str2)
+        return((char *)str1);
+ 
+    while (*cp)
+    {
+        s1 = cp;
+        s2 = (char *)str2;
+ 
+        while (*s1 && *s2 && !(*s1 - *s2))
+            s1++, s2++;
+ 
+        if (!*s2)
+            return(cp);
+ 
+        cp++;
+    }
+    return(NULL);
+}
+```
+
+---
