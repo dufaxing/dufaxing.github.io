@@ -17,7 +17,7 @@ mathjax: true
   复制字符串 s2 到字符串 s1。
 
 strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'\0'结束符的字符串复制到以dest开始的地址空间，返回值的类型为char*。  <br/>
-- 原型声明：char *strcpy(char* dest, const char *src);  <br/>
+- 原型声明：`char *strcpy(char* dest, const char *src); ` <br/>
 - 头文件：`#include <string.h>` 和 `#include <stdio.h> ` <br/>
 - 功能：把从src地址开始且含有NULL结束符的字符串复制到以dest开始的地址空间  <br/>
 - 说明：src和dest所指内存区域不可以重叠且dest必须有足够的空间来容纳src的字符串。  <br/>
@@ -30,7 +30,7 @@ strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'
 > strcat(s1, s2);  <br/>
   连接字符串 s2 到字符串 s1 的末尾。
   
-- 原型：extern char *strcat(char *dest, const char *src);  <br/>
+- 原型：`extern char *strcat(char *dest, const char *src); ` <br/>
 - 头文件：在C中，函数原型存在 `<string.h>`头文件中。在C++中，则存在于`<cstring>`头文件中。  <br/>
 - 功能：把src所指字符串添加到dest结尾处(覆盖dest结尾处的'\0')。  <br/>
 - 说明：src和dest所指内存区域不可以重叠且dest必须有足够的空间来容纳src的字符串。  <br/>
@@ -39,7 +39,31 @@ strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'
 
 ---
 
-### 标题3:
+### strlen
+> strlen(s1);
+  返回字符串 s1 的长度(不包括'\0'在内)。
+  
+- 原型：`extern unsigned int strlen(char *s);`  <br/>
+- 头文件：`<string.h>`  <br/>
+- 功能：计算给定字符串的（unsigned int型）长度，不包括'\0'在内.  <br/>
+- 说明：返回s的长度，不包括结束符NULL。  <br/>
+区别sizeof：
+> strlen(char*）函数求的是字符串的实际长度，它求得方法是从开始到遇到第一个'\0'，如果你只定义没有给它赋初值，这个结果是不定的，它会从aa首地址一直找下去，直到遇到'\0'停止。
 
+> 而sizeof（）返回的是变量声明后所占的内存数，不是实际长度，此外sizeof不是函数，仅仅是一个取字节运算符，strlen是函数。
 
 ---
+
+### strcmp
+> strcmp(s1, s2);
+  如果 s1 和 s2 是相同的，则返回 0；如果 s1<s2 则返回小于 0；如果 s1>s2 则返回大于 0。
+  
+- 原型：`extern int strcmp(const char *s1,const char *s2);`  <br/>
+- 头文件：`string.h`  <br/>
+- 功能：C/C++函数，比较两个字符串设这两个字符串为str1，str2，strcmp(str1, str2);  <br/>
+-- 若str1==str2，则返回零；
+-- 若str1<str2，则返回负数；
+-- 若str1>str2，则返回正数。
+
+---
+
