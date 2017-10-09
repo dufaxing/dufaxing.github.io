@@ -1,0 +1,37 @@
+---
+layout: post
+title:  "C 字符串库函数"
+date:   2017-10-10 00:00:00
+categories: 嵌入式
+tags: C语言
+excerpt: C 中有大量操作字符串的函数
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+### strcpy
+
+strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'\0'结束符的字符串复制到以dest开始的地址空间，返回值的类型为char*。  <br/>
+- 原型声明：char *strcpy(char* dest, const char *src);  <br/>
+- 头文件：#include <string.h> 和 #include <stdio.h>  <br/>
+- 功能：把从src地址开始且含有NULL结束符的字符串复制到以dest开始的地址空间  <br/>
+- 说明：src和dest所指内存区域不可以重叠且dest必须有足够的空间来容纳src的字符串。  <br/>
+- 返回指向dest的指针。  <br/>
+
+
+---
+
+### 标题2:
+
+
+
+
+---
+
+### 标题3:
+
+
+---
