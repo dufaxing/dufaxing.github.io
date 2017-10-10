@@ -14,8 +14,8 @@ mathjax: true
 >Source Insight4.0环境下，配置注释宏，实现"Ctrl + /"快速注释代码。
 
 ### step1:
-<br>打开source insight文件夹，utils.em文件
-![](http://wx3.sinaimg.cn/mw690/e4439297gy1fjri9r48hnj20rh0e9jsg.jpg)
+- Project->Open Project <br/>
+- 选择Base,然后OK
 
 ---
 
@@ -64,5 +64,9 @@ macro MultiLineComment()
 ### step3:
 **Options->KeyAssignments中你就可以看到这个宏了，宏的名字是MultiLineComments**
 ![](http://wx2.sinaimg.cn/mw690/e4439297gy1fjri9wkhjzj20fy0epq47.jpg)
+
+
+### step4:
+关闭Base 工程，打开自己的工程。可以测试“Ctrl + /”注释代码，再次“Ctrl + /”取消注释。
 
 ---
