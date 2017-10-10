@@ -16,11 +16,6 @@ type: page
 
 ---
 
-## I will not change,no matter how U change.
-
- 
----
-
 ## 联系我
 
 * [GitHub：dufaxing](https://github.com/dufaxing)
@@ -31,17 +26,20 @@ type: page
 * [bilibili](https://space.bilibili.com/2517215/#!/)
 
 
-
 ## 我的朋友
-
 
 [zlujing](http://zlujing.com/)
 
 ---
 
+## I will not change,no matter how U change.
+
 <iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
 
 ---
+
+
+
 
 ## 关于本站
 
@@ -49,6 +47,3 @@ type: page
 
 ~欢迎使用~
 
-## Comments
-
-{% include comments.html %}
