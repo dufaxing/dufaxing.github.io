@@ -23,7 +23,7 @@ type: page
 
 ## 联系我
 
-* GitHub：[dufaxing](https://github.com/dufaxing)
+* [GitHub：dufaxing](https://github.com/dufaxing)
 * email：dufaxing@qq.com
 * [Weibo(基本停用)](http://weibo.com/3829633687)
 * [知乎](https://www.zhihu.com/people/hyicl)
@@ -43,8 +43,11 @@ type: page
 
 [zlujing](http://zlujing.com/)
 
+---
 
 <iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
+
+---
 
 ## Comments
 
