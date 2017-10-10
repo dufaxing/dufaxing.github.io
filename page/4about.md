@@ -24,7 +24,7 @@ type: page
 * [知乎](https://www.zhihu.com/people/hyicl)
 * [网易云音乐](http://music.163.com/#/user/home?id=114319067)
 * [bilibili](https://space.bilibili.com/2517215/#!/)
-
+* [KEEP](https://show.gotokeep.com/users/57a865f7fe9edc3e052f56a1?share_userid=57a865f7fe9edc3e052f56a1&utm_medium=Android&share_count=1&utm_source=qq){:target="_blank"}
 
 ## 我的朋友
 
