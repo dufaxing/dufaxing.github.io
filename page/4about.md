@@ -12,14 +12,12 @@ type: page
 ## 关于我
 
 
-## A man who eating hot pot and singing songs
+## A man who eating hot pot and singing songs.
 
 ---
 
-<iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
+## I will not change,no matter how U change.
 
-* 
-*
  
 ---
 
@@ -39,12 +37,14 @@ type: page
 ~欢迎使用~
 
 
+
 ## 我的朋友
 
 
 [zlujing](http://zlujing.com/)
 
 
+<iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
 
 ## Comments
 
