@@ -9,7 +9,7 @@ type: page
 * content
 {:toc}
 
-## 关于我
+# 关于我
 
 
 ## A man who eating hot pot and singing songs.
@@ -41,9 +41,10 @@ type: page
 
 
 
-## 关于本站
+# 关于本站
 
 **若您想使用这个 jekyll 博客主题，请访问：[https://github.com/dufaxing/dufaxing.github.io](https://github.com/dufaxing/dufaxing.github.io)**
 
 ~欢迎使用~
 
+**本站地址:dufaxing.com**
