@@ -13,6 +13,8 @@ type: page
 
 - [百度](https://www.baidu.com/)
 
+- [七牛云](https://portal.qiniu.com/bucket/image/resource)	*(七牛云，好用的图床工具，有10G免费空间)*
+
 - [博客园](http://www.cnblogs.com/)
   
 - [知网](http://www.cnki.net/)
