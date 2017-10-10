@@ -17,6 +17,8 @@ mathjax: true
 - Project->Open Project <br/>
 - 选择Base,然后OK
 
+![](http://owlypioka.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20171010164053.png)
+
 ---
 
 ### step2:
