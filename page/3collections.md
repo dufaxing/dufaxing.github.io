@@ -74,12 +74,11 @@ type: page
 
 ## 编辑器
 
-### Atom
+- Atom
 
+- source insight
 
-### source insight
-
-### notepad++
+- notepad++
 
 ---
 
