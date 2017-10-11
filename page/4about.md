@@ -43,7 +43,7 @@ type: page
 
 # 关于本站
 
-**若您想使用这个 jekyll 博客主题，请访问：[https://github.com/dufaxing/dufaxing.github.io](https://github.com/dufaxing/dufaxing.github.io){:target="_blank"} **
+**若您想使用这个 jekyll 博客主题，请访问：[https://github.com/dufaxing/dufaxing.github.io](https://github.com/dufaxing/dufaxing.github.io){:target="_blank"}**
 
 ~欢迎使用~
 
