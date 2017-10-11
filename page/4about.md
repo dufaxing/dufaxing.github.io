@@ -19,7 +19,7 @@ type: page
 ## 联系我
 
 * [GitHub：dufaxing](https://github.com/dufaxing){:target="_blank"}
-* email：dufaxing@qq.com
+* [email：dufaxing@qq.com]  <a href="mailto:dufaxing@qq.com">
 * [Weibo(基本停用)](http://weibo.com/3829633687){:target="_blank"}
 * [知乎](https://www.zhihu.com/people/hyicl){:target="_blank"}
 * [网易云音乐](http://music.163.com/#/user/home?id=114319067){:target="_blank"}
