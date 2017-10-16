@@ -4,7 +4,7 @@ title:  "C 字符串库函数"
 date:   2017-10-10 00:00:00
 categories: 嵌入式
 tags: C语言
-excerpt: C 中有大量操作字符串的函数
+excerpt: C 中有大量操作字符串的函数，总结归纳部分常用的函数。
 mathjax: true
 ---
 * content
