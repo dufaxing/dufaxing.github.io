@@ -64,7 +64,7 @@ type: page
 
 ### C++
 
-- [C++教程|菜鸟教程]http://www.runoob.com/cplusplus/cpp-tutorial.html{:target="_blank"}
+* [C++教程|菜鸟教程](http://www.runoob.com/cplusplus/cpp-tutorial.html){:target="_blank"}
 
 ### Markdown语法
 
