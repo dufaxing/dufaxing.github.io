@@ -164,3 +164,36 @@ char *strstr(const char *str1, const char *str2)
 ```
 
 ---
+
+
+### 6.snprintf
+
+> snprintf(s1,size,s2);
+	将字符串s2中的size个字符复制到s1中。
+	
+- 原型：`int snprintf(char *str, size_t size, const char *format, ...);`  <br/>
+- 头文件：`#include <stdio.h>`  <br/>
+- 功能：
+	- (1) 如果格式化后的字符串长度 < size，则将此字符串全部复制到str中，并给其后添加一个字符串结束符('\0')；  <br/>
+	- (2) 如果格式化后的字符串长度 >= size，则只将其中的(size-1)个字符复制到str中，并给其后添加一个字符串结束符('\0')，返回值为欲写入的字符串长度。   <br/>
+
+- 函数返回值：若成功则返回欲写入的字符串长度，若出错则返回负值。   <br/>
+- 与snprintf的返回值不同，sprintf的返回值是成功写入的字符串长度，此处需要谨慎处理！   <br/>
+
+- demo code
+
+```
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{　
+  char str[10]={0};
+  int nLen=snprintf(str,sizeof(str),"0123456789012345678");
+  printf("str=%s\n",str);
+  printf("nLen=%d\n",nLen);
+  return0;
+}
+```
+运行结果：  <br/>
+str=012345678  <br/>
+nLen=19	  <br/>
