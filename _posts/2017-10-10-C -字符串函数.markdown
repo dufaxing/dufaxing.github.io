@@ -106,21 +106,6 @@ strncat()会将dest字符串最后的'\0'覆盖掉，字符追加完成后，再
 
 ---
 
-### 3.strlen
-> strlen(s1);
-  返回字符串 s1 的长度(不包括'\0'在内)。
-  
-- 原型：`extern unsigned int strlen(char *s);`  <br/>
-- 头文件：`<string.h>`  <br/>
-- 功能：计算给定字符串的（unsigned int型）长度，不包括'\0'在内.  <br/>
-- 说明：返回s的长度，不包括结束符NULL。  <br/>
-区别sizeof：
-
-> strlen(char*）函数求的是字符串的实际长度，它求得方法是从开始到遇到第一个'\0'，如果你只定义没有给它赋初值，这个结果是不定的，它会从aa首地址一直找下去，直到遇到'\0'停止。
-
-> 而sizeof（）返回的是变量声明后所占的内存数，不是实际长度，此外sizeof不是函数，仅仅是一个取字节运算符，strlen是函数。
-
----
 
 ## sprintf & snprintf
 
@@ -162,7 +147,10 @@ int main()
 str=012345678  <br/>
 nLen=19	  <br/>
 
-### 4.strcmp
+
+---
+
+## strcmp
 > strcmp(s1, s2);
   如果 s1 和 s2 是相同的，则返回 0；如果 s1<s2 则返回小于 0；如果 s1>s2 则返回大于 0。
   
@@ -174,6 +162,23 @@ nLen=19	  <br/>
   - 若str1>str2，则返回正数。
 
 ---
+
+## strlen
+> strlen(s1);
+  返回字符串 s1 的长度(不包括'\0'在内)。
+  
+- 原型：`extern unsigned int strlen(char *s);`  <br/>
+- 头文件：`<string.h>`  <br/>
+- 功能：计算给定字符串的（unsigned int型）长度，不包括'\0'在内.  <br/>
+- 说明：返回s的长度，不包括结束符NULL。  <br/>
+区别sizeof：
+
+> strlen(char*）函数求的是字符串的实际长度，它求得方法是从开始到遇到第一个'\0'，如果你只定义没有给它赋初值，这个结果是不定的，它会从aa首地址一直找下去，直到遇到'\0'停止。
+
+> 而sizeof（）返回的是变量声明后所占的内存数，不是实际长度，此外sizeof不是函数，仅仅是一个取字节运算符，strlen是函数。
+
+
+## strchr & strstr
 
 ### strchr
 > strchr(s1, ch);
