@@ -23,8 +23,6 @@ type: page
 
 - [51cto](http://www.51cto.com/){:target="_blank"}
 
-- [菜鸟教程](http://www.runoob.com/){:target="_blank"}
-
 - [tiny png](https://tinypng.com/){:target="_blank"}	*(用于压缩 png 或 jpg 的在线工具)*
 
 - [processon](https://www.processon.com/){:target="_blank"}	*(在线制作流程图)*
@@ -61,10 +59,12 @@ type: page
 
 * [C语言中的不定参数](http://kmplayer.iteye.com/blog/842715){:target="_blank"}
 
+* [C语言教程|菜鸟教程](http://www.runoob.com/cprogramming/c-tutorial.html){:target="_blank"}
+
 
 ### C++
 
-- [NULL](https://www.baidu.com){:target="_blank"}
+- [C++教程|菜鸟教程]http://www.runoob.com/cplusplus/cpp-tutorial.html{:target="_blank"}
 
 ### Markdown语法
 
