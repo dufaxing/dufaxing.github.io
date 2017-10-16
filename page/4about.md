@@ -32,7 +32,6 @@ type: page
 
 ---
 
-## I will not change,no matter how U change.
 
 <iframe src="http://wx1.sinaimg.cn/mw690/e4439297gy1fjra3wrgmpj20hm0bkq3q.jpg" style="border: 0;height: 416px;width: 634px;overflow: hidden;" frameBorder="0"></iframe>
 
