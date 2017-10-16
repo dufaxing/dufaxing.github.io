@@ -45,7 +45,7 @@ type: page
 	
 >[VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC){:target="_blank"}
 	
->[STVD](http://pan.baidu.com/s/1i5aMn2X){:target="_blank"}	*(ST8编译器，**除了安装 STVD 之外，还要安装COSMIC**否则编译不过。)*
+>[STVD](http://pan.baidu.com/s/1i5aMn2X){:target="_blank"}	*(ST8编译器，除了安装STVD之外，还要安装COSMIC否则编译不过。)*
 	
 >[截图工具](http://pan.baidu.com/s/1i4OAOM5){:target="_blank"}
 
