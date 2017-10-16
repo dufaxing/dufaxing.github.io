@@ -150,33 +150,6 @@ nLen=19	  <br/>
 
 ---
 
-## strcmp
-> strcmp(s1, s2);
-  如果 s1 和 s2 是相同的，则返回 0；如果 s1<s2 则返回小于 0；如果 s1>s2 则返回大于 0。
-  
-- 原型：`extern int strcmp(const char *s1,const char *s2);`  <br/>
-- 头文件：`string.h`  <br/>
-- 功能：C/C++函数，比较两个字符串设这两个字符串为str1，str2，strcmp(str1, str2);  <br/>
-  - 若str1==str2，则返回零；
-  - 若str1<str2，则返回负数；
-  - 若str1>str2，则返回正数。
-
----
-
-## strlen
-> strlen(s1);
-  返回字符串 s1 的长度(不包括'\0'在内)。
-  
-- 原型：`extern unsigned int strlen(char *s);`  <br/>
-- 头文件：`<string.h>`  <br/>
-- 功能：计算给定字符串的（unsigned int型）长度，不包括'\0'在内.  <br/>
-- 说明：返回s的长度，不包括结束符NULL。  <br/>
-区别sizeof：
-
-> strlen(char*）函数求的是字符串的实际长度，它求得方法是从开始到遇到第一个'\0'，如果你只定义没有给它赋初值，这个结果是不定的，它会从aa首地址一直找下去，直到遇到'\0'停止。
-
-> 而sizeof（）返回的是变量声明后所占的内存数，不是实际长度，此外sizeof不是函数，仅仅是一个取字节运算符，strlen是函数。
-
 
 ## strchr & strstr
 
@@ -277,5 +250,31 @@ char *strstr(const char *str1, const char *str2)
 
 ---
 
+## strcmp
+> strcmp(s1, s2);
+  如果 s1 和 s2 是相同的，则返回 0；如果 s1<s2 则返回小于 0；如果 s1>s2 则返回大于 0。
+  
+- 原型：`extern int strcmp(const char *s1,const char *s2);`  <br/>
+- 头文件：`string.h`  <br/>
+- 功能：C/C++函数，比较两个字符串设这两个字符串为str1，str2，strcmp(str1, str2);  <br/>
+  - 若str1==str2，则返回零；
+  - 若str1<str2，则返回负数；
+  - 若str1>str2，则返回正数。
 
+---
 
+## strlen
+> strlen(s1);
+  返回字符串 s1 的长度(不包括'\0'在内)。
+  
+- 原型：`extern unsigned int strlen(char *s);`  <br/>
+- 头文件：`<string.h>`  <br/>
+- 功能：计算给定字符串的（unsigned int型）长度，不包括'\0'在内.  <br/>
+- 说明：返回s的长度，不包括结束符NULL。  <br/>
+区别sizeof：
+
+> strlen(char*）函数求的是字符串的实际长度，它求得方法是从开始到遇到第一个'\0'，如果你只定义没有给它赋初值，这个结果是不定的，它会从aa首地址一直找下去，直到遇到'\0'停止。
+
+> 而sizeof（）返回的是变量声明后所占的内存数，不是实际长度，此外sizeof不是函数，仅仅是一个取字节运算符，strlen是函数。
+
+---
