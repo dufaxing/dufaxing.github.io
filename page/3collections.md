@@ -59,12 +59,12 @@ type: page
 
 * [C语言中的不定参数](http://kmplayer.iteye.com/blog/842715){:target="_blank"}
 
-* [C语言教程菜鸟教程](http://www.runoob.com/cprogramming/c-tutorial.html){:target="_blank"}
+* [C语言教程-菜鸟教程](http://www.runoob.com/cprogramming/c-tutorial.html){:target="_blank"}
 
 
 ### C++
 
-* [C++教程菜鸟教程](http://www.runoob.com/cplusplus/cpp-tutorial.html){:target="_blank"}
+* [C++教程-菜鸟教程](http://www.runoob.com/cplusplus/cpp-tutorial.html){:target="_blank"}
 
 ### Markdown语法
 
