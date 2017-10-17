@@ -23,7 +23,7 @@ type: page
 
 - [维普网](http://www.cqvip.com/){:target="_blank"}
 
-- [51cto](http://www.51cto.com/){:target="_blank"}
+- [51cto学院](http://edu.51cto.com/){:target="_blank"}	*（视频自学课）*
 
 - [tiny png](https://tinypng.com/){:target="_blank"}	*(用于压缩 png 或 jpg 的在线工具)*
 
