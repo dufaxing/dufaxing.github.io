@@ -13,13 +13,13 @@ type: page
 
 - [百度](https://www.baidu.com/){:target="_blank"}
 
-- [博客园](http://www.cnblogs.com/){:target="_blank"}
-
-- [菜鸟教程](http://www.runoob.com/){:target="_blank"}
-  
 - [知网](http://www.cnki.net/){:target="_blank"}
 
 - [维普网](http://www.cqvip.com/){:target="_blank"}
+
+- [博客园](http://www.cnblogs.com/){:target="_blank"}
+
+- [菜鸟教程](http://www.runoob.com/){:target="_blank"}	*（各类编程语言基础教程）*
 
 - [51cto学院](http://edu.51cto.com/){:target="_blank"}	*（视频自学课）*
 
