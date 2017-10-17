@@ -13,11 +13,9 @@ type: page
 
 - [百度](https://www.baidu.com/){:target="_blank"}
 
-- [七牛云](https://portal.qiniu.com/bucket/image/resource){:target="_blank"}	*(七牛云，好用的图床工具，有10G免费空间)*
-
 - [博客园](http://www.cnblogs.com/){:target="_blank"}
 
-- [菜鸟教程](http://www.runoob.com/)
+- [菜鸟教程](http://www.runoob.com/){:target="_blank"}
   
 - [知网](http://www.cnki.net/){:target="_blank"}
 
@@ -25,9 +23,11 @@ type: page
 
 - [51cto学院](http://edu.51cto.com/){:target="_blank"}	*（视频自学课）*
 
+- [七牛云](https://portal.qiniu.com/bucket/image/resource){:target="_blank"}	*(七牛云，好用的图床工具，有10G免费空间)*
+
 - [tiny png](https://tinypng.com/){:target="_blank"}	*(用于压缩 png 或 jpg 的在线工具)*
 
-- [processon](https://www.processon.com/){:target="_blank"}	*(在线制作流程图)*
+- [processon](https://www.processon.com/){:target="_blank"}	*(在线制作程序流程图)*
 
 ---
 
