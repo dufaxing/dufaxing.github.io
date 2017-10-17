@@ -31,7 +31,7 @@ mathjax: true
 #define CHAR_ADD        0x2B        //加号'+'
 #define CHAR_SUB        0x2D        //减号'-'
 #define CHAR_SLASH_L    0x5C        //斜杠'\\'
-#define CHAR_UNDER      0x5f		//下划线
+#define CHAR_UNDER      0x5f        //下划线
 #define CHAR_SLASH_R    0x2F        //反斜杠'\/'
 #define CHAR_BRACKET_L  0x28        //左括号'('
 #define CHAR_BRACKET_R  0x29        //右括号')'
