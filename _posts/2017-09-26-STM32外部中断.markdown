@@ -1,0 +1,80 @@
+---
+layout: post
+title:  "STM32配置外部中断"
+date:   2017-09-26 00:00:00
+categories: 嵌入式
+tags: STM
+excerpt: 将STM32的某个IO口配置成外部中断触发模式
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+### 配置外部中断IO引脚
+```
+void Exit9_Configuration()
+{
+	/**定义结构体*/
+	EXTI_InitTypeDef  EXTI_InitStructure;
+	GPIO_InitTypeDef  GPIO_InitStructure;
+	NVIC_InitTypeDef  NVIC_InitStructure;
+
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOC|RCC_APB2Periph_AFIO,ENABLE);//开启时钟
+	
+	/**外部中断使用的GPIO的配置使用PA口的9引脚*/
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	/**外部中断使用的GPIO引脚也就是PA口的9引脚连接到EXTILine9*/
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOA,GPIO_PinSource9);
+
+	/**配置外部中断*/
+	EXTI_InitStructure.EXTI_Line    = EXTI_Line9;
+	EXTI_InitStructure.EXTI_Mode    = EXTI_Mode_Interrupt;
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_Init(&EXTI_InitStructure);
+
+	/**配置NVIC*/
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;//EXTI2_IRQn;//EXTI9_5_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+}
+```
+
+---
+
+### 中断服务程序
+在STM32工程stm32f10x_it.c中编写中断服务程序
+
+```
+void EXTI9_5_IRQHandler(void)
+{
+    Ate_EXIT9_serve();//中断服务程序   
+    EXTI_ClearITPendingBit(EXTI_Line9);//清中断
+    TRACEIRQ_END(32);
+}
+```
+
+
+---
+
+### 小结
+
+- STM32不像C51单片机那样，可以用过interrupt关键字来定义中断响应函数，STM32的中断响应函数接口存在中断向量表中，是由启动代码给出的。默认的中断响应函数在stm32f10x_it.c中。因此我们需要把这个文件加入到工程中来。
+在这个文件中，我们发现，很多函数都是只有一个函数名，并没有函数体。
+- EXTI0中断响应的函数,对应EXTI0_IRQHandler() <br/>
+- EXTI1中断响应的函数,对应EXTI1_IRQHandler() <br/>
+- EXTI2中断响应的函数,对应EXTI2_IRQHandler() <br/>
+- EXTI3中断响应的函数,对应EXTI3_IRQHandler() <br/>
+- EXTI5中断响应的函数,对应EXTI4_IRQHandler() <br/>
+- 由于EXTI5-9是共用一个中断响应函数，因此所有的EXTI5-EXTI9的响应函数都写在EXTI9_5_IRQHandler()里面。 <br/>
+- 由于EXTI10-15是共用一个中断响应函数，因此所有的EXTI10-EXTI15的响应函数都写在EXTI15_10_IRQHandler()里面。 <br/>
+
+---
