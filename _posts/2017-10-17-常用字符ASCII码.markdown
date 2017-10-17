@@ -1,0 +1,54 @@
+---
+layout: post
+title:  "常用字符ASCII码"
+date:   2017-10-17 00:00:00
+categories: 嵌入式
+tags: C语言
+excerpt: 记录常用字符ASCII码(Reference others code)
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+```
+//字符
+#define CHAR_END        0x00        //结束符'\0'
+#define CHAR_CR         0x0D        //回车'\r'
+#define CHAR_LF         0x0A        //换行'\n'
+#define CHAR_ESC        0x1B        //ESC
+#define CHAR_MONEY      0x24        //钱币'$'
+#define CHAR_CTLZ       0x1A        //发送
+#define CHAR_DOT        0x2E        //句号'.'
+#define CHAR_SPACE      0x20        //空格' '
+#define CHAR_COLON      0x3A        //冒号':'
+#define CHAR_COMMA      0x2C        //逗号','
+#define CHAR_SQUOTE     0x27        //单引号'\''
+#define CHAR_DQUOTE     0x22        //双引号'\"'
+#define CHAR_DASH_L     0x3C        //左破折号'<'
+#define CHAR_DASH_R     0x3E        //右破折号'>'
+#define CHAR_ADD        0x2B        //加号'+'
+#define CHAR_SUB        0x2D        //减号'-'
+#define CHAR_SLASH_L    0x5C        //斜杠'\\'
+#define CHAR_UNDER      0x5f		//下划线
+#define CHAR_SLASH_R    0x2F        //反斜杠'\/'
+#define CHAR_BRACKET_L  0x28        //左括号'('
+#define CHAR_BRACKET_R  0x29        //右括号')'
+#define CHAR_EQU        0x3D        //等号'='
+#define CHAR_AND        0x26        //与号'&'
+#define CHAR_OR         0x7C        //或号'|'
+#define CHAR_POUND      0x23        //井号'#'
+#define CHAR_STAR       0x2A        //星号'*'
+#define CHAR_BRACE_L    0x7B        //左大括号'{'
+#define CHAR_BRACE_R    0x7D        //右大括号'}'
+#define CHAR_BRASQR_L   0x5B        //左中括号'['
+#define CHAR_BRASQR_R   0x5D        //右中括号']'
+#define CHAR_AT         0x40        //@
+```
+
+
+
+---
+
+
