@@ -2,8 +2,8 @@
 layout: post
 title:  "C typedef"
 date:   2017-10-09 00:00:00
-categories: 模板
-tags: 模板
+categories: 嵌入式
+tags: C语言
 excerpt: C 语言提供了 typedef 关键字，可以使用它来为类型取一个新的名字。
 mathjax: true
 ---
