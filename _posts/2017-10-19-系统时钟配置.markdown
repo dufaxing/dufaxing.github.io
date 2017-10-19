@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "博客空白模块"
+title:  "STM32系统时钟时钟"
 date:   2017-10-19 00:00:00
 categories: 嵌入式
 tags: STM
@@ -30,6 +30,7 @@ mathjax: true
 
 HSI：内部高速时钟，频率为HSI RC的2分频。
 PLL：锁相环.通过PLL倍频后，送入系统时钟。
+
 ```
 VOID HwRcc_Hsi()
 {
@@ -62,6 +63,7 @@ VOID HwRcc_Hsi()
 ```
 
 ![](http://owlypioka.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20171019145631.png)
+
 ---
 
 ### 标题2:
