@@ -73,7 +73,7 @@ VOID HwRcc_Hsi()
 
 ---
 
-### 标题3:
-
+### 相关文档
+[STM32-通用定时器基本定时功能](http://www.cnblogs.com/emouse/archive/2011/05/05/2198148.html){:target="_blank"}
 
 ---
