@@ -77,9 +77,9 @@ type: page
 ## 编辑器
 
 ### Atom
-- Atom插件 <br/>
-	- markdown-scroll-sync *(编辑markdown文件时，可自动生成浏览页面)* <br/>
-	- atom-beautify *(格式化代码)* <br/>
+常用插件 <br/>
+- markdown-scroll-sync *(编辑markdown文件时，可自动生成浏览页面)* <br/>
+- atom-beautify *(格式化代码)* <br/>
 
 ### source insight
 
