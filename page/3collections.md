@@ -81,9 +81,9 @@ type: page
 	- markdown-scroll-sync *(编辑markdown文件时，可自动生成浏览页面)* <br/>
 	- atom-beautify *(格式化代码)* <br/>
 
-## source insight
+### source insight
 
-## notepad++
+### notepad++
 
 ---
 
