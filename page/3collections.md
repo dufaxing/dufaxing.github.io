@@ -36,19 +36,19 @@ type: page
 >[git](https://pan.baidu.com/s/1jIl9xAI){:target="_blank"}	*(git工具)*
 
 >[GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9){:target="_blank"}	*(git桌面)*
-	
+
 >[QT](https://pan.baidu.com/s/1i5wuEw9){:target="_blank"}	*(可以运行在Linux系统也可运行在Windows系统,可C++编写GUI程序)*
 
 >[IAR8.0](http://pan.baidu.com/s/1i5oZpY1){:target="_blank"}
-	
+
 >[Altium Designer17](http://pan.baidu.com/s/1gfktF6z){:target="_blank"}
 
 >[Source Insight 4.0](http://pan.baidu.com/s/1miaaawS){:target="_blank"}
-	
+
 >[VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC){:target="_blank"}
-	
+
 >[STVD](http://pan.baidu.com/s/1i5aMn2X){:target="_blank"}	*(ST8编译器，除了安装STVD之外，还要安装COSMIC否则编译不过。)*
-	
+
 >[截图工具](http://pan.baidu.com/s/1i4OAOM5){:target="_blank"}
 
 >[迅雷破解版](http://pan.baidu.com/s/1c2jKoqW){:target="_blank"}
@@ -76,11 +76,14 @@ type: page
 
 ## 编辑器
 
-- Atom
+### Atom
+- Atom插件 <br/>
+	- markdown-scroll-sync *(编辑markdown文件时，可自动生成浏览页面)* <br/>
+	- atom-beautify *(格式化代码)* <br/>
 
-- source insight
+## source insight
 
-- notepad++
+## notepad++
 
 ---
 
