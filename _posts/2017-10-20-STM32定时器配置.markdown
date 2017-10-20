@@ -1,0 +1,137 @@
+---
+layout: post
+title:  "STM32定时器配置"
+date:   2017-10-20 00:00:00
+categories: 嵌入式
+tags: STM
+excerpt: STM32的定时器
+mathjax: true
+---
+* content
+{:toc}
+---
+
+把STM32F10X的主频调为72MHz后，为了测试时钟是否配置正确，用定时器生成PWM波，测量PWM波的周期是否与配置的一致。
+
+### 配置定时器的一般步骤
+
+
+
+#### void TIMER_cfg()配置
+  TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+
+- 1.重新将Timer设置为缺省值  <br/>
+  TIM_DeInit(TIM2);
+
+- 2.采用内部时钟给TIM2提供时钟源  <br/>
+  TIM_InternalClockConfig(TIM2);
+
+- 3.预分频系数为36000-1，这样计数器时钟为72MHz/36000 = 2kHz  <br/>
+  TIM_TimeBaseStructure.TIM_Prescaler = 36000 - 1;
+
+- 4设置时钟分割  <br/>
+  TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+
+- 5.设置计数器模式为向上计数模式  <br/>
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+
+- 6.设置计数溢出大小，每计2000个数就产生一个更新事件  <br/>
+  TIM_TimeBaseStructure.TIM_Period = 2000 - 1;
+
+- 7.将配置应用到TIM2中  <br/>
+  TIM_TimeBaseInit(TIM2,&TIM_TimeBaseStructure);
+
+- 8.清除溢出中断标志  <br/>
+  TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+
+- 9.禁止ARR预装载缓冲器  <br/>
+  TIM_ARRPreloadConfig(TIM2, DISABLE);
+
+- 10.开启TIM2的中断  <br/>
+  TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
+
+#### void NVIC_cfg()配置
+
+NVIC_InitTypeDef NVIC_InitStructure;
+
+- 1.选择中断分组1  <br/>
+NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+
+- 2.选择TIM2的中断通道  <br/>
+  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQChannel;      
+
+- 3.抢占式中断优先级设置为0  <br/>
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+
+- 4.响应式中断优先级设置为0  <br/>
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+
+- 5.使能中断  <br/>
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+
+### 配置定时器
+
+在我使用的框架中实际代码如下：
+
+```
+VOID HwTim_100msEnable()
+{
+    TIM_TimeBaseInitTypeDef INIT = {0};
+    RCC_ClocksTypeDef       Clock;
+    USHORT                  Frequency = 0;  //hz
+    TRACESTACK(HwTim_100msEnable);
+
+    RCC_GetClocksFreq(&Clock);
+
+    TIM_DeInit(TIM7);
+    //100ms
+    Frequency = 10;
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7,ENABLE);
+    INIT.TIM_Period = Clock.PCLK1_Frequency*2/1000/Frequency - 1;   //APB1时钟分频>1，定时器输入频率*2
+    INIT.TIM_Prescaler = 1000 - 1;//设置预分频系数，计数器时钟为72MHz/1000 = 72kHz
+    INIT.TIM_ClockDivision = TIM_CKD_DIV1; //设置时钟分割
+    INIT.TIM_CounterMode = TIM_CounterMode_Up;        
+    TIM_TimeBaseInit(TIM7, &INIT);
+    TIM_ClearFlag(TIM7,TIM_FLAG_Update);
+    TIM_ITConfig(TIM7,TIM_IT_Update,ENABLE);
+    TIM_Cmd(TIM7, ENABLE);
+    HwIrq_Enable(TIM7_IRQn,2,0x03,ENABLE);
+
+    return;
+}
+```
+其中Clock.PCLK1_Frequency为系统时钟的2分频，这种配置方法可移植性非常高，代码简洁明了。 <br/>
+`Frequency = 10;` <br/>
+`INIT.TIM_Period = Clock.PCLK1_Frequency*2/1000/Frequency - 1; ` <br/>
+`INIT.TIM_Prescaler = 1000 - 1;` <br/>
+如上三行代码配置了100ms的计数值和计数时间。
+计数频率 = 系统时钟频率/分频系数 = SYSCLK/INIT.TIM_Prescaler <br/>
+计数次数 = NIT.TIM_Period = Clock.PCLK1_Frequency*2/1000/Frequency - 1; <br/>
+定时器计时时间 = 单位计数时间*计数次数 <br/>
+
+如果系统时钟为24MHz: <br/>
+计数次数 = 12M*2/1000/Frequency - 1 = 2.4K <br/>
+计数频率 = 24M/INIT.TIM_Prescaler = 24k <br/>
+定时时间 = 计数次数/计数频率 = 0.1S. <br/>
+
+如果系统时钟为72MHz <br/>
+计数次数 = 36M*2/1000/Frequency - 1 = 7.2K <br/>
+计数频率 = 72M/INIT.TIM_Prescaler = 72k <br/>
+定时时间 = 计数次数/计数频率 = 0.1S. <br/>
+
+**这种配置方法及时更改了系统时钟，也不会影响到定时器的配置。**
+
+若要配置其他时钟更改计数次数和计数频率即可。
+
+生成的波形如下图所示：
+![](http://owlypioka.bkt.clouddn.com/TIM%E5%9B%BE%E7%89%8720171020143125.jpg)
+
+![](http://owlypioka.bkt.clouddn.com/TIM%E5%9B%BE%E7%89%8720171020143135.jpg)
+
+![](http://owlypioka.bkt.clouddn.com/TIM%E5%9B%BE%E7%89%8720171020143153.jpg)
+
+![](http://owlypioka.bkt.clouddn.com/TIM%E5%9B%BE%E7%89%8720171020143159.jpg)
+
+---

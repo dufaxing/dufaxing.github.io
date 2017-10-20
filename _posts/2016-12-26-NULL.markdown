@@ -1,17 +1,17 @@
 ---
 layout: post
-title:  "博客空白模块"
-date:   2016-12-26 00:00:00
-categories: 模板
-tags: 模板
-excerpt: post文件夹下空白博客模板，用于快速编写博客
+title:  "STM32定时器配置"
+date:   2017-10-20 00:00:00
+categories: 嵌入式
+tags: STM
+excerpt: STM32的定时器
 mathjax: true
 ---
 * content
 {:toc}
 ---
 
->_post文件夹下空白博客模板，用于快速编写博客。
+把STM32F10X的主频调为72MHz后，测试
 
 ### 标题1:
 
@@ -26,6 +26,7 @@ mathjax: true
 ---
 
 ### 标题3:
+
 
 
 ---

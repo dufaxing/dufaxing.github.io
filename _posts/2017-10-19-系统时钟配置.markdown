@@ -172,8 +172,8 @@ VOID HwRcc_Hse()
 修改为：RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_9); //使用16MHz外部晶振之后，2分频再9倍频到72MHz： <br/>
 
 
-（1）.此文件中找到语句：#define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */： <br/>
-（2）.将这条语句更改为：#define HSE_VALUE    ((uint32_t)16000000) /*!< Value of the External oscillator in Hz */： <br/>
+（1）.此文件中找到语句：`#define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */：` <br/>
+（2）.将这条语句更改为：`#define HSE_VALUE    ((uint32_t)16000000) /*!< Value of the External oscillator in Hz */：`  <br/>
 
 
 ---
