@@ -26,11 +26,41 @@ mathjax: true
 连接在APB1（低速外设）上的设备有：电源接口、备份接口、CAN、USB、I2C1、I2C2、UART2、UART3、SPI2、窗口看门狗、Timer2、Timer3、Timer4。
 连接在APB2（高速外设）上的设备有：UART1、SPI1、Timer1、ADC1、ADC2、所有普通IO口、第二功能IO口。 <br/>
 
-### PLLCLK作为系统时钟
 
-HSI：内部高速时钟，频率为HSI RC的2分频。
-PLL：锁相环.通过PLL倍频后，送入系统时钟。
 
+
+### HSI经PLL锁相环倍频后作为系统时钟
+
+HSI：内部高速时钟，频率为HSI RC的2分频。 <br/>
+PLL：锁相环.通过PLL倍频后，送入系统时钟。 <br/>
+STM32F10X使用HSI作为时钟源，最大时钟频率为36MHz。 <br/>
+- 时钟初始化
+```
+VOID HwRcc_Init()
+{
+    RCC_DeInit();
+    /*开启内部时钟*/
+    RCC_HSICmd(ENABLE);
+    /*等待内部晶振起振*/
+    while(RCC_GetFlagStatus(RCC_FLAG_HSIRDY) == RESET);
+
+    RCC_HCLKConfig(RCC_SYSCLK_Div1);    //设置HCLK(AHB时钟)=SYSCLK
+    RCC_PCLK1Config(RCC_HCLK_Div2);     //PCLK1(APB1) = HCLK
+
+    RCC_PCLK2Config(RCC_HCLK_Div2);     //PCLK2(APB2) = HCLK
+
+    /*配置HSI*/
+    HwRcc_Hsi();
+
+    //16mhz
+    //FLASH_PrefetchBufferCmd(ENABLE);
+    FLASH_SetLatency(FLASH_Latency_2);
+
+    return;
+}
+```
+
+- HSI时钟配置
 ```
 VOID HwRcc_Hsi()
 {
@@ -61,14 +91,89 @@ VOID HwRcc_Hsi()
     return;
 }
 ```
-
 ![](http://owlypioka.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20171019145631.png)
 
+### HSE经PLL锁相环倍频后作为系统时钟
+- 时钟初始化
+```
+VOID HwRcc_Init()
+{
+  RCC_DeInit();
+  /*开始外部时钟*/
+  RCC_HSEConfig(RCC_HSE_ON);
+  /*等待外部晶振起振*/
+  while(SUCCESS != RCC_WaitForHSEStartUp());
+
+  RCC_HCLKConfig(RCC_SYSCLK_Div1);    //设置HCLK(AHB时钟)=SYSCLK
+  RCC_PCLK1Config(RCC_HCLK_Div2);     //PCLK1(APB1) = HCLK
+
+  RCC_PCLK2Config(RCC_HCLK_Div2);     //PCLK2(APB2) = HCLK
+  /*配置外部时钟*/
+  HwRcc_Hse();
+}
+```
+- HSE时钟配置 <br/>
+我在配置HSE时，想将系统时钟配置成STM32F10X允许的最大时钟72MHz时遇到个问题，`RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_6);`PLL最大为6倍频，也就是48MHz，超过6倍频时`while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET){;}`不能正常工作。 <br/>
+解决办法： <br/>
+查阅资料知： <br/>
+Bits 2:0  LATENCY: Latency  <br/>
+These bits represent the ratio of the SYSCLK (System Clock) period to the Flash Access time.  <br/>
+000 Zero wait state, if 0 < SYSCLK≤ 24 MHz  <br/>
+001 One wait state, if 24 MHz < SYSCLK ≤ 48 MHz  <br/>
+010 Two wait states, if 48 MHz < SYSCLK ≤ 72 MHz  <br/>
+**超过48MHz的SYSCLK，需要2个FLASH预取延时周期**  <br/>
+添加如下两行代码后，系统运行正常，且时钟频率为72MHz  <br/>
+```
+FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
+FLASH_SetLatency(FLASH_Latency_2);/* Flash 2 wait state */
+```
+- 配置代码  <br/>
+```
+VOID HwRcc_Hse()
+{
+    g_stHwadpt.RccHse = TRUE;
+
+    RCC_PLLCmd(DISABLE);
+
+    //PLL设置SYSCLK/2 * 3 = 8*3= 24MHz
+    RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_9);
+    //设置系统时钟SYSCLK = PLL输出
+    RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+	/*******************************************************************************************/
+	//不加延时周期，FLASH的访问速度最高为50MHz左右.
+	//These bits represent the ratio of the SYSCLK (System Clock) period to the Flash Access time.
+	//000 Zero wait state, if 0 < SYSCLK≤ 24 MHz
+	//001 One wait state, if 24 MHz < SYSCLK ≤ 48 MHz
+	//010 Two wait states, if 48 MHz < SYSCLK ≤ 72 MHz
+	/********************************************************************************************/
+    FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
+    FLASH_SetLatency(FLASH_Latency_2);/* Flash 2 wait state */
+    //启动PLL
+    RCC_PLLCmd(ENABLE);//如果PLL被用于系统时钟,不能被DISABLE
+    //等待PLL稳定
+    while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET){;}
+
+    //等待PLL成功用作于系统时钟的时钟源,并等待稳定
+    // 0x00:HSI作为系统时钟
+    // 0x04:HSE作为系统时钟
+    // 0x08:PLL作为系统时钟
+    while(RCC_GetSYSCLKSource() != 0x08);
+
+    return;
+}
+```
+![](http://owlypioka.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20171019145546.png)
 ---
 
-### 标题2:
+**在配置外部晶振为系统时钟源时需要注意需要注意，若外部晶振为16MHz需要更改HSE_VALUE宏定义。**
+
+修改RCC配置代码如下： <br/>
+将语句：RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9); //之前使用8MHz外部晶振，9倍频到72MHz： <br/>
+修改为：RCC_PLLConfig(RCC_PLLSource_HSE_Div2, RCC_PLLMul_9); //使用16MHz外部晶振之后，2分频再9倍频到72MHz： <br/>
 
 
+（1）.此文件中找到语句：#define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */： <br/>
+（2）.将这条语句更改为：#define HSE_VALUE    ((uint32_t)16000000) /*!< Value of the External oscillator in Hz */： <br/>
 
 
 ---
