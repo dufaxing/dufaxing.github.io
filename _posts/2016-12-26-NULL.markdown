@@ -1,17 +1,17 @@
 ---
 layout: post
-title:  "STM32定时器配置"
-date:   2017-10-20 00:00:00
-categories: 嵌入式
-tags: STM
-excerpt: STM32的定时器
+title:  "NULL"
+date:   2016-12-26 00:00:00
+categories: NULL
+tags: NULL
+excerpt: NULL
 mathjax: true
 ---
 * content
 {:toc}
 ---
 
-把STM32F10X的主频调为72MHz后，测试
+
 
 ### 标题1:
 
