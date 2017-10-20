@@ -4,7 +4,7 @@ title:  "STM32定时器配置"
 date:   2017-10-20 00:00:00
 categories: 嵌入式
 tags: STM
-excerpt: STM32的定时器
+excerpt: STM32F10X的定时器配置
 mathjax: true
 ---
 * content
@@ -71,7 +71,7 @@ NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     NVIC_Init(&NVIC_InitStructure);
 
 
-### 配置定时器
+### 实际使用的定时器配置
 
 在我使用的框架中实际代码如下：
 
