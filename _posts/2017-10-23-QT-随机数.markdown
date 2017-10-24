@@ -73,6 +73,6 @@ srand放在循环里面，每产生一个随机数之前，都调用srand，由�
 
 ### 效果预览
 
-![](http://owlypioka.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20171024134101.png)
+![](http://owlypioka.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20171024153645.png)
 
 ---
