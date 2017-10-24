@@ -1,0 +1,66 @@
+---
+layout: post
+title:  "基于QT的随机数发生器"
+date:   2017-10-23 00:00:00
+categories: GUI
+tags: C++
+excerpt: 用QT写了一个简单的随机数发生器
+mathjax: true
+---
+* content
+{:toc}
+---
+
+在公司我们午饭通过点外卖来解决，点餐付款由张老板负责了，但是留下一个问题，饭后的餐桌整理由谁负责，且并不是每个人每天都点外卖，所以不能做一个值日表让固定的人擦桌子。今天中午临时决定写一个简单的GUI程序生成3个随机数，由此来确定哪个luckyboy来擦桌子(～￣▽￣)～ 。所以每一个中午点外卖的人都有擦桌子的风险(￣.￣)。 <br/>
+
+解决思路：调用 C/C++库函数`random()`函数返回一个0~num-1之间的随机数. random(num)是在`stdlib.h`中的一个宏定义. num和函数返回值都是整型数.
+```
+srand((int)time(0));
+num = random(NumMax);
+```
+
+random()的返还值是一个随机值，但是如果不经过`srand()`函数随机数发生器的初始化，再次取随机数会得到相同的随机值，这个值不会改变。
+
+### 使用到的控件
+判断成员是否点餐，用QT的控件【Check Box】,连接到槽`clicked(bool)`。如果控件传入的值为真，判断成员点餐有效，将值存入数组。
+```
+void MainWindow::on_checkBox_clicked(bool checked)
+{
+    if (checked)
+        chCheckBox[0] = 1;
+    else
+        chCheckBox[0] = 0;
+}
+```
+
+输出信息，使用控件【textBrowser】，在使用QT输出字符串或者数字是，需要将文本转换为`QString`类型。
+```
+ QString QStrNum;
+ QStrNum = QString::number(OrderFoodNum,10);//将OrderFoodNum按10进制转为QString
+ui->textBrowser->setText(QStrNum);
+ ```
+
+---
+
+### 解决点餐人数不确定问题
+
+虽然每天点餐的人数是不固定的，但是通过点餐群我们知道可能点餐的总人数，我们默认全部的人都是点餐的，按照这个人数，生成三个随机数。但是事实上并不是全部的人都会点餐，所以在生成随机数后，检查这个随机数对应的人是否勾选点餐，如果没有，放弃这个随机数，产生下一个随机数，直到所有随机数都勾选了点餐。
+
+```
+num2 = random(OrderFoodNumMax);
+while(((0==chCheckBox[num2]))||(num2 == num1 || num2 == num0))
+{
+    srand((int)time(0));
+    num2 = random(OrderFoodNumMax);
+}
+```
+
+
+
+---
+
+### 效果预览
+
+![](http://owlypioka.bkt.clouddn.com/TIM%E5%9B%BE%E7%89%8720171023173358.png)
+
+---
