@@ -33,7 +33,7 @@ void MainWindow::on_checkBox_clicked(bool checked)
 }
 ```
 
-输出信息，使用控件【textBrowser】，在使用QT输出字符串或者数字是，需要将文本转换为`QString`类型。
+输出信息，使用控件【textBrowser】，在使用QT输出字符串或者数字是QString，需要将文本转换为`QString`类型。
 ```
  QString QStrNum;
  QStrNum = QString::number(OrderFoodNum,10);//将OrderFoodNum按10进制转为QString
@@ -61,6 +61,6 @@ while(((0==chCheckBox[num2]))||(num2 == num1 || num2 == num0))
 
 ### 效果预览
 
-![](http://owlypioka.bkt.clouddn.com/TIM%E5%9B%BE%E7%89%8720171023173358.png)
+![](http://owlypioka.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20171024134101.png)
 
 ---
