@@ -109,7 +109,7 @@ VOID HwTim_100msEnable()
 如上三行代码配置了100ms的计数值和计数时间。
 计数频率 = 系统时钟频率/分频系数 = SYSCLK/INIT.TIM_Prescaler <br/>
 计数次数 = NIT.TIM_Period = Clock.PCLK1_Frequency*2/1000/Frequency - 1; <br/>
-定时器计时时间 = 单位计数时间*计数次数 <br/>
+定时器计时时间 = 单位计数时间 × 计数次数 <br/>
 
 如果系统时钟为24MHz: <br/>
 计数次数 = 12M*2/1000/Frequency - 1 = 2.4K <br/>
