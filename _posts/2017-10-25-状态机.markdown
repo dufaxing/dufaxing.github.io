@@ -3,7 +3,7 @@ layout: post
 title:  "状态机思想"
 date:   2017-10-25 01:00:00
 categories: 嵌入式
-tags: C语言
+tags: C语言 读书笔记
 excerpt: 今天在看野火写的K60书的时候发现一个很吸引我的东西——状态机思想。在以前还是愣头青的时候若程序需要多状态的分支，一般用if-else草草了事。这样的做的程序可读性不强，效率低下。
 mathjax: true
 ---
