@@ -1,0 +1,75 @@
+---
+layout: post
+title:  "状态机思想"
+date:   2017-10-25 01:00:00
+categories: 嵌入式
+tags: C语言
+excerpt: 今天在看野火写的K60书的时候发现一个很吸引我的东西——状态机思想。在以前还是愣头青的时候若程序需要多状态的分支，一般用if-else草草了事。这样的做的程序可读性不强，效率低下。
+mathjax: true
+---
+* content
+{:toc}
+---
+> 有限状态机，简写为FSM(Finite State Machine)，主要分为两大类：第1类，若输出只和状态有关而于输入无关，则称为Moore状态机；第2类，输出不仅和状态有关而且和输入有关，则称为Mealy状态机。
+### 状态机的概念
+
+状态机可归纳为4个要素，即线态，条件，动作，次态。<br/>
+- 现态：是指当前所处的状态。
+- 条件：又称为“事件”，当一个条件被满足，将会触发一个动作，或者执行一次状态的迁移。
+- 动作：条件满足后执行的动作。动作完毕后，可以迁移到新的状态，也可以依旧保持原状态。
+- 次态：条件满足后要迁往新的状态。“次态”是相对于“现态”而言的，“次态”一旦被激活，就转变了新的“现态”了。
+
+以摄像头采集图像为例。
+
+### 响应的处理函数
+#### switch处理状态机
+```
+typedef enum {
+  IMG_NOTINIT = 0,
+  IMG_FINISH,
+  IMG_GATHER,
+  IMG_START,
+}
+void img_deal(int imgstate)
+{
+  switch(imgstate) {
+    case IMG_NOTINIT:
+    //初始化动作
+    break;
+    case IMG_START:
+    //启动图像采集动作
+    break；
+    //···
+    //其他动作
+    //···
+    default：
+    break；
+  }
+}
+```
+如果状态较多，使用switch会影响速度。
+
+#### 利用函数指针数组
+
+```
+void img_init(void){}
+void img_start(void){}
+void img_collet(void){}
+void img_finish(void){}
+
+typedef void (* imgfunc)(void);
+imgfunc imgfuncarry[4] = {img_init,img_start,img_collet,img_finish};
+
+void img_deal(int i)
+{
+  (* imgfuncarry[i])();//查状态表，执行响应的函数，速度优于switch
+}
+
+int main(void)
+{
+  img_deal(2);//执行img_collet()函数
+  return 0;
+}
+```
+
+---
