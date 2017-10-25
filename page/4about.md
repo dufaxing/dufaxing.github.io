@@ -18,6 +18,7 @@ type: page
 
 ## 联系我
 
+* <a href="mailto:haorooms@126.com">给发送邮件</a>
 * [GitHub](https://github.com/dufaxing){:target="_blank"}
 * [Weibo(基本停用)](http://weibo.com/3829633687){:target="_blank"}
 * [知乎](https://www.zhihu.com/people/hyicl){:target="_blank"}
