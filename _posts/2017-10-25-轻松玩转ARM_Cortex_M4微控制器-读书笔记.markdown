@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "《工程师经验手记——轻松玩转ARM Cortex-M4微控制器》读书笔记（0）"
+title:  "《工程师经验手记——轻松玩转ARM Cortex-M4微控制器》读书笔记"
 date:   2017-10-25 00:00:00
 categories: 嵌入式
 tags: C语言 读书笔记
