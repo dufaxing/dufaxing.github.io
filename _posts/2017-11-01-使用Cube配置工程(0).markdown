@@ -1,0 +1,38 @@
+---
+layout: post
+title:  "STM32串口配置————使用Cube配置工程(0)"
+date:   2017-11-01 00:00:00
+categories: 嵌入式
+tags: STM
+excerpt: 对于单片机来说串口是一个非常重要的通讯工具，准备从零开始搭建框架，决定从串口调试开始入手。
+mathjax: true
+---
+* content
+{:toc}
+---
+> Cube是ST公司推出的图形编程软件，其简单易用，可快速配置单片机I/O，系统时钟等，自动生成配置代码，不需要程序员花费大量时间去阅读数据手册。
+
+
+
+### Cube主界面
+
+![](http://owlypioka.bkt.clouddn.com/cube%E7%95%8C%E9%9D%A2.png)
+
+配置USART,Mode选择Asynchronous<br/>
+**注意在配置Cube时，需要把SYS->Debug配置为Serial Wire，否则在烧录程序时不能进入调试，从而将芯片锁死。<br/>**
+
+
+---
+
+### 标题2:
+
+
+
+
+---
+
+### 标题3:
+
+
+
+---
