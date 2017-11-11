@@ -12,7 +12,8 @@ mathjax: true
 ---
 
 ### 在IAR中添加notepad++工具
-Tools ->Configure Tools<br/>
+**Tools ->Configure Tools**<br/>
+
 New新建Notepad++工具<br/>
 Menu Text:Notepad++<br/>
 Command:Notepad++在本机的安装地址<br/>
@@ -21,9 +22,11 @@ Argument:`$FILE_PATH$`<br/>
 
 ### 把 notepad++ 的 tab 设为4个空格:
 
-版本号notepad++v.5.1(32-bit) <br/>
-设置->首选项->语言<br/>
-![](http://owlypioka.bkt.clouddn.com/notepad++tab%E8%AE%BE%E7%BD%AE.png)
+测试所使用的版本号notepad++v.5.1(32-bit) <br/>
+**设置->首选项->语言**<br/>
+制表符宽度选择为4，勾选上替换为空格。<br/>
+
+![](http://owlypioka.bkt.clouddn.com/notepad%E7%9A%84tab%E8%AE%BE%E7%BD%AE.png)
 
 ---
 
