@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "STM32串口配置————使用Cube配置工程(0)"
+title:  "STM32串口配置——使用Cube配置工程(0)"
 date:   2017-11-01 00:00:00
 categories: 嵌入式
 tags: STM
