@@ -11,7 +11,13 @@ mathjax: true
 {:toc}
 ---
 
-
+### 在IAR中添加notepad++工具
+Tools ->Configure Tools<br/>
+New新建Notepad++工具<br/>
+Menu Text:Notepad++<br/>
+Command:Notepad++在本机的安装地址<br/>
+Argument:$FILE_PATH$<br/>
+![](http://owlypioka.bkt.clouddn.com/IAR%E4%B8%AD%E6%B7%BB%E5%8A%A0Notepad%E5%B7%A5%E5%85%B7.png)
 
 ### 把 notepad++ 的 tab 设为4个空格:
 
