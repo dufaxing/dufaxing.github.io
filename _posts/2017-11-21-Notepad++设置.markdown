@@ -1,0 +1,35 @@
+---
+layout: post
+title:  "Notepad++设置"
+date:   2017-11-21 00:00:00
+categories: 工具
+tags: Notepad++
+excerpt: Notepad++设置,更加符合个人的编码习惯。
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+
+### 把 notepad++ 的 tab 设为4个空格:
+
+版本号notepad++v.5.1(32-bit) <br/>
+设置->首选项->语言<br/>
+![](http://owlypioka.bkt.clouddn.com/notepad++tab%E8%AE%BE%E7%BD%AE.png)
+
+---
+
+### 标题2:
+
+
+
+
+---
+
+### 标题3:
+
+
+
+---
