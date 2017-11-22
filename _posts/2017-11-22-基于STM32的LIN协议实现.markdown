@@ -1,0 +1,78 @@
+---
+layout: post
+title:  "基于STM32的LIN协议实现."
+date:   2017-11-22 00:00:00
+categories: 嵌入式
+tags: cube
+excerpt: 使用cube初始化配置后的LIN数据收发
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+
+### cube配置
+
+#### 将UART配置为LIN模式
+![](http://owlypioka.bkt.clouddn.com/LIN_cube1.png)
+#### 配置波特率与断开场长度
+![](http://owlypioka.bkt.clouddn.com/LIN_cube2.png)
+#### 开启中断
+![](http://owlypioka.bkt.clouddn.com/lin_cube3.png)
+#### RX引脚配置为上拉
+![](http://owlypioka.bkt.clouddn.com/lin_cube4.png)
+
+---
+
+### LIN协议
+
+我一开始研究LIN协议的时候忽视了同步间隔场的作用，以为LIN 只是一种以0X00+0X55开头的普通串口数据，但是在示波器的LIN模式下，始终不能识别。最后用逻辑分析仪抓出波形发现UART定义为串口模式下最大只能发出连续9bit的低电平（起始位为低，八个数据为为低，停止位为高）。不满足LIN同步间隔场的要求。
+
+报文：
+- 1.Lin总线没有仲裁功能。使用12V的信号线<br/>
+- 2.LIN总线的节点一般在16个以下，典型应用在12个以下。<br/>
+- 3.帧由帧头（header）和应答（response）组成。其中帧头由主机发送，从节点收到帧后对帧头分析然后决定是发送应答还是接受数据还是什么都不干。
+帧头包括：同步间隔场、同步场、PID（protectedidentifer）。应答（response）包括数据段、校验和段。
+![](http://owlypioka.bkt.clouddn.com/lin_cube5.jpg)
+校验和包括经典校验和和增强型校验和两种方式，均采用带进位加法进行计算，不同之处在于经典校验和只对数据做校验，而增强型校验和对数据和ID一起进行校验。<br/>
+
+简而言之，LIN表现为**同步间隔场(至少连续13bit的低电平) + 同步场(0x55) + ID +DATA(最多八位) +SUM(校验和)** 的形式<br/>
+
+示波器抓出来的波形：<br/>
+
+![](http://owlypioka.bkt.clouddn.com/LIN%E6%B3%A2%E5%BD%A2.png)
+
+
+
+---
+
+### 完整报文帧发送代码
+```
+void Uart4Lin_Tx(uint8_t id,uint8_t len,uint8_t *pData)
+{
+	uint8_t arrTempBuffer[len+3];
+	int checksum = 0;
+    uint8_t i = 0;
+    for(uint8_t j = 0; j < len; j++) {
+		checksum += *(pData+j);
+		if(checksum > 0xff) {
+			checksum = (checksum & 0x0ff) + 1;
+		}
+	}
+	checksum = (~checksum) & 0x00ff;
+	arrTempBuffer[0] = 0x55;
+    arrTempBuffer[1] = id;
+	for(i = 2; i < (len+2); i++) {
+		arrTempBuffer[i] = *(pData+i-2);
+	}
+
+	arrTempBuffer[i] = checksum;
+    HAL_LIN_SendBreak(&huart4);//发送断开场
+	UART4_Tx_Data(sizeof(arrTempBuffer)/sizeof(arrTempBuffer[0]),arrTempBuffer); //发送报文帧   
+}
+```
+
+
+---
