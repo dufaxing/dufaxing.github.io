@@ -27,7 +27,7 @@ strcpy是一种C语言的标准库函数，strcpy把从src地址开始且含有'
 ### strncpy
 > strncpy(char *dest,char *src,size_t n);  <br/>
 	将src中n个字符复制到dest中。
-	
+
 strncpy 是 C语言的库函数之一，来自 C语言标准库，定义于 string.h，char *strncpy(char *dest, const char *src, int n)，把src所指向的字符串中以src地址开始的前n个字节复制到dest所指的数组中，并返回dest。  <br/>
 - 原型：`char *strncpy(char *dest,char *src,size_t n);`  <br/>
 - 头文件：`#include<string.h>`  <br/>
@@ -72,7 +72,7 @@ printf("%s\n",dest);
 ### strcat
 > char *strcat(char *dest, const char *src);  <br/>
   连接字符串 src 到字符串 dest 的末尾。
-  
+
 - 原型：`extern char *strcat(char *dest, const char *src); ` <br/>
 - 头文件：在C中，函数原型存在 `<string.h>`头文件中。在C++中，则存在于`<cstring>`头文件中。  <br/>
 - 功能：把src所指字符串添加到dest结尾处(覆盖dest结尾处的'\0')。  <br/>
@@ -82,21 +82,21 @@ printf("%s\n",dest);
 ### strncat
 > strncat(char *dest, const char *src, size_t n);
 	src所指字符串的前n个字符添加到dest所指字符串的结尾处，并覆盖dest所指字符串结尾的'\0'
-	
+
 - 原型 `char * strncat(char *dest, const char *src, size_t n);`  <br/>
 - 头文件：` #include <string.h>` <br/>
 - 说明：*src和dest所指内存区域不可以重叠，并且dest必须有足够的空间来容纳src的字符串。* <br/>
 - demo code  <br/>
 ```
 #include<stdio.h>
-#include<string.h> 
+#include<string.h>
 int main(void)
-{ 
+{
     char dest[20] = "Hello";
     char src[10] = "World";
-    strncat(dest, src, sizeof(dest)); 
+    strncat(dest, src, sizeof(dest));
     printf("%s\n", dest);
-    return  0; 
+    return  0;
 }
 【运行结果】：HelloWorld
 ```
@@ -112,14 +112,14 @@ strncat()会将dest字符串最后的'\0'覆盖掉，字符追加完成后，再
 ### sprintf
 > int sprintf( char *buffer, const char *format, [ argument] … );  <br/>
 	把格式化的数据写入某个字符串缓冲区。
-	
+
 sprintf指的是字符串格式化命令，主要功能是把格式化的数据写入某个字符串中。sprintf 是个变参函数。使用sprintf 对于写入buffer的字符数是没有限制的，这就存在了buffer溢出的可能性。
 
 ### snprintf
 
 > snprintf(char *str, size_t size, const char *format, ...);  <br/>
 	将可变个参数(...)按照format格式化成字符串，然后将其复制到str中
-	
+
 - 原型：`int snprintf(char *str, size_t size, const char *format, ...);`  <br/>
 - 头文件：`#include <stdio.h>`  <br/>
 - 功能：
@@ -156,7 +156,7 @@ nLen=19	  <br/>
 ### strchr
 > strchr(s1, ch);  <br/>
   返回一个指针，指向字符串 s1 中字符 ch 的第一次出现的位置。
-  
+
 - 原型：`char *strchr(const char* _Str,char _Val)`  <br/>
 - 头文件：`#include <string.h>`  <br/>
 - 功能：查找字符串_Str中首次出现字符_Val的位置  <br/>
@@ -180,7 +180,7 @@ char* strchr(char *s, char c)
 ### strstr
 > strstr(s1, s2);  <br/>
   函数用于判断字符串s2是否是s1的子串。如果是，则该函数返回s2在s1中首次出现的地址；否则，返回NULL。
-  
+
 - 原型：`extern char *strstr(char *str1, const char *str2);`  <br/>
 - 头文件：`string.h`  <br/>
 
@@ -227,21 +227,21 @@ char *strstr(const char *str1, const char *str2)
 {
     char *cp = (char*)str1;
     char *s1, *s2;
- 
+
     if (!*str2)
         return((char *)str1);
- 
+
     while (*cp)
     {
         s1 = cp;
         s2 = (char *)str2;
- 
+
         while (*s1 && *s2 && !(*s1 - *s2))
             s1++, s2++;
- 
+
         if (!*s2)
             return(cp);
- 
+
         cp++;
     }
     return(NULL);
@@ -253,7 +253,7 @@ char *strstr(const char *str1, const char *str2)
 ## strcmp
 > strcmp(s1, s2);  <br/>
   如果 s1 和 s2 是相同的，则返回 0；如果 s1<s2 则返回小于 0；如果 s1>s2 则返回大于 0。
-  
+
 - 原型：`extern int strcmp(const char *s1,const char *s2);`  <br/>
 - 头文件：`string.h`  <br/>
 - 功能：C/C++函数，比较两个字符串设这两个字符串为str1，str2，strcmp(str1, str2);  <br/>
@@ -261,12 +261,26 @@ char *strstr(const char *str1, const char *str2)
   - 若str1<str2，则返回负数；
   - 若str1>str2，则返回正数。
 
+strcmp()函数用于比较两个字符串，它锁存在的其中一个问题是：当两个字符串相等时函数的返还值为零。当字符串比较是条件语句的一部分是，这个问题就会导致令人费解的代码：<br/>
+```
+if(!strcmp(s,"volatile"))
+    return QUALIFIER;
+```
+返回值为零使条件语句的结果为假，所以我们不得不对其取反，得到我们需要的结果。<br/>
+这里有个更好的方法。建立宏定义：<br/>
+```
+#define STRCMP(a, R, b) (strcmp(a, b) R 0)
+if(STRCMP(s, ==, "volatile"))
+```
+展开为`if(strcmp(s,"volatile") == 0)`<br/>
+使用这个宏定义，代码可以用更自然的风格来表示它的意思。
+
 ---
 
 ## strlen
 > strlen(s1);  <br/>
   返回字符串 s1 的长度(不包括'\0'在内)。
-  
+
 - 原型：`extern unsigned int strlen(char *s);`  <br/>
 - 头文件：`<string.h>`  <br/>
 - 功能：计算给定字符串的（unsigned int型）长度，不包括'\0'在内.  <br/>
