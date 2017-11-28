@@ -78,7 +78,7 @@ type: page
 
 ---
 
-## 编辑器
+## 编辑器 & 编译器
 
 ### Atom
 常用插件 <br/>
@@ -89,6 +89,8 @@ type: page
 
 ### notepad++
 
+### IAR8.20
+[IAR破解教程](http://blog.csdn.net/qq_36955622/article/details/71146620){:target="_blank"}
 ---
 
 ## Blog相关
