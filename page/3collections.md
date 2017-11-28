@@ -57,6 +57,8 @@ type: page
 
 > [迅雷破解版](http://pan.baidu.com/s/1c2jKoqW){:target="_blank"}
 
+> [分区助手绿色版](http://pan.baidu.com/s/1i5pIUyh){:target="_blank"}
+
 ---
 
 ## 编程语言 & 语法
