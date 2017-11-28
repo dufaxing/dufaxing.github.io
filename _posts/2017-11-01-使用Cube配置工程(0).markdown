@@ -1,9 +1,9 @@
 ---
 layout: post
 title:  "STM32串口配置——使用Cube配置工程(0)"
-date:   2017-11-01 00:00:00
+date:   2017-11-28 00:00:00
 categories: 嵌入式
-tags: STM
+tags: cube
 excerpt: 对于单片机来说串口是一个非常重要的通讯工具，准备从零开始搭建框架，决定从串口调试开始入手。
 mathjax: true
 ---
@@ -24,15 +24,105 @@ mathjax: true
 
 ---
 
-### 标题2:
+### 调用HAL库，串口发送数据
+调用HAL库发送函数`HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout)`
+```
+int Rewrite_Strlen(uint8_t* str)
+{
+    if (str == NULL)
+        return NULL;
+    int len=0;
+    while((*str++)!='\0')
+        len++;
+    return len;
+}
+```
 
+```
+void UART3_Tx(uint8_t * str)
+{
+    //用UART3发送str中的数据，最大发送时间为0xffff
+    HAL_UART_Transmit(&huart3,str,(Rewrite_Strlen(str)+1),0xffff);
+    return;
+}
+```
+在使用串口打印调试信息的时候，可以对printf()函数重构，定义工程中`int fputc(int ch, FILE *f)`，printf()不会执行标准输出到屏幕，而是进入你的驱动程序。但是使用printf()函数，需要配置全库函数。
+![](http://owlypioka.bkt.clouddn.com/printf%E9%87%8D%E6%9E%84%E9%85%8D%E7%BD%AE1.png)
 
+![](http://owlypioka.bkt.clouddn.com/printf%E9%87%8D%E6%9E%84%E9%85%8D%E7%BD%AE2.png)
+```
+//UART2_Tx已经重构为printf();
+//对printf函数进行重构,将printf映射到串口输出。
+//配置全库函数options->libray config->libray->full(全库)
+//配置全库函数options->libray config->libray->Tiny(不能打印float/long型数据，适合字符串类打印)
+int fputc(int ch, FILE *f)
+{
+    //drive
+    HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
 
+    return (ch);
+}
+```
 
 ---
 
-### 标题3:
+### 调用HAL库，串口发送数据
+`HAL_StatusTypeDef HAL_UART_Receive_IT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size)`为HAL串口接收库函数，可以一次接收Size个bit放入pData指针。<bt/>
+因为在使用中，我们并不知道会接收到多少bit的数据，为了接收到全部的数据，将size定义为1bit。一次接收一个bit，直到接收完成。<br/>
 
+```
+uint8_t g_uart1RxBuffer[BUFFSIZE];//定义接收buffer
+stUart stUart1 = {
+    .pRear     = g_uart1RxBuffer,  
+    .pFront    = g_uart1RxBuffer,  //两个指针指向相同的地址空间
+};
+```
 
+```
+void UART1_Rx_Start()
+{
+    //UART1串口接收中断开启。
+    HAL_UART_Receive_IT(&huart1,stUart1.pRear,1);
+    return;
+}
+```
+HAL库的回调机制。
+```
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)  
+{      
+    if (UartHandle == &huart1) {
+        UART1_RxCpltCallback(UartHandle);
+    }
+}
+```
 
+```
+void UART1_RxArray_Reset()
+{   
+    if (stUart1.pRear == (stUart1.pFront - 1))
+        return;
+    //将队列头指针、尾指针重新复位。
+    while ((stUart1.pFront) < stUart1.pRear) {
+        stUart1.pRear--;
+    }
+    //将huart3接收缓存区指向下一个地址拉回起始地址。
+    huart2.pRxBuffPtr = stUart1.pRear;
+
+}
+```
+接收完成后除了需要清空buffer外，还需要将队列头指针、尾指针重新复位。
+```
+void UART1_RxArray_Reset()
+{   
+    if (stUart1.pRear == (stUart1.pFront - 1))
+        return;
+    //将队列头指针、尾指针重新复位。
+    while ((stUart1.pFront) < stUart1.pRear) {
+        stUart1.pRear--;
+    }
+    //将huart3接收缓存区指向下一个地址拉回起始地址。
+    huart2.pRxBuffPtr = stUart1.pRear;
+
+}
+```
 ---
