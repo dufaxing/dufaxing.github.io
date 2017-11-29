@@ -1,0 +1,68 @@
+---
+layout: post
+title:  "使用STM32cube对CAN配置"
+date:   2017-12-29 01:00:00
+categories: 嵌入式
+tags: CAN cube
+excerpt: NULL
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+### 配置波特率
+
+CAN总线通信的各节点通信时会产生相位差，所以要进行位同步，两个节点保持步调一致。<br/>
+CAN_SJW：重新同步跳跃宽度(SJW) 。定义了在每位中可以延长或缩短多少个时间单元的上限。其值可以编程为1到4个时间单元。<br/>
+CAN_BS1：时间段1(BS1)：定义采样点的位置。其值可以编程为1到16个时间单元，但也可以被自动延长，以补偿因为网络中不同节点的频率差异所造成的相位的正向漂移。<br/>
+CAN_BS2：时间段2(BS2)：定义发送点的位置。其值可以编程为1到8个时间单元，但也可以被自动缩短以补偿相位的负向漂移。<br/>
+CAN_Prescaler：分频率。<br/>
+
+*CAN总线的波特率是取自于总线APB1（PCLK1）<br/>*
+**CAN总线的波特率=PCLK1/((CAN_SJW + CAN_BS1 + CAN_BS2)*CAN_Prescaler)**
+
+![](http://owlypioka.bkt.clouddn.com/%E6%97%B6%E9%92%9F%E9%85%8D%E7%BD%AE.png)
+
+
+![](http://owlypioka.bkt.clouddn.com/CAN%E6%B3%A2%E7%89%B9%E7%8E%87%E9%85%8D%E7%BD%AE.png)
+
+如上图所示，将参数配置为PCLK1=36MHz、CAN_SJW=1、CAN_BS1=5、CAN_BS2=6、CAN_Prescaler=6 <br/>
+
+则CAN总线的波特率=PCLK1/((1 + 5 + 6) * 6) = 36MHz / 12 / 6 = 500K bits
+
+
+---
+
+### Can过滤器配置
+
+```
+void Can_Configure_Filter()
+{
+    sFilterConfig.FilterNumber = 0;//过滤器组0
+    sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;//工作在标识符屏蔽位模式
+    sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;//滤波器位宽为单个32位
+    sFilterConfig.FilterIdHigh = 0x0000;//要过滤的ＩＤ高位
+    sFilterConfig.FilterIdLow = 0x0000;//要过滤的ID低位
+    sFilterConfig.FilterMaskIdHigh = 0x0000;//过滤器高16位每位无须匹配
+    sFilterConfig.FilterMaskIdLow = 0x0000;//过滤器低16位每无必须匹配
+    sFilterConfig.FilterFIFOAssignment = CAN_FIFO0;//过滤器被关联到FIFO0
+    sFilterConfig.FilterActivation = ENABLE; //使能过滤器
+    //sFilterConfig.BankNumber = 14;
+    if (HAL_OK != HAL_CAN_ConfigFilter(&hcan, &sFilterConfig))
+    {
+        Error_Handler();
+    }
+
+}
+```
+
+
+---
+
+
+
+
+
+---

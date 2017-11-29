@@ -3,7 +3,7 @@ layout: post
 title:  "CAN协议基础"
 date:   2017-11-29 00:00:00
 categories: 嵌入式
-tags: STM
+tags: CAN
 excerpt: 关于CAN协议的笔记
 mathjax: true
 ---
