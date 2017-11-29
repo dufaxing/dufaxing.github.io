@@ -1,0 +1,85 @@
+---
+layout: post
+title:  "CAN协议基础"
+date:   2017-11-29 00:00:00
+categories: 嵌入式
+tags: STM
+excerpt: 关于CAN协议的笔记
+mathjax: true
+---
+* content
+{:toc}
+---
+
+> CAN控制器通过组成总线的2根线（CAN-H和CAN-L）的电位差来确定总线的电平，信号是以两线之间的“差分”电压形式出现，总线电平分为显性电平和隐性电平。
+
+> CAN总线采用两种互补的逻辑数值"显性"和"隐性"。"显性"数值表示逻辑"0"，而"隐性"表示逻辑"1"。当总线上同时出现“显性”位和“隐性”位时，最终呈现在总线上的是“显性”位。
+
+**在“隐性”状态下，VCAN_H和VCAN_L被固定与平均电压电平，Vdiff近似为零，此时VCAN_H和VCAN_L的标称值为2.5V。“显性”位以大于最小阀值的差分电压表示，此时VCAN_H的标称值为3.5V，VCAN_L的标称值为1.5V。**
+
+
+![](http://owlypioka.bkt.clouddn.com/CAN%E7%94%B5%E5%B9%B3%E7%89%B9%E6%80%A7.png)
+
+
+## 数据帧
+> 结构上由7个段组成，其中根据仲裁段ID码长度的不同，分为标准帧（CAN2.0A）和扩展帧（CAN2.0B）。
+
+数据帧由发送单元使用，用来发送信息给接收单元，这是用户操作的基本帧。<br/>
+数据帧有7个域组成。图15显示了数据帧的结构。<br/>
+（1）帧起始（SOF）：这个域表示数据帧的开始。<br/>
+（2）仲裁段：这个域表示一个帧的优先级<br/>
+（3）控制段：这个域表示保留位和数据字节数<br/>
+（4）数据段：这是数据内容，0-8个字节的数据能被发送<br/>
+（5）CRC段：这个域用于检查帧的传输错误。<br/>
+（6）ACK段：是对帧已经被正常接收的一个证实。<br/>
+（7）帧结束：指示数据帧结束<br/>
+
+![](http://owlypioka.bkt.clouddn.com/CAN%E6%95%B0%E6%8D%AE%E5%B8%A7%E7%BB%93%E6%9E%84.png)
+
+### 帧起始 与 帧结束
+帧起始与帧结束用于界定一个数据帧，无论是标准数据帧还是拓展数据帧都包含这两个段。<br/>
+![](http://owlypioka.bkt.clouddn.com/CAN%E5%B8%A7%E8%B5%B7%E5%A7%8B%E4%B8%8E%E5%B8%A7%E7%BB%93%E6%9D%9F.png)
+
+---
+### 仲裁段
+
+![](http://owlypioka.bkt.clouddn.com/CAN%E4%BB%B2%E8%A3%81%E6%AE%B5.png)
+
+- 总线仲裁
+
+![](http://owlypioka.bkt.clouddn.com/CAN%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81.png)
+
+---
+
+### 控制段
+
+
+![](http://owlypioka.bkt.clouddn.com/CAN%E6%8E%A7%E5%88%B6%E6%AE%B5.png)
+
+
+---
+
+### 数据段
+
+![](http://owlypioka.bkt.clouddn.com/CAN%E6%95%B0%E6%8D%AE%E6%AE%B5.png)
+
+---
+
+### CRC段
+
+![](http://owlypioka.bkt.clouddn.com/CANCAC%E6%AE%B5.png)
+
+---
+
+### ACK段
+
+![](http://owlypioka.bkt.clouddn.com/CANACK%E6%AE%B5.png)
+
+
+
+
+## 参考资料
+
+- [CAN协议，系统结构和帧结构](https://www.cnblogs.com/pejoicen/p/3986587.html){:target="_blank"}
+
+- [CAN总线基础知识](http://blog.csdn.net/shanghaiqianlun/article/details/17911545){:target="_blank"}
