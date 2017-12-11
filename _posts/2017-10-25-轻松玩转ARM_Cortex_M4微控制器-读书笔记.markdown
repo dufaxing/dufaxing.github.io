@@ -127,14 +127,14 @@ int * p = NULL;//定义一个指向int型的指针p；
 ##### #转换为字符串
 #操作符，这里值的不是用在宏定义#define 开头的#号，而是用在#define后面的#操作符。#操作符就是把宏定义转换为一个字符串。 <br/>
 ```
-define MKSTR(str) #str
+#define MKSTR(str) #str
 void main(void)
 {
   printf(MKSTR(dufaxing.com\n));//#操作符把dufaxing.com\n替换为“dufaxing.com\n”字符串
 }
 ```
 
-在嵌入式开发中，#操作符常用语输出调试信息。假定有变量reg，需要输出调试信息时，可以通过下面的方法来实现。输出调试信息时仅需要输入变量名，天使信息里也会包含变量名，从而更方便调试。 <br/>
+在嵌入式开发中，#操作符常用语输出调试信息。假定有变量reg，需要输出调试信息时，可以通过下面的方法来实现。输出调试信息时仅需要输入变量名，调试信息里也会包含变量名，从而更方便调试。 <br/>
 ```
 #define DEBUG_OUT(var) printf(#var" = %d\n",var)
 void main()

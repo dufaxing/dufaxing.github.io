@@ -104,6 +104,8 @@ type: page
 ### 利用GitHub搭建博客
 * [搭建教程](http://www.cnfeat.com/blog/2014/05/10/how-to-build-a-blog/){:target="_blank"}
 
+###
+* [百度云网页下载破解](http://www.jianshu.com/p/e7d55ca9b6d1){:target="_blank"}
 ---
 
 ## Comments
