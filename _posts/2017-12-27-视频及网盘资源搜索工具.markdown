@@ -38,8 +38,10 @@ mathjax: true
 
 ---
 
-### 网盘资源搜索
+### 百度云盘资源搜索
 
 - [胖次](http://www.panc.cc/){:target="_blank"}
+
+- [去转盘](http://www.quzhuanpan.com/){:target="_blank"}
 
 ---
