@@ -17,7 +17,7 @@ mathjax: true
 
 ### 视频在线解析
 
-> 主要用于破解主流视频网站VIP限制
+> 主要用于破解主流视频网站VIP限制,将VIP视频地址复制到解析网站。
 
 - [电影天堂解析](http://www.52dytt.net/vip.html){:target="_blank"}
 
