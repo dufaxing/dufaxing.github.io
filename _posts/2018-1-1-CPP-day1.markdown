@@ -469,3 +469,42 @@ cout<<ref<<endl;
 -- 2，使用const 可以处理const 和非const 实参。否则将只能接受非const 数据。<br/>
 -- 3，使用const 引用，可使函数能够正确的生成并使用临时变量（如果实参与引用参
 数不匹配，就会生成临时变量）<br/>
+
+## 2.7.new/delete Operator
+
+c 语言中提供了malloc 和free 两个系统函数，完成对堆内存的申请和释放。而c++则
+提供了两关键字new 和delete ; <br/>
+
+### 2.7.1.new/new[]用法:
+
+- 1.开辟单变量地址空间<br/>
+```
+int *p = new int; //开辟大小为sizeof(int)空间
+int *a = new int(5); //开辟大小为sizeof(int)空间，并初始化为5
+```
+
+- 2.开辟数组空间<br/>
+```
+一维: int *a = new int[100]{0};开辟一个大小为100 的整型数组空间
+int **p = new int*[5]{NULL}
+二维: int (*a)[6] = new int[5][6]
+三维: int (*a)[5][6] = new int[3][5][6]
+四维维及其以上:依此类推.
+```
+### 2.7.2.delete /delete[]用法:
+
+```
+int *a = new int;
+delete a; //释放单个int 的空间
+```
+
+```
+int *a = new int[5];
+delete []a; //释放int 数组空间
+```
+
+### 2.7.3.注意事项
+- 1，new/delete 是关键字，效率高于malloc 和free.<br/>
+- 2，配对使用，避免内存泄漏和多重释放。<br/>
+- 3，避免，交叉使用。比如malloc 申请的空间去delete，new 出的空间被free;<br/>
+
