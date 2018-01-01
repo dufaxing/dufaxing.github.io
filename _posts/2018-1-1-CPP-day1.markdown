@@ -222,5 +222,248 @@ void func(char a, int b, double c);
 C++提供了运算符重载机制。可以为自定义数据类型重载运算符。实现构造数据类型也
 可以像基本数据类型一样的运算特性。<br/>
 
-
 ---
+
+## 2.5.默认参数(default parameters)
+- 通常情况下，函数在调用时，形参从实参那里取得值。对于多次调用用一函数同一实参
+时，C++给出了更简单的处理办法。给形参以默认值，这样就不用从实参那里取值了。<br/>
+
+### 2.5.1 示例
+
+- 单个参数<br/>
+```
+#include <iostream>
+#include <ctime>
+using namespace std;
+void weatherForcast(char * w="sunny")
+{
+    time_t t = time(0);
+    char tmp[64];
+    strftime( tmp, sizeof(tmp), "%Y/%m/%d %X %A ",localtime(&t) );
+    cout<<tmp<< "today is weahter "<<w<<endl;
+}
+int main()
+{
+    //sunny windy cloudy foggy rainy
+    weatherForcast();
+    weatherForcast("rainny");
+    weatherForcast();
+    return 0;
+}
+```
+
+- 多个参数
+```
+#include <iostream>
+
+using namespace std;
+
+float volume(float length, float weight = 4,float high = 5)
+{
+    return length*weight*high;
+}
+
+int main(int argc, char *argv[])
+{
+    float v = volume(10);//运行结果200
+    float v1 = volume(10,20);//运行结果1000
+    float v2 = volume(10,20,30);//运行结果6000
+    cout<<v<<endl;
+    cout<<v1<<endl;
+    cout<<v2<<endl;
+    return 0;
+}
+```
+
+### 2.5.2.规则
+
+- 1，默认的顺序，是从右向左，不能跳跃。<br/>
+- 2，函数声明和定义一体时，默认认参数在定义(声明)处。声明在前，定义在后，默认参
+数在声明处。<br/>
+- 3，一个函数，不能既作重载，又作默认参数的函数。当你少写一个参数时，系统无法
+确认是重载还是默认参数。<br/>
+
+```
+void print(int a)
+{
+
+}
+void print(int a,int b =10)
+{
+
+}
+int main()
+{
+    print(10);//error: call of overloaded 'print(int)' is ambiguous print(10);
+    return 0;
+}
+```
+## 2.6.引用(Reference)
+
+###2.6.1.引用的概念
+- 变量名，本身是一段内存的引用,即别名(alias)。此处引入的引用，是为己有变量起一个
+别名。<br/>
+```
+//声明如下：
+int main()
+{
+int a;
+int &b = a;
+}
+```
+
+### 2.6.2.规则
+- 1，引用没有定义，是一种关系型声明。声明它和原有某一变量(实体)的关系。故而类型
+与原类型保持一致，且不分配内存。与被引用的变量有相同的地址。<br/>
+- 2，声明的时候必须初始化，一经声明，不可变更。<br/>
+- 3，可对引用，再次引用。多次引用的结果，是某一变量具有多个别名。<br/>
+- 4，&符号前有数据类型时，是引用。其它皆为取地址。<br/>
+```
+int main()
+{
+    int a,b;
+    int &r = a;
+    int &r = b; //错误，不可更改原有的引用关系
+    float &rr = b; //错误，引用类型不匹配
+    cout<<&a<<&r<<endl; //变量与引用具有相同的地址。
+    int &ra = r; //可对引用更次引用，表示a 变量有两个别名，分别是r 和ra
+}
+```
+### 2.6.3.应用
+- C++很少使用独立变量的引用，如果使用某一个变量，就直接使用它的原名，没有必要
+使用他的别名。<br/>
+```
+//值作函数参数(call by value)
+void swap(int a, int b); //无法实现两数据的交换
+void swap(int *p, int *q); //开辟了两个指针空间实现交换
+```
+
+```
+//引用作函数参数(call by reference)
+void swap(int &a, int &b)
+{
+    int tmp;
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+int main()
+{
+    int a = 3,b = 5;
+    cout<<"a = "<<a<<"b = "<<b<<endl;
+    swap(a,b);
+    cout<<"a = "<<a<<"b = "<<b<<endl;
+    return 0;
+}
+```
+### 2.6.4.引用提高
+- 引用的本质是指针，C++对裸露的内存地址(指针)作了一次包装。又取得的指针的优良特
+性。所以再对引用取地址，建立引用的指针没有意义。<br/>
+
+**1，可以定义指针的引用，但不能定义引用的引用。<br/>**
+```
+int a;
+int* p = &a;
+int*& rp = p; // ok
+int& r = a;
+int&& rr = r; // error
+```
+- 案例
+```
+#include <iostream>
+using namespace std;
+void swap(char *pa,char *pb)
+{
+    char *t;
+    t = pa;
+    pa = pb;
+    pb = t;
+}
+void swap2(char **pa,char **pb)
+{
+    char *t;
+    t = *pa;
+    *pa = *pb;
+    *pb = t;
+}
+void swap3(char * &pa,char *&pb)
+{
+    char *t;
+    t = pa;
+    pa = pb;
+    pb = t;
+}
+int main()
+{
+    char *pa = "china";
+    char *pb = "america";
+    cout<<"pa "<<pa<<endl;
+    cout<<"pb "<<pb<<endl;
+    // swap(pa,pb);
+    // swap2(&pa,&pb);
+    swap3(pa,pb);
+    cout<<"pa "<<pa<<endl;
+    cout<<"pb "<<pb<<endl;
+    return 0;
+}
+```
+- 2，可以定义指针的指针(二级指针)，但不能定义引用的指针。<br/>
+```
+int a;
+int* p = &a;
+int** pp = &p; // ok
+int& r = a;
+int&* pr = &r; // error
+```
+- 3，可以定义指针数组，但不能定义引用数组，可以定义数组引用。<br/>
+```
+int a, b, c;
+int* parr[] = {&a, &b, &c}; // ok
+int& rarr[] = {a, b, c}; // error
+int arr[] = {1, 2, 3};
+int (&rarr)[3] = arr; // ok µÄ
+```
+
+- 4，常引用 <br/>
+const 引用有较多使用。它可以防止对象的值被随意修改。因而具有一些特性。<br/>
+-- (1)const 对象的引用必须是const 的，将普通引用绑定到const 这
+个原因比较简单。既然对象是const 的，表示不能被修改，引用当然也不能修改，必须使
+用const 引用。实际上，const int a=1; int &b=a;这种写法是不合法的，编译不过。<br/>
+-- (2)const 引用可使用相关类型的对象(常量,非同类型的变量或表达式)初始化。这个是
+const 引用与普通引用最大的区别。const int &a=2;是合法的。double x=3.14; const int
+&b=a;也是合法的。<br/>
+const 引用的目的是，禁止通过修改引用值来改变被引用的对象。const 引用的初始化
+特性较为微妙，可通过如下代码说明：<br/>
+```
+double val = 3.14;
+const int &ref = val; // int const & int & const ??
+double & ref2 = val;
+cout<<ref<<" "<<ref2<<endl;
+val = 4.14;
+cout<<ref<<" "<<ref2<<endl;
+```
+上述输出结果为3 3.14 和3 4.14。因为ref 是const 的，在初始化的过程中已经给
+定值，不允许修改。而被引用的对象是val，是非const 的，所以val 的修改并未影响ref
+的值，而ref2 的值发生了相应的改变。<br/>
+那么，为什么非const 的引用不能使用相关类型初始化呢？实际上，const 引用使用相
+关类型对象初始化时发生了如下过程：<br/>
+```
+int temp = val;
+const int &ref = temp;
+```
+如果ref 不是const 的，那么改变ref 值，修改的是temp，而不是val。期望对ref 的
+赋值会修改val 的程序员会发现val 实际并未修改。<br/>
+```
+int i=5;
+const int & ref = i+5;
+//此时产生了与表达式等值的无名的临时变量，
+//此时的引用是对无名的临时变量的引用。故不能更改。
+cout<<ref<<endl;
+```
+
+- 5，尽可能使用const<br/>
+**use const whatever possible **原因如下：<br/>
+-- 1，使用const 可以避免无意修改数据的编程错误。<br/>
+-- 2，使用const 可以处理const 和非const 实参。否则将只能接受非const 数据。<br/>
+-- 3，使用const 引用，可使函数能够正确的生成并使用临时变量（如果实参与引用参
+数不匹配，就会生成临时变量）<br/>
