@@ -125,6 +125,7 @@ int main()
     <<setprecision(2)<<setiosflags(ios::fixed)<<120.00<<endl;
     return 0;
 }
+```
 
 #### 2.2.2.2.按进制输出
 
