@@ -157,6 +157,70 @@ int main()
 
 ## 2.3.函数重载(function overload)
 
+### 2.3.1.引例
+
+如下函数分别求出整理数据和浮点型数据的绝对值:
+```
+int iabs(int a)
+{
+    return a>0? a:-a;
+}
+double fabs(double a)
+{
+    return a>0? a:-a;
+}
+```
+C++ 致力于简化编程，能过函数重名来达到简化编程的目的。<br/>
+```
+int abs(int a)
+{
+    return a>0? a:-a;
+}
+double abs(double a)
+{
+    return a>0? a:-a;
+}
+```
+
+### 2.3.2.重载规则与调用匹配（overload&match）
+- 重载规则：<br/>
+-- 1，函数名相同。<br/>
+-- 2，参数个数不同，参数的类型不同，参数顺序不同，均可构成重载。<br/>
+-- 3，返回值类型不同则不可以构成重载。<br/>
+```
+void func(int a); //ok
+void func(char a); //ok
+void func(char a,int b); //ok
+void func(int a, char b); //ok
+char func(int a); //与第一个函数有冲突，返还值不同。
+```
+有的函数虽然有返回值类型，但不与参数表达式运算，而作一条单独的语句。<br/>
+
+- 匹配原则：
+-- 1，严格匹配，找到则调用。<br/>
+-- 2，通过隐式转换寻求一个匹配，找到则调用。<br/>
+
+### 2.3.3.重载底层实现（name mangling）
+- C++利用name mangling(倾轧)技术，来改名函数名，区分参数不同的同名函数。
+实现原理：用v-c- i-f- l- d 表示void char int float long double 及其引用。<br/>
+
+```
+void func(char a); // func_c(char a)
+void func(char a, int b, double c);
+//func_cid(char a, int b, double c)
+```
+### 2.3.4.extern “C”
+- extern "C"的主要作用就是为了能够正确实现C++代码调用其他C语言代码。加上extern "C"后，会指示编译器这部分代码按C语言的进行编译，而不是C++的。由于C++支持函数重载，因此编译器编译函数的过程中会将函数的参数类型也加到编译后的代码中，而不仅仅是函数名；而C语言并不支持函数重载，因此编译C语言代码的函数时不会带上函数的参数类型，一般之包括函数名。
+比如说你用C 开发了一个DLL 库，为了能够让C ++语言也能够调用你的DLL输出(Export)的函数，你需要用extern "C"来强制编译器不要修改你的函数名。<br/>
+
+### 2.4.操作符重载(operator overload)
+
+前面用到的<<本身在c 语言中是位操作中的左移运算符。现在又用用流插入运算符，这
+种一个字符多种用处的现像叫作重载。在c 语中本身就用重载的现像，比如& 既表示取地址，
+又表示位操作中的与。*既表示解引用，又表示乘法运算符。只不过c 语言并没有开放重载机
+制。<br/>
+C++提供了运算符重载机制。可以为自定义数据类型重载运算符。实现构造数据类型也
+可以像基本数据类型一样的运算特性。<br/>
 
 
 ---
