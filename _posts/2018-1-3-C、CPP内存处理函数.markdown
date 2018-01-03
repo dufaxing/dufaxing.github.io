@@ -77,6 +77,16 @@ char data[10];
 memset(data, 1, sizeof(data));    // right  
 memset(data, 0, sizeof(data));    // right  
 ```
+
+而在初始化其他基础类型时，则需要注意，比如`int`类型，`sizeof(int) = 4;`
+
+```
+int data[10];  
+memset(data, 0, sizeof(data));    // right  
+memset(data, -1, sizeof(data));    // right  
+memset(data, 1, sizeof(data));    // wrong, data[x] would be 0x0101 instead of 1 
+```
+
 ---
 
 ### 4、memcpy
