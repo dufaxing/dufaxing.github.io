@@ -58,7 +58,7 @@ int main(void)
 
 `void * memset ( void * ptr, int value, size_t num );`
 
-- 填充内存块:将ptr指向的没存块的前num个字节设置为特定的值value。<br/>
+- memset是以字节为单位，初始化内存块<br/>
 - 头文件:`<memory.h>或<string.h>`
 - 参数
  - ptr
@@ -69,21 +69,13 @@ int main(void)
        要是指特定值的字节数。
 
 - demo
+
+当初始化**一个字节单位**的数组时，可以用memset把每个数组单元初始化成任何你想要的值
+
 ```
-/* memset example */  
-#include <stdio.h>  
-#include <string.h>  
-int main ()  
-{  
-    char str[] = "almost every programmer should know memset!";  
-    memset (str,'-',6);  
-    puts (str);  
-    return 0;  
-}  
-```
-```
-//output
------- every programmer should know memset!
+char data[10];  
+memset(data, 1, sizeof(data));    // right  
+memset(data, 0, sizeof(data));    // right  
 ```
 ---
 
