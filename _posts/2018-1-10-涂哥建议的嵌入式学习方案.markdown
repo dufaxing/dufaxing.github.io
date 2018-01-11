@@ -36,6 +36,8 @@ mathjax: true
 
 ## 嵌入式linux路由器学习
 
+> 作为一个程序员，怎么能不用googel呢？——涂哥
+
 **前提是一级路由**
 
 - 1.看可以使用的[OPENWRT](http://wiki.openwrt.org/toh/start){:target="_blank"}的路由器;<br/> 
