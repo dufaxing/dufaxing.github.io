@@ -46,4 +46,6 @@ mathjax: true
 - 5.安装FTP、SAMBA、PPTP、VPS(KVM，19.9$/年)，BBR(加速器) <br/>
 - 6.注册DDNS域名(f3322) <br/>
 
+* SS购买网址(http://www.zrblog.net/){:target="_blank"}
+
 ---
