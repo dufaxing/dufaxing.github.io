@@ -39,7 +39,7 @@ mathjax: true
 **前提是一级路由**
 
 - 1.看可以使用的OPENWRT的路由器;<br/>
-    [OPENWRT]http://wiki.openwrt.org/toh/start{:target="_blank"}
+    [OPENWRT](http://wiki.openwrt.org/toh/start){:target="_blank"}
 - 2.买一个样垃圾路由器(要支持OPENWR),线刷工具(烧录固件) <br/>
 - 3.下openwrt源码、裁剪、编译、烧录；<br/>
 - 4.安装FTP、SAMBA、SVN(版本服务器)、PPTP(VPN)、SS(懂的)、DDNS(动态域名解析)； <br/>
