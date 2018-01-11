@@ -34,7 +34,7 @@ mathjax: true
 - 3.单片机系统freertos(免费)、ucosII(开发免费开源、商业收费)；<br/>
 - 4.嵌入式其他的操作系统(vxWorks BSP驱动设计)；<br/>
 
-## 嵌入式linux路由器学习
+## 嵌入式linux路由器瞎折腾
 
 > 作为一个程序员，怎么能不用googel呢？——涂哥
 
