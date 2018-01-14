@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "NULL"
-date:   2018-1-14S 00:00:00
+date:   2018-1-14 00:00:00
 categories: 嵌入式
 tags: C语言
 excerpt: 再论指针
