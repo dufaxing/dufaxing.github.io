@@ -1,0 +1,19 @@
+---
+layout: post
+title:  "IAR清除指定警告码"
+date:   2018-1-15 00:00:00
+categories: 嵌入式
+tags: IAR
+excerpt: 清除IAR编译特定警告码
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+今天在移植代码的时候，遇到了指针操作时会出现`Warning[Pa082]: undefined behavior: the order of volatile accesses is undefined in this statement`的警告，但是程序功能运行正常，故想消除`Pa082`的警告码。
+
+![](http://owlypioka.bkt.clouddn.com/IAR%E6%B6%88%E9%99%A4%E6%8C%87%E5%AE%9A%E8%AD%A6%E5%91%8A%E7%A0%81.png)
+
+---
