@@ -16,13 +16,9 @@ mathjax: true
 
 ### 视频在线解析
 
-> 主要用于破解主流视频网站VIP限制,将VIP视频地址复制到解析网站。
-
-- [电影天堂解析](http://www.52dytt.net/vip.html){:target="_blank"}
+> 浮空解析
 
 - [够低调解析](http://goudidiao.com/){:target="_blank"}
-
-- [58资源网](http://lykezhan.com/vip/){:target="_blank"}
 
 - [知了堂](http://yy.zhiliaotang.com/vip/){:target="_blank"}
 
