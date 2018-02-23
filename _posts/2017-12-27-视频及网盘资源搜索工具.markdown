@@ -4,14 +4,13 @@ title:  "视频及网盘资源搜索工具"
 date:   2017-12-27 00:00:00
 categories: 工具
 tags: 资源搜索
-excerpt: 常用的各大视频VIP解析方法、视频资源搜索以及网盘资源搜索
+excerpt: 视频资源搜索以及网盘资源搜索
 mathjax: true
 ---
 * content
 {:toc}
 ---
 
-> **很早之前就答应了小学妹，做一个视频资源检索整合的blog，前段时间一直都很忙，一拖再拖，但答应的事情还是得做到，现把这个坑填上。**
 
 ![](http://owlypioka.bkt.clouddn.com/H%E4%B8%80Cl.jpg)
 
@@ -35,6 +34,15 @@ mathjax: true
 
 - [疯狂影视搜索](http://www.ifkdy.com/){:target="_blank"}
 
+- [YY4480](http://aaqqy.com/){:target="_blank"}
+
+- [A4YY](http://www.a4yy4480.com/){:target="_blank"}
+
+- [全看网](http://www.quankan.tv/){:target="_blank"}
+
+- [yse影视](http://www.yse123.com/){:target="_blank"}
+
+- [降龙影院](http://xlyy100.com/){:target="_blank"}
 
 ---
 
