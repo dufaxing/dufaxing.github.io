@@ -40,6 +40,8 @@ mathjax: true
 
 - [降龙影院](http://xlyy100.com/){:target="_blank"}
 
+- [八哥网](http://www.8gw.com/){:target="_blank"}
+
 ---
 
 ### 百度云盘资源搜索
