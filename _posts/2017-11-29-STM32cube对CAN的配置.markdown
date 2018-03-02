@@ -61,8 +61,118 @@ void Can_Configure_Filter()
 
 ---
 
+### 标准帧过滤器配置
 
+```
+//过滤器为LIST掩码模式，其过滤ID为需跟过滤器严格匹配。只有相同的ID才能引起CAN中断。
+VOID Dev_Can_Chip_Filt_Std_List(BUS_CAN_E bus,UCHAR idx,ULONG id0,ULONG id1,ULONG id2,ULONG id3)
+{
+    CAN_FilterConfTypeDef   Filter;
+    CAN_HandleTypeDef*  hwal_can_handler = NULL;
 
+    hwal_can_handler = &HWAL_CAN_0;
+
+    Filter.FilterMode = CAN_FILTERMODE_IDLIST;
+    Filter.FilterScale = CAN_FILTERSCALE_16BIT;
+    Filter.FilterIdHigh = (id0<<5)|CAN_ID_STD;
+    Filter.FilterIdLow = (id1<<5)|CAN_ID_STD;
+    Filter.FilterMaskIdHigh = (id2<<5)|CAN_ID_STD;
+    Filter.FilterMaskIdLow = (id3<<5)|CAN_ID_STD;
+    Filter.FilterFIFOAssignment = CAN_FIFO0;
+    if(BUS_CAN_0 == bus) {Filter.FilterNumber = idx;}
+#ifdef SYS_USE_CAN_1
+    else {Filter.FilterNumber = idx + DEV_CAN_BANK_NUMBER;}
+#endif
+    Filter.FilterActivation = ENABLE;
+    Filter.BankNumber = DEV_CAN_BANK_NUMBER;
+
+    HAL_CAN_ConfigFilter(hwal_can_handler,&Filter);
+
+    return;
+}
+//过滤器为MASK掩码模式，其过滤ID为mask与ID相与，为部分位匹配模式。当设置为0时，设定为全部ID通过过滤器。
+VOID Dev_Can_Chip_Filt_Std_Mask(BUS_CAN_E bus,UCHAR idx,USHORT id0,USHORT mask0,USHORT id1,USHORT mask1)
+{
+    CAN_FilterConfTypeDef   Filter;
+    CAN_HandleTypeDef*  hwal_can_handler = NULL;
+
+    hwal_can_handler = &HWAL_CAN_0;
+
+    Filter.FilterMode = CAN_FILTERMODE_IDMASK;
+    Filter.FilterScale = CAN_FILTERSCALE_16BIT;
+    Filter.FilterIdHigh = (id0<<5)|CAN_ID_STD;
+    Filter.FilterIdLow = (id1<<5)|CAN_ID_STD;
+    Filter.FilterMaskIdHigh = (mask0<<5)|CAN_ID_STD;
+    Filter.FilterMaskIdLow = (mask1<<5)|CAN_ID_STD;
+    Filter.FilterFIFOAssignment = CAN_FIFO0;
+    if(BUS_CAN_0 == bus) {Filter.FilterNumber = idx;}
+#ifdef SYS_USE_CAN_1
+    else {Filter.FilterNumber = idx + DEV_CAN_BANK_NUMBER;}
+#endif
+    Filter.FilterActivation = ENABLE;
+    Filter.BankNumber = DEV_CAN_BANK_NUMBER;
+
+    HAL_CAN_ConfigFilter(hwal_can_handler,&Filter);
+
+    return;
+}
+
+```
+
+### 拓展帧过滤器配置
+
+```
+VOID Dev_Can_Chip_Filt_Ext_List(BUS_CAN_E bus,UCHAR idx,ULONG id0,ULONG id1)
+{
+    CAN_FilterConfTypeDef   Filter;
+    CAN_HandleTypeDef*  hwal_can_handler = NULL;
+
+    hwal_can_handler = &HWAL_CAN_0;
+
+    Filter.FilterMode = CAN_FILTERMODE_IDLIST;
+    Filter.FilterScale = CAN_FILTERSCALE_32BIT;
+    Filter.FilterIdHigh = ((id0<<3)>>16)&0xffff;
+    Filter.FilterIdLow = ((id0<<3)&0xffff)|CAN_ID_EXT;
+    Filter.FilterMaskIdHigh = ((id1<<3)>>16)&0xffff;
+    Filter.FilterMaskIdLow = ((id1<<3)&0xffff)|CAN_ID_EXT;
+    Filter.FilterFIFOAssignment = CAN_FIFO0;
+    if(BUS_CAN_0 == bus) {Filter.FilterNumber = idx;}
+#ifdef SYS_USE_CAN_1
+    else {Filter.FilterNumber = idx + DEV_CAN_BANK_NUMBER;}
+#endif
+    Filter.FilterActivation = ENABLE;
+    Filter.BankNumber = DEV_CAN_BANK_NUMBER;
+
+    HAL_CAN_ConfigFilter(hwal_can_handler,&Filter);
+
+    return;
+}
+VOID Dev_Can_Chip_Filt_Ext_Mask(BUS_CAN_E bus,UCHAR idx,ULONG id0,ULONG mask0)
+{
+    CAN_FilterConfTypeDef   Filter;
+    CAN_HandleTypeDef*  hwal_can_handler = NULL;
+
+    hwal_can_handler = &HWAL_CAN_0;
+
+    Filter.FilterMode = CAN_FILTERMODE_IDMASK;
+    Filter.FilterScale = CAN_FILTERSCALE_32BIT;
+    Filter.FilterIdHigh = ((id0<<3)>>16)&0xffff;
+    Filter.FilterIdLow = ((id0<<3)&0xffff)|CAN_ID_EXT;
+    Filter.FilterMaskIdHigh = ((mask0<<3)>>16)&0xffff;
+    Filter.FilterMaskIdLow = ((mask0<<3)&0xffff)|CAN_ID_EXT;
+    Filter.FilterFIFOAssignment = CAN_FIFO0;
+    if(BUS_CAN_0 == bus) {Filter.FilterNumber = idx;}
+#ifdef SYS_USE_CAN_1
+    else {Filter.FilterNumber = idx + DEV_CAN_BANK_NUMBER;}
+#endif
+    Filter.FilterActivation = ENABLE;
+    Filter.BankNumber = DEV_CAN_BANK_NUMBER;
+
+    HAL_CAN_ConfigFilter(hwal_can_handler,&Filter);
+
+    return;
+}
+```
 
 
 ---
