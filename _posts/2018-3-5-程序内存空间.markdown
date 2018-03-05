@@ -4,7 +4,7 @@ title:  "程序内存空间"
 date:   2018-3-5 00:00:00
 categories: 嵌入式
 tags: 内存空间
-excerpt: NULL
+excerpt: 在冯诺依曼的体系结构中，一个进程必须有：代码段，堆栈段，数据段。
 mathjax: true
 ---
 * content
