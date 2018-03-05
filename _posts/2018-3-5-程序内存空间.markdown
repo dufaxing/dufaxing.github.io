@@ -14,8 +14,6 @@ mathjax: true
 > 站在高级语言的角度，一个程序分为代码段 [text（code segment/text segment）]、数据段[data]、bss段、栈(stack)、堆(heap)。
 
 
-### 标题1:
-
 
 **可执行二进制程序 = 代码段(text)＋数据段(data)+BSS段<br/>**
 一般情况下，一个可执行二进制程序(更确切的说，在Linux操作系统下为一个进程单元，在UC/OSII中被称为任务)在存储(没有调入到内存运行)时拥有3个部分，分别是代码段(text)、数据段(data)和BSS段。这3个部分一起组成了该可执行程序的文件。<br/>
