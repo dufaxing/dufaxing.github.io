@@ -15,6 +15,8 @@ type: page
 
 - [知网](http://www.cnki.net/){:target="_blank"}
 
+- [系统之家](http://www.xitongzhijia.net/){:target="_blank"}
+
 - [维普网](http://www.cqvip.com/){:target="_blank"}
 
 - [博客园](http://www.cnblogs.com/){:target="_blank"}
