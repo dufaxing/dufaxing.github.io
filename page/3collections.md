@@ -13,6 +13,8 @@ type: page
 
 - [百度](https://www.baidu.com/){:target="_blank"}
 
+- [谷歌翻译](https://translate.google.cn/){:target="_blank"}
+
 - [知网](http://www.cnki.net/){:target="_blank"}
 
 - [系统之家](http://www.xitongzhijia.net/){:target="_blank"}
@@ -99,6 +101,7 @@ type: page
 ### notepad++
 
 ### IAR8.20
+
 [IAR破解教程](http://blog.csdn.net/qq_36955622/article/details/71146620){:target="_blank"}
 
 ---
@@ -106,13 +109,19 @@ type: page
 ## Blog相关
 
 ### jekyll blog 主题
+
 * [jekyll themes](http://jekyllthemes.org/){:target="_blank"}
 
 ### 利用GitHub搭建博客
+
 * [搭建教程](http://www.cnfeat.com/blog/2014/05/10/how-to-build-a-blog/){:target="_blank"}
 
-###
+### 百度云
+
+
 * [百度云网页下载破解](http://www.jianshu.com/p/e7d55ca9b6d1){:target="_blank"}
+
+
 ---
 
 ## Comments
