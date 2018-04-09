@@ -24,10 +24,9 @@ mathjax: true
 - 用最短字符表示最准确的意义。<br/>
 - 使用变量前缀。<br/>
 
-- 骆峰命名法:变量由多个单词组成，则每个单词的首个字母大写。
-```
-int                       nStudentID;
-```
+- 骆峰命名法:变量由多个单词组成，则每个单词的首个字母大写。<br/>
+
+`int                       nStudentID;`
 
 - 全局变量
 
@@ -38,15 +37,15 @@ int                     g_nID;                  //g
 
 -  整型前缀
 
-```
-int               nId;           //int前缀：n
 
-short             sId;            //short前缀：s
+`int               nId;           //int前缀：n`
 
-unsigned int      unId          // unsigned int 前缀：un
+`short             sId;            //short前缀：s`
 
-long              lId;             //long前缀：l
-```
+`unsigned int      unId          // unsigned int 前缀：un`
+
+`long              lId;             //long前缀：l`
+
 
 
 
