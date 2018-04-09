@@ -42,61 +42,36 @@ mathjax: true
 
 
 - 浮点型前缀
-
-```
-float              fValue;      //float前缀：f
-
-double             dValue;     //double前缀：d
-```
+    - `float              fValue;      //float前缀：f`
+    - `double             dValue;     //double前缀：d`
 
 
 - 字符型前缀
-
-```
-char              chChar;    //char前缀：ch
-```
+    - `char              chChar;    //char前缀：ch`
 
 
 - 字符串前缀
-
-```
-char                szPath;     //char字符串前缀：sz
-
-string              strPath;   //string字符串前缀：str
-
-CString             strPath;   //MFC CString类前缀：str
-```
-
+    - `char                szPath;     //char字符串前缀：sz`
+    - `string              strPath;   //string字符串前缀：str`
+    - `CString             strPath;   //MFC CString类前缀：str`
 
 - 布尔型前缀
-
-```
-bool                bIsOK;      //bool类型前缀：b
-```
+    - `bool                bIsOK;      //bool类型前缀：b`
 
 
 - 指针型前缀
-
-```
-char *              pPath;      //指针前缀：p
-```
+    - `char *              pPath;      //指针前缀：p`
 
 - 指针型前缀
-
-```
-char *              pPath;      //指针前缀：p
-```
+    - `char *              pPath;      //指针前缀：p`
 
 - 数组前缀
-
-```
-int                 arrnNum;                   //数组前缀：arr
-```
+    - `int                 arrnNum;                   //数组前缀：arr`
 
 - 结构体前缀
-
-```
-定义结构体，保证C和C++兼容，采用typedef语句,并且结构体类型全部大写，以ST_开头。
+    - `定义结构体，保证C和C++兼容，采用typedef语句,并且结构体类型全部大写，以ST_开头。`
+    - 
+```    
 typedef struct ST_Table
 {
     char a;
@@ -106,25 +81,14 @@ ST_Table          stTable;         //结构体前缀:st
 ```
 
 - 枚举前缀
-
-```
-enum                 emWeek;          //枚举前缀：em
-```
+    - `enum                 emWeek;          //枚举前缀：em`
 
 - 字节前缀
-
-```
-BYTE                 byIP;                   //字节前缀：by
-```
+    - `BYTE                 byIP;                   //字节前缀：by`
 
 - 字的前缀
-
-```
-DWORD              dwMsgID;        //双字前缀：dw
-
-WORD               wMsgID;           //单字前缀：w
-```
-
+    - `DWORD              dwMsgID;        //双字前缀：dw`
+    - `WORD               wMsgID;           //单字前缀：w`
 
 ---
 
@@ -135,13 +99,13 @@ WORD               wMsgID;           //单字前缀：w
 
 操作名一般采用：谓语（此时设备名作为宾语或者标明操作所属的模块）或者<br/>
 谓语+宾语/表语（此时设备名作为主语或者标明操作所属的模块） 等形式，如：<br/>
-```
-tic_init()
-adc_is_busy()
-uart_tx_char()
-//中断函数的命名直接使用 设备名_isr() 的形式命名，如：
-timer2_isr()
-```
+
+`tic_init()`
+`adc_is_busy()`
+`uart_tx_char()`
+
+中断函数的命名直接使用 设备名_isr() 的形式命名，如：`timer2_isr()`
+
 *注：在Linux系统中，采用小写加下划线的函数命名方式；在单片机程序中，采用首字母大写加下划线的函数命名方式*
 
 
