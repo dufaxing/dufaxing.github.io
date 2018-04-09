@@ -1,0 +1,216 @@
+---
+layout: post
+title:  "C/CPP编程命名规范"
+date:   2018-4-8 00:00:00
+categories: C++
+tags: C语言 C++
+excerpt: 个人编码命名习惯
+mathjax: true
+---
+* content
+{:toc}
+---
+
+> 变量命名规则是为了增强代码的可读性和容易维护性。
+
+- 1、变量名只能是字母（A-Z，a-z）和数字（0-9）或者下划线（_）组成。<br/>
+- 2、 第一个字母必须是字母或者下划线开头。<br/>
+- 3、 不能使用C++关键字来命名变量，以免冲突。<br/>
+- 4、 变量名区分大小写。<br/>
+
+
+## 变量命名规则
+
+- 用最短字符表示最准确的意义。<br/>
+- 使用变量前缀。<br/>
+
+- 骆峰命名法:变量由多个单词组成，则每个单词的首个字母大写。
+```
+int                       nStudentID;
+```
+
+- 全局变量
+
+```
+全局变量一律以g_开头，后面为变量，变量同时还要加前缀。
+int                     g_nID;                  //g
+```
+
+-  整型前缀
+
+```
+int               nId;           //int前缀：n
+
+short             sId;            //short前缀：s
+
+unsigned int      unId          // unsigned int 前缀：un
+
+long              lId;             //long前缀：l
+```
+
+
+
+- 浮点型前缀
+
+```
+float              fValue;      //float前缀：f
+
+double             dValue;     //double前缀：d
+```
+
+
+- 字符型前缀
+
+```
+char              chChar;    //char前缀：ch
+```
+
+
+- 字符串前缀
+
+```
+char                szPath;     //char字符串前缀：sz
+
+string              strPath;   //string字符串前缀：str
+
+CString             strPath;   //MFC CString类前缀：str
+```
+
+
+- 布尔型前缀
+
+```
+bool                bIsOK;      //bool类型前缀：b
+```
+
+
+- 指针型前缀
+
+```
+char *              pPath;      //指针前缀：p
+```
+
+- 指针型前缀
+
+```
+char *              pPath;      //指针前缀：p
+```
+
+- 数组前缀
+
+```
+int                 arrnNum;                   //数组前缀：arr
+```
+
+- 结构体前缀
+
+```
+定义结构体，保证C和C++兼容，采用typedef语句,并且结构体类型全部大写，以ST_开头。
+typedef struct ST_Table
+{
+    char a;
+    int b;
+} ST_Table;        
+ST_Table          stTable;         //结构体前缀:st
+```
+
+- 枚举前缀
+
+```
+enum                 emWeek;          //枚举前缀：em
+```
+
+- 字节前缀
+
+```
+BYTE                 byIP;                   //字节前缀：by
+```
+
+- 字的前缀
+
+```
+DWORD              dwMsgID;        //双字前缀：dw
+
+WORD               wMsgID;           //单字前缀：w
+```
+
+
+---
+
+## 函数的命名
+
+函数名使用下划线分割小写字母的方式命名：<br/>
+**设备名_操作名()**<br/>
+
+操作名一般采用：谓语（此时设备名作为宾语或者标明操作所属的模块）或者<br/>
+谓语+宾语/表语（此时设备名作为主语或者标明操作所属的模块） 等形式，如：<br/>
+```
+tic_init()
+adc_is_busy()
+uart_tx_char()
+//中断函数的命名直接使用 设备名_isr() 的形式命名，如：
+timer2_isr()
+```
+*注：在Linux系统中，采用小写加下划线的函数命名方式；在单片机程序中，采用首字母大写加下划线的函数命名方式*
+
+
+---
+
+## 常用缩写词
+
+|原词	         |缩写词	       |含义             |
+|----------------|-----------------|-----------------|
+|addition        |add              |加               |
+|subtraction     |sub              |减               |
+|multiplication  |mul              |乘法             |
+|division        |div              |除法             |
+|answer          |ans              |响应、回答       |
+|array           |arr              |数组、集合       |
+|average         |avg              |平均             |
+|buffer          |buf或buff        |缓冲区           |
+|capture         |cap或capt        |捕获             |
+|check           |chk              |检查             |
+|count           |cnt              |计数器           |
+|column          |col              |列               |
+|control         |ctrl             |控制             |
+|decode          |dec              |解码、译码       |
+|define          |def              |定义             |
+|delete          |del              |删除             |
+|destination     |dst或dest        |目的             |
+|display         |disp             |显示             |
+|encode          |enc              |编码             |
+|environment     |env              |环境             |
+|error           |err              |错误             |
+|float           |flt              |浮动、浮点       |
+|frequency       |freq             |频率             |
+|header          |hdr              |开始、开头       |
+|index           |idx              |索引、指示、     |
+|image           |img              |影像、镜像       |
+|increment       |inc              |增加、增量       |
+|initalize       |init             |初始化           |
+|iteration       |itr              |循环、迭代       |
+|length          |len              |长度             |
+|memory          |mem              |内存             |
+|middle          |mid              |中值             |
+|make            |mk               |制造、形成       |
+|message         |msg              |消息             |
+|number          |num              |数量、编号       |
+|operand         |opnd             |操作数           |  
+|optimization    |opt              |最优             |
+|operator        |optr             |操作             |
+|packet          |pkt              |消息包           |
+|positon         |pos              |位置             |  
+|previous        |pre或prev        |以前的           |
+|pointer         |ptr              |指针             |
+|record          |rcd              |记录             |
+|receive         |recv             |收到、接收       |  
+|result          |res              |结果             |
+|return          |ret              |返回             |
+|source          |src              |源头             |
+|stack           |stk              |栈               |   
+|string          |str              |字符串           |
+|table           |tab              |表               |
+|temporary       |tmp或temp        |临时             |
+|total           |tot              |全部的           | 
+|time stamp      |ts               |时间戳           |
+|value           |val              |值               |
