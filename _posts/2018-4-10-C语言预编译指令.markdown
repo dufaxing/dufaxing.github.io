@@ -15,7 +15,7 @@ mathjax: true
 
 ### 1. #define、#undef
 
-#define命令定义一个宏:<br/>
+`#define命令定义一个宏`<br/>
 - 宏定义，按照是否带参数通常分为对象宏、函数宏两种。
     - 对象宏: 不带参数的宏被称为"对象宏(objectlike macro)"。对象宏多用于定义常量、通用标识。例如：
     - 
@@ -35,16 +35,95 @@ mathjax: true
 // 安全释放内存函数
 #define SAFE_DELETE(p) {if(NULL!=p){delete p; p = NULL;}}
 ```
----
 
-### 标题2:
-
-
-
+`#undef可以取消宏定义，与#define对应。`
 
 ---
 
-### 标题3:
+### 2. defined
+
+defined用来测试某个宏是否被定义。defined(name): 若宏被定义，则返回1，否则返回0。<br/>
+它与#if、#elif、#else结合使用来判断宏是否被定义，乍一看好像它显得多余,因为已经有了#ifdef和#ifndef。defined可用于在一条判断语句中声明多个判别条件；#ifdef和#ifndef则仅支持判断一个宏是否定义。<br/>
+
+`#if defined(VAX) && defined(UNIX) && !defined(DEBUG)`
+
+---
+
+### 3、#ifdef、#ifndef、#else、#endif
+
+条件编译中相对常用的预编译指令。模式如下：<br/>
+```
+#ifdef ABC
+// ... codes while definded ABC
+#elif (CODE_VERSION > 2)
+// ... codes while CODE_VERSION > 2
+#else
+// ... remained cases
+#endif // #ifdef ABC
+```
+
+#ifdef用于判断某个宏是否定义，和#ifndef功能正好相反，二者仅支持判断单个宏是否已经定义，上面例子中二者可以互换。如果不需要多条件预编译的话，上面例子中的#elif和#else均可以不写。<br/>
+
+---
+
+### 4、#if、#elif、#else、#endif
+
+#if可支持同时判断多个宏的存在，与常量表达式配合使用。常用格式如下：<br/>
+```
+#if 常量表达式1
+// ... some codes
+#elif 常量表达式2
+// ... other codes
+#elif 常量表达式3
+// ...
+...
+#else
+// ... statement
+#endif
+```
+常量表达式可以是包含宏、算术运算、逻辑运算等等的合法C常量表达式，如果常量表达式为一个未定义的宏, 那么它的值被视为0。<br/>
+```
+#if MACRO_NON_DEFINED // 等价于
+
+#if 0
+```
+
+在判断某个宏是否被定义时，应当避免使用#if，因为该宏的值可能就是被定义为0。而应当使用#ifdef或#ifndef。<br/>
+*注意: #if、#elif之后的宏只能是对象宏。如果宏未定义，或者该宏是函数宏，则编译器可能会有对应宏未定义的警告。* <br/>
+
+---
+
+### 5、#error
+
+#error命令是C/C++语言的预处理命令之一，当预处理器预处理到#error命令时将停止编译并输出用户自定义的错误消息。<br/>
+在IAR8.2编译器输入以下代码：<br/>
+
+```
+/*******************************全局定义*********************************/
+#undef  __dufaxing
+//#define __dufaxing
+/************************************************************************/
+#ifndef __dufaxing
+#error  ERROR!!!
+#endif
+/*********************************END***********************************/
+```
+
+编译器Build报错，并输出以下信息：
+``` 
+Messages
+Fatal Error[Pe035]: #error directive: ERROR!!!
+Error while running C/C++ Compiler
+```
+
+---
+
+### 6、#pragma
+
+- 1、#pragma message("文本信息") 
+    - 编译器编译到此处，在Build窗口中打印相应文本信息。
+- 2、#pragma error “文本信息” 
+    - 编译器编译到此处，在Build窗口中产生错误并打印其文本信息。
 
 
 
