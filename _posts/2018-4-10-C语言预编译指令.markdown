@@ -16,7 +16,17 @@ mathjax: true
 ### 1. #define、#undef
 
 #define命令定义一个宏:<br/>
-
+- 宏定义，按照是否带参数通常分为对象宏、函数宏两种。
+    - 对象宏: 不带参数的宏被称为"对象宏(objectlike macro)"。对象宏多用于定义常量、通用标识。例如：
+    - 
+```
+// 常量定义
+#define MAX_LENGTH 100
+// 通用标识，日志输出宏
+#define SLog printf
+// 预编译宏
+#define _DEBUG
+```
 
 ---
 
