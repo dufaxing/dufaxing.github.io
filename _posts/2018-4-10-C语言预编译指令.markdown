@@ -1,0 +1,34 @@
+---
+layout: post
+title:  "C语言预编译指令"
+date:   2018-4-10 00:00:00
+categories: 嵌入式
+tags: C语言
+excerpt: C语言预编译指令
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+
+### 1. #define、#undef
+
+#define命令定义一个宏:<br/>
+
+
+---
+
+### 标题2:
+
+
+
+
+---
+
+### 标题3:
+
+
+
+---
