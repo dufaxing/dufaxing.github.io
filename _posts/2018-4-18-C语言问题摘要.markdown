@@ -1,0 +1,55 @@
+---
+layout: post
+title:  "C语言问题摘要"
+date:   2018-4-18 00:00:00
+categories: 嵌入式
+tags: C语言
+excerpt: C语言经典问题摘要
+mathjax: true
+---
+* content
+{:toc}
+---
+
+- 位操作（Bit manipulation）嵌入式系统总是要用户对变量或寄存器进行位操作。给定一个整型变量 a，写两段代码，第一个设置 a
+的 bit 3，第二个清除 a 的 bit 3。在以上两个操作中，要保持其它位不变<br/>
+```
+#define BIT3 (0x1 << 3)
+static int a;
+void set_bit3(void)
+{
+a |= BIT3;
+}
+void clear_bit3(void)
+{
+a &= ~BIT3;
+}
+```
+
+- 对绝对地址 0x100000 赋值且想让程序跳转到绝对地址是 0x100000 去执行<br/>
+```
+(unsigned int*)0x100000 = 1234;
+//首先要将 0x100000 强制转换成函数指针,即:
+(void (*)())0x100000
+//然后再调用它:
+*((void (*)())0x100000)();
+//用 typedef 可以看得更直观些:
+typedef void(*)() voidFuncPtr;
+*((voidFuncPtr)0x100000)();
+```
+
+
+---
+
+
+
+
+
+
+---
+
+
+
+
+
+---
