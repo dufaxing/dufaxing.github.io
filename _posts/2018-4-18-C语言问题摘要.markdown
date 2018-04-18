@@ -38,7 +38,7 @@ A more obscure approach is:<br/>
 `*(int * const)(0x67a9) = 0xaa55;`
 
 
-- 3、对绝对地址 0x100000 赋值且想让程序跳转到绝对地址是 0x100000 去执行<br/>
+- 3、对绝对地址 0x100000 赋值且想让程序跳转到绝对地址是 0x100000 去执行。<br/>
 ```
 (unsigned int*)0x100000 = 1234;
 //首先要将 0x100000 强制转换成函数指针,即:
@@ -51,17 +51,23 @@ typedef void(*)() voidFuncPtr;
 ```
 
 
----
-
-
-
-
-
-
----
-
-
-
+- 4、中断（Interrupts）：中断是嵌入式系统中重要的组成部分，这导致了很多编译开发商提供一种扩展—让标准 C 支持中断。具
+代表事实是，产生了一个新的关键字 __interrupt。下面的代码就使用了__interrupt 关键字去定义了一
+个中断服务子程序(ISR)，请评论一下这段代码。<br/>
+```
+__interrupt double compute_area (double radius)
+{
+double area = PI * radius * radius;
+printf("\nArea = %f", area);
+return area;
+}
+```
+（1）、ISR 不能返回一个值。<br/>
+（2）、ISR 不能传递参数。<br/>
+（3）、在许多的处理器/编译器中，浮点一般都是不可重入的。有些处理器/编译器需要让额处的寄存器入栈，有
+些处理器/编译器就是不允许在 ISR 中做浮点运算。此外， ISR 应该是短而有效率的，在 ISR 中做浮点运算
+是不明智的。<br/>
+（4）、printf()经常有重入和性能上的问题，可能导致中断嵌套。<br/>
 
 
 ---
