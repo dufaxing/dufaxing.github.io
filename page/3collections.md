@@ -83,6 +83,8 @@ type: page
 
 * [C++教程_菜鸟教程](http://www.runoob.com/cplusplus/cpp-tutorial.html){:target="_blank"}
 
+* [C++百度贴吧引索](http://tieba.github.io/cpp/){:target="_blank"}
+
 ### Markdown语法
 
 * [Markdown，你只需要掌握这几个](http://www.cnblogs.com/crazyant007/p/4220066.html){:target="_blank"}
