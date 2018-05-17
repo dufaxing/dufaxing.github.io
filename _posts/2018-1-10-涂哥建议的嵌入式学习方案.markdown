@@ -50,3 +50,7 @@ mathjax: true
 * [SS购买网址](http://www.zrblog.net/){:target="_blank"}
 
 ---
+
+## VPS虚拟服务器访问外网
+
+https://blog.csdn.net/sinat_32829963/article/details/79261297{:target="_blank"}
