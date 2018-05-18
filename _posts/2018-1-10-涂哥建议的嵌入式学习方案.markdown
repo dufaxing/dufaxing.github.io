@@ -53,4 +53,4 @@ mathjax: true
 
 ## VPS虚拟服务器访问外网
 
-https://blog.csdn.net/sinat_32829963/article/details/79261297{:target="_blank"}
+- [博客教程](https://blog.csdn.net/sinat_32829963/article/details/79261297){:target="_blank"}
