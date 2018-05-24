@@ -56,15 +56,15 @@ mathjax: true
 
 ### 百度云盘资源搜索
 
-> 主要用于工具软件，资料等搜索。
+> 网盘搜索神器，收录百度云盘资源和新浪微盘资源等。主要用于工具软件，资料等搜索。
 
 - [胖次](http://www.panc.cc/){:target="_blank"}
 
 - [去转盘](http://www.quzhuanpan.com/){:target="_blank"}
 
-- [盘多多](http://www.panduoduo.net/){:target="_blank"}  /*盘多多，网盘搜索神器，收录百度云盘资源和新浪微盘资源等。每天更新各类视频，种子，小说，壁纸，音乐等优质网盘资源。*/
+- [盘多多](http://www.panduoduo.net/){:target="_blank"} 
 
-- [西林街](http://www.xilinjie.com/){:target="_blank"}  /*垂直专注于网盘、视频、文库（文档、古籍、专业书籍、电子书[PDF、ePub、Mobi等格式]）、学术（各种期刊、论文、学报等）和Mooc（在线课程、学习、视频教程）等资源的搜索。*/
+- [西林街](http://www.xilinjie.com/){:target="_blank"}  
 
 
 
