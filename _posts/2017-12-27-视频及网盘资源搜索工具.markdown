@@ -54,4 +54,6 @@ mathjax: true
 
 - [去转盘](http://www.quzhuanpan.com/){:target="_blank"}
 
+- [盘多多](http://www.panduoduo.net/){:target="_blank"}
+
 ---
