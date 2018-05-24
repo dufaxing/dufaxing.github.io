@@ -14,6 +14,12 @@ mathjax: true
 
 ![](http://owlypioka.bkt.clouddn.com/H%E4%B8%80Cl.jpg)
 
+
+### 搜索
+
+- [快搜](http://search.chongbuluo.com/){:target="_blank"}
+
+
 ### 视频在线解析
 
 > 浮空解析
@@ -27,6 +33,8 @@ mathjax: true
 ### 视频资源搜索
 
 > 主要用于主流视频网站没有上架的视频，国外动漫，抢先版电影等视频资源搜索
+
+- [茶杯狐](https://www.cupfox.com/){:target="_blank"}
 
 - [疯狂影视搜索](http://www.ifkdy.com/){:target="_blank"}
 
@@ -54,6 +62,10 @@ mathjax: true
 
 - [去转盘](http://www.quzhuanpan.com/){:target="_blank"}
 
-- [盘多多](http://www.panduoduo.net/){:target="_blank"}
+- [盘多多](http://www.panduoduo.net/){:target="_blank"}  /*盘多多，网盘搜索神器，收录百度云盘资源和新浪微盘资源等。每天更新各类视频，种子，小说，壁纸，音乐等优质网盘资源。*/
+
+- [西林街](http://www.xilinjie.com/){:target="_blank"}  /*垂直专注于网盘、视频、文库（文档、古籍、专业书籍、电子书[PDF、ePub、Mobi等格式]）、学术（各种期刊、论文、学报等）和Mooc（在线课程、学习、视频教程）等资源的搜索。*/
+
+
 
 ---
