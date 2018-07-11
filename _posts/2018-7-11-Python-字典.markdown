@@ -11,9 +11,26 @@ mathjax: true
 {:toc}
 ---
 
+字典的每个键值(key=>value)对用冒号(:)分割，每个对之间用逗号(,)分割，整个字典包括在花括号({})中 ,格式如下所示：<br/>
+```
+d = {key1 : value1, key2 : value2 }
+```
 
 
-### 标题1:
+### 循环历遍出所有的key和value
+
+```
+#!/usr/bin/python3
+dic = {'k1':'v1','k2':'v2','k3':'v3'}
+for i in dic:
+    print(i,dic[i])
+```
+output:<br/>
+```
+k1 v1
+k2 v2
+k3 v3
+```
 
 
 ---
