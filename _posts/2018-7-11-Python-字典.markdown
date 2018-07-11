@@ -1,0 +1,32 @@
+---
+layout: post
+title:  "Python字典"
+date:   2018-7-11 00:00:00
+categories: Python
+tags: Python
+excerpt: NULL
+mathjax: 字典是另一种可变容器模型，且可存储任意类型对象。
+---
+* content
+{:toc}
+---
+
+
+
+### 标题1:
+
+
+---
+
+### 标题2:
+
+
+
+
+---
+
+### 标题3:
+
+
+
+---
