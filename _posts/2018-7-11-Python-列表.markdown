@@ -1,0 +1,60 @@
+---
+layout: post
+title:  "Python列表"
+date:   2018-7-11 00:00:00
+categories: Python
+tags: Python
+excerpt: 序列是Python中最基本的数据结构。序列中的每个元素都分配一个数字 - 它的位置，或索引，第一个索引是0，第二个索引是1，依此类推。
+mathjax: true
+---
+* content
+{:toc}
+---
+
+字典的每个键值(key=>value)对用冒号(:)分割，每个对之间用逗号(,)分割，整个字典包括在花括号({})中 ,格式如下所示：<br/>
+
+
+
+### 列表和字符串的互相转换
+
+> 利用切片操作，实现一个trim函数，去除字符串首尾的空格。
+
+```
+#!/usr/bin/python3
+def trim(s):
+    temp = list(s)#字符串转列表
+    for i in temp:
+        if (temp[0] == ' '):
+            temp = temp[1:]
+        if temp[0] != ' ':
+            break
+    for j in temp:
+        if (temp[-1] == ' '):
+            temp = temp[:-1]
+        if temp[-1] != ' ':
+            break
+    temp = ''.join(temp)#列表转字符串
+    return temp
+print(trim('    dufaxing  '))
+```
+output:<br/>
+
+```
+dufaxing
+```
+
+
+---
+
+### 标题2:
+
+
+
+
+---
+
+### 标题3:
+
+
+
+---
