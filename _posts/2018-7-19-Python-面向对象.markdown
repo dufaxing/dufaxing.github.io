@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Python面向对象"
-date:   2018-7-11 00:00:00
+date:   2018-7-19 00:00:00
 categories: Python
 tags: Python
 excerpt: 字典是另一种可变容器模型，且可存储任意类型对象。
