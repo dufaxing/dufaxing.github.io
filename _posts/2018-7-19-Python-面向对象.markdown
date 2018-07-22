@@ -1,0 +1,60 @@
+---
+layout: post
+title:  "Python面向对象"
+date:   2018-7-11 00:00:00
+categories: Python
+tags: Python
+excerpt: 字典是另一种可变容器模型，且可存储任意类型对象。
+mathjax: true
+---
+* content
+{:toc}
+
+
+ 
+## 类成员
+
+### 静态字段和普通字段
+
+- 静态字段在代码加载时已经创建，而普通字段在对象创建时才会被创建。<br/>
+
+```
+#!/usr/bin/python3
+class Foo:
+    #字段(静态字段)保存在类里面
+    CC = 123
+    
+    def __init__(self):
+        #字段(普通的字段),保存在对象里面
+        self.name = 'dufaxing'
+        
+obj = Foo
+```
+- #一般情况：自己访问自己的字段<br/>
+- #规则：普通字段只能用对象访问，静态字段用类访问。<br/>
+- 但是在Python中，类可以访问静态字段，对象也可以访问静态字段。`Foo.CC'和'obj.CC'都能访问到'CC'。<br/>
+
+
+### 普通方法与静态方法
+
+```
+#!/usr/bin/python3
+class Foo:
+    #普通方法，由对象来调用
+    def show(self):
+        print('-----')
+    #静态方法，由类来调用，定义方法时，去掉self,同时在方法的上面加上@staticmethod 装饰器   
+    @staticmethod
+    def f1(arg1,arg2):
+        print('-----')
+Foo.f1(111,222)
+```
+
+
+---
+
+### 标题3:
+
+
+
+---
