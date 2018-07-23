@@ -1,0 +1,49 @@
+---
+layout: post
+title:  "Python群发邮件"
+date:   2018-7-23 00:00:00
+categories: Python
+tags: Python
+excerpt: 用Python实现群发邮件。
+mathjax: true
+---
+* content
+{:toc}
+
+
+```
+#coding:utf-8   #强制使用utf-8编码格式
+import smtplib  #加载smtplib模块
+from email.mime.text import MIMEText
+from email.utils import formataddr
+my_sender='du_fa_xing@163.com' #发件人邮箱账号
+my_password = '********'#邮箱密码
+my_user=['dufaxing@qq.com','收件箱@qq.com','收件箱@qq.com','收件箱@qq.com' ,\
+         '收件箱@qq.com','收件箱@qq.com','收件箱@qq.com']#收件人邮箱账号
+def mail():
+    ret=True
+    try:
+        msg=MIMEText('TEST','plain','utf-8')
+        msg['From']=formataddr(["H一Cl",my_sender])   #括号里的对应发件人邮箱昵称、发件人邮箱账号
+        # msg['To']=formataddr(["收件人",my_user])    #括号里的对应收件人邮箱昵称、收件人邮箱账号
+        msg['to']=','.join(my_user)                   #群发邮件的发送格式
+        msg['Subject']="这是H一Cl的Python测试邮件，无须回复。" #邮件的主题，也可以说是标题
+
+        server=smtplib.SMTP("smtp.163.com",25)  #发件人邮箱中的网易163邮箱SMTP服务器，端口是25
+        server.login(my_sender,my_password)    #括号中对应的是发件人邮箱账号、邮箱密码
+        server.sendmail(my_sender,my_user,msg.as_string())   #括号中对应的是发件人邮箱账号、收件人邮箱账号、发送邮件
+        server.quit()   #这句是关闭连接的意思
+    except Exception:   #如果try中的语句没有执行，则会执行下面的ret=False
+        ret=False
+    return ret
+
+ret=mail()
+if ret:
+    print("ok") #如果发送成功则会返回ok，稍等20秒左右就可以收到邮件
+else:
+    print("filed")  #如果发送失败则会返回filed
+
+```
+
+
+---
