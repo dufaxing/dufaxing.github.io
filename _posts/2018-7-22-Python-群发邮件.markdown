@@ -11,6 +11,8 @@ mathjax: true
 {:toc}
 
 
+> 以下代码在Python3.6.5中测试有效
+
 ```
 #coding:utf-8   #强制使用utf-8编码格式
 import smtplib  #加载smtplib模块
@@ -39,7 +41,7 @@ def mail():
 
 ret=mail()
 if ret:
-    print("ok") #如果发送成功则会返回ok，稍等20秒左右就可以收到邮件
+    print("ok") #如果发送成功则会返回ok，稍等10秒左右就可以收到邮件
 else:
     print("filed")  #如果发送失败则会返回filed
 
