@@ -10,47 +10,17 @@ mathjax: true
 * content
 {:toc}
   
-# VIM--移动  
+# VIM
+
 ### 官方参考文档
 http://vimcdoc.sourceforge.net/doc/usr_03.html#usr_03.txt
-#### 移动
-快捷键 | 描述
----- | ---
-[n]w | 移动光标向前跳n个词
-[n]W |  移动光标向前那个空白字符分隔的 "字串"
-[n]b | 移动光标向后跳n个词
-[n]B |  移动光标向后那个空白字符分隔的 "字串"最后一个字符
-[n]e | 移动光标向前跳n个词的词末
-[n]E |  移动光标向前那个空白字符分隔的 "字串"第一个字符
-[n]ge | 移动光标向后跳n个词的词末
-[n]gE |  移动光标向后那个空白字符分隔的 "字串"第一个字符
-$| 移动到行尾部
-^| 移动到行首的第一个非空格字符
-0 |移动到行首的一个字符
-[n]fx | 向前查找本行中的字符 x
-[n]Fx | 向后查找本行中的字符 x
-[n]tx | 向前查找本行中的字符 x，光标定位到前一个字符
-[n]Tx | 向后查找本行中的字符 x，光标定位到后一个字符
-% | 匹配“（，[,{"
-;| 命令重复
-;| 反向重复
-nG|光标到某一个行
-5%| 移动到文档5%的位置
-H |"Home" (头)
-M | "Middle" (中)
-L | "Last" (尾)
-  
-# VIM序言  
-### LOGO
-![vim logo](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Vimlogo.svg/64px-Vimlogo.svg.png "vim 图片")  
-[布莱姆·米勒（Bram Moolenaar）](https://zh.wikipedia.org/wiki/%E5%B8%83%E8%90%8A%E5%A7%86%C2%B7%E7%B1%B3%E5%8B%92)   
-![布莱姆·米勒](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Bram_Moolenaar_in_2007.jpg/220px-Bram_Moolenaar_in_2007.jpg "vim作者")
+
 
 ### 官方网站
 http://www.vim.org/
 
    
-# VIM-资源总结  
+## VIM-资源总结  
 ### 官方网站
 http://www.vim.org/
 ### vim 入门与精通
@@ -83,6 +53,7 @@ Vim具有6种基本模式和5种派生模式，我们这里只简单介绍下:
 | 替换模式     | R| 
 
 ### Ex模式实例：
+
 ```
 ：1,3d //删除1到3行的内容
 ：1,5m7 //移动1-3行到7行后面
@@ -91,6 +62,10 @@ Vim具有6种基本模式和5种派生模式，我们这里只简单介绍下:
 :%t$ //拷贝所有行，然后放到末尾
 :1,.m$ //把1到当前行移动到文件尾
 ```  
+
+
+
+
 # 快速入门VIM  
 
      Vim 是一个具有很多命令的功能非常强大的编辑器。限于篇幅，在本教程当中
