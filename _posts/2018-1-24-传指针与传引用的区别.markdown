@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "[转]传指针与传引用的区别"
+title:  "传指针与传引用的区别"
 date:   2018-1-24 00:00:00
 categories: 嵌入式
 tags: C语言
-excerpt: 传指针和传指针引用的区别/指针和引用的区别
+excerpt: 传引用等价于，扩大了原对象的作用域。
 mathjax: true
 ---
 * content
@@ -50,3 +50,19 @@ mathjax: true
     
     
 ---
+
+
+
+````
+void swap(&x,&y)
+{
+    int t =x;
+    x = y;
+    y = t;
+}
+int main()
+{
+    int x,y;
+    swap(x,y);//等价于 t = x; x= y; y =t;扩大了原对象的作用域。
+}
+```
