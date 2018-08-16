@@ -45,8 +45,6 @@ type: page
 
 > [GitHubDesktopSetup](http://pan.baidu.com/s/1slFhyo9){:target="_blank"}	*(git桌面)*
 
-> [QT](https://pan.baidu.com/s/1i5wuEw9){:target="_blank"}	*(可以运行在Linux系统也可运行在Windows系统,可C++编写GUI程序)*
-
 > [IAR8.0](http://pan.baidu.com/s/1i5oZpY1){:target="_blank"}
 
 > [Altium Designer](https://pan.baidu.com/s/1mj2Urzi){:target="_blank"}
@@ -57,15 +55,7 @@ type: page
 
 > [VS2013旗舰版带Key](https://pan.baidu.com/s/1c2CJSOC){:target="_blank"}
 
-> [STVD](http://pan.baidu.com/s/1i5aMn2X){:target="_blank"}	  *(ST8编译器，除了安装STVD之外，还要安装COSMIC否则编译不过。)*
-
 > [截图工具](http://pan.baidu.com/s/1i4OAOM5){:target="_blank"}
-
-> [迅雷破解版](http://pan.baidu.com/s/1c2jKoqW){:target="_blank"}
-
-> [分区助手绿色版](http://pan.baidu.com/s/1i5pIUyh){:target="_blank"}
-
-> [PanDownload](https://pan.baidu.com/s/1c2wG0CC){:target="_blank"}
 
 
 ---
