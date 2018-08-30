@@ -46,8 +46,6 @@ mathjax: true
 
 - [A4YY](http://www.a4yy4480.com/){:target="_blank"}
 
-- [全看网](http://www.quankan.tv/){:target="_blank"}
-
 - [yse影视](http://www.yse123.com/){:target="_blank"}
 
 - [降龙影院](http://xlyy100.com/){:target="_blank"}
