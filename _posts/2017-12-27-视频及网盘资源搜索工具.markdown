@@ -26,7 +26,6 @@ mathjax: true
 
 - [够低调解析](http://goudidiao.com/){:target="_blank"}
 
-- [知了堂](http://yy.zhiliaotang.com/vip/){:target="_blank"}
 
 ---
 
