@@ -1,0 +1,40 @@
+---
+layout: post
+title:  "读取不定的输入数据"
+date:   2018-9-13 00:00:00
+categories: C++
+tags: C++
+excerpt: 输入流读取不定的输入数据
+mathjax: true
+---
+* content
+{:toc}
+
+
+当我们使用一个`istream`对象最为条件时，其效果是检测流的状态。如果流是有效的，即没有遇到错误，那么检测成功。当遇到文件结束符(end-of-file)，或遇到一个无效输入时（例如输入的值不是一个整数），istream对象的状态变为无效。处于无效状态的istream对象会使条件变为假。
+
+```
+#include <iostream>
+using namespace std;
+
+
+int main()
+{
+    int sum = 0,value = 0;
+    while(cin >> value) {
+        sum = value + sum;
+    }
+    cout << "sum is:" << sum << endl;
+    return 0;
+}
+
+```
+
+![](http://owlypioka.bkt.clouddn.com/%E8%AF%BB%E5%8F%96%E6%95%B0%E9%87%8F%E4%B8%8D%E5%AE%9A%E7%9A%84%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE.png)
+
+
+# 从键盘输入文件结束符
+
+当从键盘向程序输入数据时，对于如何指出文件结束，不同操作系统有不同的约定。在Windows系统中，输入文件结束符的方法时敲`Ctrl + Z`,然后按Enter或者return。在UNIX系统中，包括MAC_OS系统中，文件结束符输入`Ctrl + D`
+
+---
