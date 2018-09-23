@@ -22,4 +22,5 @@ mathjax: true
 ![](http://owlypioka.bkt.clouddn.com/makefile_2.png)
 
 
-
+在查找资料过后，在《跟我一起写Makefile》中这样描述：
+> make会在当前目录下找到名字为`Makefile`或者`makefile`的文件。如果找到，它会找文件中的第一个目标文件，并把这个文件作为最终的目标文件。由于make的依赖性，make会一层一层的去找依赖关系，直到编译出第一个目标文件。
