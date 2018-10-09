@@ -18,7 +18,7 @@ mathjax: true
 
 - 2.在终端输入`objdump -S -d ./out `，objdump中的-S选项是为了在显示汇编代码的时候同时显示原来的C++源代码。<br/>
 
-![](http://owlypioka.bkt.clouddn.com/cpp_test_2.png)
+![](http://owlypioka.bkt.clouddn.com/cpp_test2.png)
 
 
 源码如下：<br/>
