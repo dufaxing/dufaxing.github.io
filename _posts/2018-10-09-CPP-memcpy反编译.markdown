@@ -42,7 +42,7 @@ mathjax: true
  16     char* pStr =  new char[20];
  17     memcpy(pStr,CONST_STR,strlen(CONST_STR));
  18     cout << pStr << endl;
- 19     
+ 19     return 0;
  20 }
 
 ```
@@ -81,6 +81,10 @@ int main()
  9b5:	48 89 c6             	mov    %rax,%rsi
  9b8:	48 89 d7             	mov    %rdx,%rdi
  9bb:	e8 70 fe ff ff       	callq  830 <_ZNSolsEPFRSoS_E@plt>
+    return 0;
+ 9c0:	b8 00 00 00 00       	mov    $0x0,%eax
+}
+
 
 }
 
