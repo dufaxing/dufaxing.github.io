@@ -16,7 +16,7 @@ mathjax: true
 
 - 1.编写main.cpp文件，在终端输入`g++ main.cpp -g -o out`，之所以在g++编译的时候加上-g是为了添加调试信息。<br/>
 
-- 2.在终端输入`objdump -S -d ./out `，objdump中的-S选项是为了在显示汇编代码的时候同时显示原来的C语言源代码。<br/>
+- 2.在终端输入`objdump -S -d ./out `，objdump中的-S选项是为了在显示汇编代码的时候同时显示原来的C++源代码。<br/>
 
 ![](http://owlypioka.bkt.clouddn.com/cpp_test_2.png)
 
