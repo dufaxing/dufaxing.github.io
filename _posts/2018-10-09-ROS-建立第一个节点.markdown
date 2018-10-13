@@ -1,0 +1,215 @@
+---
+layout: post
+title:  "使用BoboWare建立ROS的第一个节点"
+date:   2018-10-13 00:00:00
+categories: C++
+tags: Linux
+excerpt: 在ros下实现节点编程，实现一个节点发送消息，另一个节点接收。
+mathjax: true
+---
+* content
+{:toc}
+
+> 写在前面：今天折腾了一个下午了，初次接触到ROS和BoboWare,编译环境不熟悉，做了很多无用功。买了本工具书，喜欢书作者分享的胡适先生的名言，愿你我共勉：怕什么真理无穷，进一寸有近一寸的欢喜。
+
+
+### 什么是ROS？
+
+- ROS是一个分布式的框架，为用户提供多节点（进程）之间的通信服务，所有软件功能和工具都建立在这种分布式通信机制上，所以ROS的通信机制是最底层也是最核心的技术。
+
+
+
+### 安装RobeWare
+
+1.直接登录`http://roboware.me`官方网站，下载对应版本的deb安装文件，双击即可安装，`RoboWare Studio`可自动检测并加装ROS环境，无需额外配置。<br/>
+
+2.在终端中输入`RoboWare-Studio`即可打开IED。<br/>
+
+
+
+### 建立第一个节点“hello world”
+
+
+1.使用BoboWare打开或新建一个ROS工程，BoboWare会把该工作区自动初始化。<br/>
+
+![](http://owlypioka.bkt.clouddn.com/%E6%89%93%E5%BC%80%E6%88%96%E6%96%B0%E5%BB%BA%E5%B7%A5%E7%A8%8B.png)
+
+
+2.新建一个`ROS Package`，右键src文件夹选择“新建ROS包”在名称栏：test_pkg <br/>
+
+![](http://owlypioka.bkt.clouddn.com/Add%20ROS%20Package.png)
+
+3.新建ROS节点,右键test_pkg文件夹，选择新建C++ROS节点。输入名称：test<br/>
+
+![](http://owlypioka.bkt.clouddn.com/%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9.png)
+
+```
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+
+#include <sstream>
+
+/**
+ * This tutorial demonstrates simple sending of messages over the ROS system.
+ */
+int main(int argc, char *argv[])
+{
+	/**
+	 * The ros::init() function needs to see argc and argv so that it can perform
+	 * any ROS arguments and name remapping that were provided at the command line.
+	 * For programmatic remappings you can use a different version of init() which takes
+	 * remappings directly, but for most command-line programs, passing argc and argv is
+	 * the easiest way to do it.  The third argument to init() is the name of the node.
+	 *
+	 * You must call one of the versions of ros::init() before using any other
+	 * part of the ROS system.
+	 */
+	ros::init(argc, argv, "test_pub");
+
+	/**
+	 * NodeHandle is the main access point to communications with the ROS system.
+	 * The first NodeHandle constructed will fully initialize this node, and the last
+	 * NodeHandle destructed will close down the node.
+	 */
+	ros::NodeHandle n;
+
+	/**
+	 * The advertise() function is how you tell ROS that you want to
+	 * publish on a given topic name. This invokes a call to the ROS
+	 * master node, which keeps a registry of who is publishing and who
+	 * is subscribing. After this advertise() call is made, the master
+	 * node will notify anyone who is trying to subscribe to this topic name,
+	 * and they will in turn negotiate a peer-to-peer connection with this
+	 * node.  advertise() returns a Publisher object which allows you to
+	 * publish messages on that topic through a call to publish().  Once
+	 * all copies of the returned Publisher object are destroyed, the topic
+	 * will be automatically unadvertised.
+	 *
+	 * The second parameter to advertise() is the size of the message queue
+	 * used for publishing messages.  If messages are published more quickly
+	 * than we can send them, the number here specifies how many messages to
+	 * buffer up before throwing some away.
+	 */
+	ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
+
+	ros::Rate loop_rate(10);
+
+	/**
+	 * A count of how many messages we have sent. This is used to create
+	 * a unique string for each message.
+	 */
+	int count = 0;
+	while (ros::ok())
+	{
+		/**
+		 * This is a message object. You stuff it with data, and then publish it.
+		 */
+		std_msgs::String msg;
+
+		std::stringstream ss;
+		ss << "hello world " << count;
+		msg.data = ss.str();
+
+		ROS_INFO("%s", msg.data.c_str());
+
+		/**
+		 * The publish() function is how you send messages. The parameter
+		 * is the message object. The type of this object must agree with the type
+		 * given as a template parameter to the advertise<>() call, as was done
+		 * in the constructor above.
+		 */
+		chatter_pub.publish(msg);
+
+		ros::spinOnce();
+
+		loop_rate.sleep();
+		++count;
+	}
+
+	return 0;
+}
+```
+
+
+
+```
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+
+/**
+ * This tutorial demonstrates simple receipt of messages over the ROS system.
+ */
+void chatterCallback(const std_msgs::String::ConstPtr& msg)
+{
+	ROS_INFO("I heard: [%s]", msg->data.c_str());
+}
+
+int main(int argc, char *argv[])
+{
+	/**
+	 * The ros::init() function needs to see argc and argv so that it can perform
+	 * any ROS arguments and name remapping that were provided at the command line.
+	 * For programmatic remappings you can use a different version of init() which takes
+	 * remappings directly, but for most command-line programs, passing argc and argv is
+	 * the easiest way to do it.  The third argument to init() is the name of the node.
+	 *
+	 * You must call one of the versions of ros::init() before using any other
+	 * part of the ROS system.
+	 */
+	ros::init(argc, argv, "test_sub");
+
+	/**
+	 * NodeHandle is the main access point to communications with the ROS system.
+	 * The first NodeHandle constructed will fully initialize this node, and the last
+	 * NodeHandle destructed will close down the node.
+	 */
+	ros::NodeHandle n;
+
+	/**
+	 * The subscribe() call is how you tell ROS that you want to receive messages
+	 * on a given topic.  This invokes a call to the ROS
+	 * master node, which keeps a registry of who is publishing and who
+	 * is subscribing.  Messages are passed to a callback function, here
+	 * called chatterCallback.  subscribe() returns a Subscriber object that you
+	 * must hold on to until you want to unsubscribe.  When all copies of the Subscriber
+	 * object go out of scope, this callback will automatically be unsubscribed from
+	 * this topic.
+	 *
+	 * The second parameter to the subscribe() function is the size of the message
+	 * queue.  If messages are arriving faster than they are being processed, this
+	 * is the number of messages that will be buffered up before beginning to throw
+	 * away the oldest ones.
+	 */
+	ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+
+	/**
+	 * ros::spin() will enter a loop, pumping callbacks.  With this version, all
+	 * callbacks will be called from within this thread (the main one).  ros::spin()
+	 * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
+	 */
+	ros::spin();
+
+	return 0;
+}
+```
+
+
+4.编译选项为`Release(isolated)`，点击左上角绿色的榔头即可编译。<br/>
+
+![](http://owlypioka.bkt.clouddn.com/RoboWare%E7%BC%96%E8%AF%91.png)
+
+5.设置环境变量，找到当前使用的工作区的`setup.bash`文件<br/>
+
+在终端中输入`source setup.bash`。注意这个环境变量，仅对当前的终端有效果，新建终端，需要再次设置环境变量。<br/>
+
+6.运行
+
+- 在终端中输入`roscore`打开ROS<br/>
+- 新建一个终端设置环境变量后输入`rosrun test_pkg test_pub`<br/>
+- 再新建一个终端设置环境变量后输入`rosrun test_pkg test_sub`<br/>
+
+运行效果如下：<br/>
+
+![](http://owlypioka.bkt.clouddn.com/ros%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9.jpg)
+
+
