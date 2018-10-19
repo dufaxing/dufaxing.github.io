@@ -36,14 +36,17 @@ mathjax: true
  10 #include <cstring>
  11 
  12 #define CONST_STR "dufaxing"
- 13                                                                                                                   
+ 13 
  14 int main()
  15 {
  16     char* pStr =  new char[20];
  17     memcpy(pStr,CONST_STR,strlen(CONST_STR));
- 18     cout << pStr << endl;
- 19     return 0;
- 20 }
+ 18     memcpy(pStr,CONST_STR,strlen(CONST_STR));
+ 19     cout << pStr << endl;
+ 20     delete []pStr;                                                                                                
+ 21     return 0;
+ 22 }
+
 
 ```
 
@@ -51,41 +54,51 @@ mathjax: true
 部分反编译文件：<br/>
 
 ```
-000000000000096a <main>:
+00000000000009ba <main>:
 #include <cstring>
 
 #define CONST_STR "dufaxing"
 
 int main()
 {
- 96a:	55                   	push   %rbp
- 96b:	48 89 e5             	mov    %rsp,%rbp
- 96e:	48 83 ec 10          	sub    $0x10,%rsp
+ 9ba:	55                   	push   %rbp
+ 9bb:	48 89 e5             	mov    %rsp,%rbp
+ 9be:	48 83 ec 10          	sub    $0x10,%rsp
     char* pStr =  new char[20];
- 972:	bf 14 00 00 00       	mov    $0x14,%edi
- 977:	e8 74 fe ff ff       	callq  7f0 <_Znam@plt>
- 97c:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+ 9c2:	bf 14 00 00 00       	mov    $0x14,%edi
+ 9c7:	e8 64 fe ff ff       	callq  830 <_Znam@plt>
+ 9cc:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     memcpy(pStr,CONST_STR,strlen(CONST_STR));
- 980:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
- 984:	ba 08 00 00 00       	mov    $0x8,%edx
- 989:	48 8d 35 25 01 00 00 	lea    0x125(%rip),%rsi        # ab5 <_ZStL19piecewise_construct+0x1>
- 990:	48 89 c7             	mov    %rax,%rdi
- 993:	e8 68 fe ff ff       	callq  800 <memcpy@plt>
+ 9d0:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ 9d4:	ba 08 00 00 00       	mov    $0x8,%edx
+ 9d9:	48 8d 35 45 01 00 00 	lea    0x145(%rip),%rsi        # b25 <_ZStL19piecewise_construct+0x1>
+ 9e0:	48 89 c7             	mov    %rax,%rdi
+ 9e3:	e8 58 fe ff ff       	callq  840 <memcpy@plt>
+    memcpy(pStr,CONST_STR,strlen(CONST_STR));
+ 9e8:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ 9ec:	ba 08 00 00 00       	mov    $0x8,%edx
+ 9f1:	48 8d 35 2d 01 00 00 	lea    0x12d(%rip),%rsi        # b25 <_ZStL19piecewise_construct+0x1>
+ 9f8:	48 89 c7             	mov    %rax,%rdi
+ 9fb:	e8 40 fe ff ff       	callq  840 <memcpy@plt>
     cout << pStr << endl;
- 998:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
- 99c:	48 89 c6             	mov    %rax,%rsi
- 99f:	48 8d 3d 7a 06 20 00 	lea    0x20067a(%rip),%rdi        # 201020 <_ZSt4cout@@GLIBCXX_3.4>
- 9a6:	e8 75 fe ff ff       	callq  820 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
- 9ab:	48 89 c2             	mov    %rax,%rdx
- 9ae:	48 8b 05 1b 06 20 00 	mov    0x20061b(%rip),%rax        # 200fd0 <_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GLIBCXX_3.4>
- 9b5:	48 89 c6             	mov    %rax,%rsi
- 9b8:	48 89 d7             	mov    %rdx,%rdi
- 9bb:	e8 70 fe ff ff       	callq  830 <_ZNSolsEPFRSoS_E@plt>
+ a00:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ a04:	48 89 c6             	mov    %rax,%rsi
+ a07:	48 8d 3d 12 06 20 00 	lea    0x200612(%rip),%rdi        # 201020 <_ZSt4cout@@GLIBCXX_3.4>
+ a0e:	e8 4d fe ff ff       	callq  860 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+ a13:	48 89 c2             	mov    %rax,%rdx
+ a16:	48 8b 05 b3 05 20 00 	mov    0x2005b3(%rip),%rax        # 200fd0 <_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GLIBCXX_3.4>
+ a1d:	48 89 c6             	mov    %rax,%rsi
+ a20:	48 89 d7             	mov    %rdx,%rdi
+ a23:	e8 48 fe ff ff       	callq  870 <_ZNSolsEPFRSoS_E@plt>
+    delete []pStr;
+ a28:	48 83 7d f8 00       	cmpq   $0x0,-0x8(%rbp)
+ a2d:	74 0c                	je     a3b <main+0x81>
+ a2f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ a33:	48 89 c7             	mov    %rax,%rdi
+ a36:	e8 45 fe ff ff       	callq  880 <_ZdaPv@plt>
     return 0;
- 9c0:	b8 00 00 00 00       	mov    $0x0,%eax
+ a3b:	b8 00 00 00 00       	mov    $0x0,%eax
 }
 
-
-}
 
 ```
