@@ -12,7 +12,7 @@ mathjax: true
 
 > 问题描述：定义一个字符串常量，使用两次内存拷贝函数后，反汇编查看地址字符串地址是否发生了变化。
 
-
+### 反编译
 
 - 1.编写main.cpp文件，在终端输入`g++ main.cpp -g -o out`，之所以在g++编译的时候加上-g是为了添加调试信息。<br/>
 
@@ -105,3 +105,56 @@ int main()
 
 
 - 由以上反汇编代码可以看出，两次调用memcpy函数常量字符串的地址没有变化。
+
+### 打印常量字符串地址
+
+```
+  1 /*************************************************************************
+  2     > File Name: main.cpp
+  3     > Author: dufaxing
+  4     > Mail: dufaxing@qq.com
+  5     > Created Time: Tue 09 Oct 2018 02:18:06 AM PDT
+  6  ************************************************************************/
+  7 
+  8 #include<iostream>
+  9 using namespace std;
+ 10 #include <cstring>
+ 11 
+ 12 #define CONST_STR "dufaxing"
+ 13 
+ 14 void str_test()
+ 15 {
+ 16     char* pStr =  new char[20];
+ 17     memcpy(pStr,CONST_STR,strlen(CONST_STR));
+ 18     memcpy(pStr,CONST_STR,strlen(CONST_STR));
+ 19     cout << "in str_test:" << &(CONST_STR) << endl;
+ 20     delete []pStr;
+ 21 }
+ 22 
+ 23 int main()
+ 24 {
+ 25     str_test();
+ 26     char* pStr =  new char[20];
+ 27     memcpy(pStr,CONST_STR,strlen(CONST_STR));
+ 28     cout << "in main:    " << &(CONST_STR) << endl;                                                                 
+ 29     delete []pStr;
+ 30     return 0;
+ 31 }                             
+
+```
+
+- 在终端中输入`g++ -o out main.cpp `执行生成的二进制文件`./out `
+
+```
+dufaxing@ubuntu:~/Projects/OOP/test_2$ vim main.cpp 
+dufaxing@ubuntu:~/Projects/OOP/test_2$ g++ -o out main.cpp 
+dufaxing@ubuntu:~/Projects/OOP/test_2$ ./out 
+in str_test:0x55fdc3ff6bf5
+in main:    0x55fdc3ff6bf5
+
+
+```
+
+### 总结
+
+- 宏定义了字符串CONST_STR没有生成内存空间，在调用memcpy()函数后，CONST_STR在堆栈上创建了内存空间，并且在函数执行完成后CONST_STR的内存空间没有被销毁。所以在main()函数中两次调用memcpy()函数或者调用str_test()函数，CONST_STR的地址都没有变化。
