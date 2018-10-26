@@ -157,4 +157,4 @@ in main:    0x55fdc3ff6bf5
 
 ### 总结
 
-- 宏定义了字符串CONST_STR没有生成内存空间，在调用memcpy()函数后，CONST_STR在堆栈上创建了内存空间，并且在函数执行完成后CONST_STR的内存空间没有被销毁。所以在main()函数中两次调用memcpy()函数或者调用str_test()函数，CONST_STR的地址都没有变化。
+- 宏定义了字符串CONST_STR没有生成内存空间，在调用memcpy()函数后，CONST_STR在堆栈上创建了内存空间，并且在函数执行完成后CONST_STR的内存空间没有被销毁(创建后在一定时间内不会被销毁)。所以在main()函数中两次调用memcpy()函数或者调用str_test()函数，CONST_STR的地址都没有变化。
