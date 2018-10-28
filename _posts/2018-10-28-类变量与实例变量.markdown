@@ -1,0 +1,72 @@
+---
+layout: post
+title:  "类变量与实例变量"
+date:   2018-10-13 00:00:00
+categories: C++
+tags: Linux
+excerpt: 在看书，刷笔试题的时候，反复遇到这些概念，现记录以便查阅。
+mathjax: true
+---
+* content
+{:toc}
+
+
+
+
+### 类变量与实例变量的定义
+
+![](http://owlypioka.bkt.clouddn.com/2018-10-28_%E7%89%9B%E5%AE%A2%E7%B1%BB%E5%8F%98%E9%87%8F.png)
+
+
+- 类变量也叫静态变量，也就是在变量前加了static 的变量。<br/>
+- 实例变量也叫对象变量，即没加static 的变量。<br/>
+
+区别在于：类变量和实例变量的区别在于：类变量是所有对象共有，其中一个对象将它值改变，其他对象得到的就是改变后的结果；而实例变量则属对象私有，某一个对象将其值改变，不影响其他对象。
+
+
+
+### 静态数据成员与静态成员函数
+
+#### 静态数据成员
+
+- 静态数据成员不属于任何一个对象，只要在类中定义了静态数据成员，即使不定义对象，也为静态数据成员分配空间。它在程序编译时被分配空间，到程序结束时释放空间。<br/>
+- 静态数据成员可以初始化，但只能在类体外。<br/>
+
+
+如下建立一个静态数据成员，统计生成对象的个数。<br/>
+
+```
+#include<iostream>
+using namespace std;
+
+class MyClass {
+public:
+    MyClass(int a,int b,int c):a(a),b(b),c(c),d(a+b+c){count++;};
+    static void get_sum();
+    static int count;//声明为静态数据成员
+private:
+    int a,b,c,d;
+};
+
+int MyClass::count = 0;//定义并且初始化静态数据成员
+
+void MyClass::get_sum()
+{
+    cout << count <<endl;
+}
+
+int main ()
+{
+    MyClass cl1(1,2,3);
+    MyClass cl2(1,2,3);
+    MyClass::get_sum();//调用静态成员函数
+    return 0;
+}
+```
+
+### 静态成员函数
+
+- 静态成员函数是类的一部分，不是对象的一部分。可以通过类名直接引用。例如`MyClass::get_sum()` <br/>
+- 静态成员函数没有this指针，由此决定了静态成员函数不能访问本类中的非静态成员。<br/>
+
+
