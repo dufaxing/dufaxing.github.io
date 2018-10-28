@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "类变量与实例变量"
-date:   2018-10-13 00:00:00
+date:   2018-10-28 00:00:00
 categories: C++
 tags: Linux
 excerpt: 在看书，刷笔试题的时候，反复遇到这些概念，现记录以便查阅。
