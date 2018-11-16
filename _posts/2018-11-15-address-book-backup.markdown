@@ -329,7 +329,7 @@ int main(int argc, char** argv)
 ### SQLite3
 
 
-- [SQLite教程|菜鸟教程](http://www.runoob.com/sqlite/sqlite-tutorial.html){:target="_blank"}
+- [SQLite教程-菜鸟教程](http://www.runoob.com/sqlite/sqlite-tutorial.html){:target="_blank"}
 
 
 
