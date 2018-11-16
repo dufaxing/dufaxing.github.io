@@ -169,6 +169,7 @@ JNIEXPORT jstring JNICALL Java_com_example_dufaxing_myapplication_JNITest_upData
     return (*env).NewStringUTF("上传成功");
 }
 
+```
 
 
 ### 保存至SD卡
