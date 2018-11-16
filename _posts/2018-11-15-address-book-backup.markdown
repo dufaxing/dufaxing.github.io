@@ -252,9 +252,302 @@ private static final int REQUEST_EXTERNAL_STORAGE = 1;
 ## 服务器端
 
 
+### socket通信
+
+
+以下为socket通信测试代码
+
+```
+/*************************************************************************
+	> File Name: server.cpp
+	> Author: dufaxing
+	> Mail: dufaxing@qq.com
+	> Created Time: Tue 30 Oct 2018 06:10:26 AM PDT
+ ************************************************************************/
+
+#include<iostream>
+using namespace std;
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<errno.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#include<unistd.h>
+
+#define MAXLINE 4096
+
+int main(int argc, char** argv)
+{
+    int  listenfd, connfd;
+    struct sockaddr_in  servaddr;
+    char  buff[4096];
+    int  n;
+
+    if( (listenfd = socket(AF_INET, SOCK_STREAM, 0)) == -1 ) {
+        printf("create socket error: %s(errno: %d)\n",strerror(errno),errno);
+        return 0;
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(6666);//监听的端口号
+
+    if( bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) == -1) {
+        printf("bind socket error: %s(errno: %d)\n",strerror(errno),errno);
+        return 0;
+    }
+
+    if( listen(listenfd, 10) == -1) {
+        printf("listen socket error: %s(errno: %d)\n",strerror(errno),errno);
+        return 0;
+    }
+
+    printf("======waiting for client's request======\n");
+    while(1) {
+        if( (connfd = accept(listenfd, (struct sockaddr*)NULL, NULL)) == -1) {
+            printf("accept socket error: %s(errno: %d)",strerror(errno),errno);
+            continue;
+        }
+        n = recv(connfd, buff, MAXLINE, 0);
+        buff[n] = '\0';
+        printf("recv msg from client: %s\n", buff);
+        close(connfd);
+    }
+    close(listenfd);
+    return 0;
+}
+
+```
 
 
 
+
+### SQLite3
+
+
+- [SQLite教程|菜鸟教程](http://www.runoob.com/sqlite/sqlite-tutorial.html){:target="_blank"}
+
+
+
+Linux服务器上大多都已经自装了SQLite3，只要使用下面的命令来检查您的机器上是否已经安装了 SQLite。
+
+```
+dufaxing@ubuntu:~$ sqlite3
+SQLite version 3.22.0 2018-01-22 18:45:57
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> 
+
+```
+
+
+#### 创建数据库
+
+在终端执行命令`g++ create_database.cpp -o create_database.out -l sqlite3 `可以生成可执行文件，注意需要加入`-l sqlite3`编译以加入`sqlite3.h`头文件。
+
+
+```
+/*************************************************************************
+	> File Name: create_database.cpp
+	> Author: dufaxing
+	> Mail: dufaxing@qq.com
+	> Created Time: Tue 30 Oct 2018 02:38:33 AM PDT
+ ************************************************************************/
+
+#include<iostream>
+using namespace std;
+#include <stdio.h>
+#include <sqlite3.h>
+
+int main(int argc, char* argv[])
+{
+   sqlite3 *db;
+   char *zErrMsg = 0;
+   int rc;
+
+   rc = sqlite3_open("test.db", &db);
+
+   if( rc ){
+      fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+      exit(0);
+   }else{
+      fprintf(stderr, "Opened database successfully\n");
+   }
+   sqlite3_close(db);
+}
+```
+
+
+
+#### 创建表
+
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h> 
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+   int i;
+   for(i=0; i<argc; i++){
+      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+   }
+   printf("\n");
+   return 0;
+}
+
+int main(int argc, char* argv[])
+{
+   sqlite3 *db;
+   char *zErrMsg = 0;
+   int  rc;
+   char *sql;
+
+   /* Open database */
+   rc = sqlite3_open("test.db", &db);
+   if( rc ){
+      fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+      exit(0);
+   }else{
+      fprintf(stdout, "Opened database successfully\n");
+   }
+
+   /* Create SQL statement */
+   sql = "CREATE TABLE COMPANY("  \
+         "ID INT PRIMARY KEY     NOT NULL," \
+         "NAME           TEXT    NOT NULL );";
+
+   /* Execute SQL statement */
+   rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+   if( rc != SQLITE_OK ){
+   fprintf(stderr, "SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+   }else{
+      fprintf(stdout, "Table created successfully\n");
+   }
+   sqlite3_close(db);
+   return 0;
+}
+```
+
+#### 将通讯录上传至服务器
+
+
+- 插入数据库时，需严格匹配所创建数据库的数据类型！
+
+
+```
+/*************************************************************************
+	> File Name: server.cpp
+	> Author: dufaxing
+	> Mail: dufaxing@qq.com
+	> Created Time: Tue 30 Oct 2018 06:10:26 AM PDT
+ ************************************************************************/
+
+#include<iostream>
+using namespace std;
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<errno.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#include<unistd.h>
+
+#define MAXLINE 4096
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName)
+{
+    int i;
+    for(i=0; i<argc; i++) {
+        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+    printf("\n");
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
+
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    char *sql;
+    int id = 1;
+
+
+    int  listenfd, connfd;
+    struct sockaddr_in  servaddr;
+    char  buff[4096];
+    int  n;
+
+    if( (listenfd = socket(AF_INET, SOCK_STREAM, 0)) == -1 ) {
+        printf("create socket error: %s(errno: %d)\n",strerror(errno),errno);
+        return 0;
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(6666);
+
+    if( bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) == -1) {
+        printf("bind socket error: %s(errno: %d)\n",strerror(errno),errno);
+        return 0;
+    }
+
+    if( listen(listenfd, 10) == -1) {
+        printf("listen socket error: %s(errno: %d)\n",strerror(errno),errno);
+        return 0;
+    }
+
+    printf("======waiting for client's request======\n");
+    while(1) {
+        if( (connfd = accept(listenfd, (struct sockaddr*)NULL, NULL)) == -1) {
+            printf("accept socket error: %s(errno: %d)",strerror(errno),errno);
+            continue;
+        }
+        n = recv(connfd, buff, MAXLINE, 0);
+        buff[n] = '\0';
+        printf("recv msg from client: %s\n", buff);
+        close(connfd);
+        /* Open database */
+        rc = sqlite3_open("test.db", &db);
+        if( rc ) {
+            fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+            exit(0);
+        } else {
+            fprintf(stderr, "Opened database successfully\n");
+        }
+        
+        /* Create SQL statement */
+        char BUFF[200] = {0};
+        sprintf (BUFF, "INSERT INTO COMPANY(ID,NAME)" "VALUES (%d, `%s`);", id++, buff);
+        rc = sqlite3_exec(db, BUFF, callback, 0, &zErrMsg);
+        if( rc != SQLITE_OK ) {
+            fprintf(stderr, "SQL error: %s\n", zErrMsg);
+            sqlite3_free(zErrMsg);
+        } else {
+            fprintf(stdout, "Records created successfully\n");
+        }
+        sqlite3_close(db);
+    }
+    close(listenfd);
+    return 0;
+}
+```
 
 
 ---
