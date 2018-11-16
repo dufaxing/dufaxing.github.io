@@ -29,6 +29,12 @@ mathjax: true
 - 服务器下接受socket传来的通讯录信息，同时保存至本地数据库。<br/>
 
 
+[![ixVfHg.md.png](https://s1.ax1x.com/2018/11/16/ixVfHg.md.png)](https://imgchr.com/i/ixVfHg)
+
+
+[![ixV5Nj.md.png](https://s1.ax1x.com/2018/11/16/ixV5Nj.md.png)](https://imgchr.com/i/ixV5Nj)
+
+
 ---
 
 ## Android端
@@ -134,8 +140,7 @@ JNIEXPORT jstring JNICALL Java_com_example_dufaxing_myapplication_JNITest_upData
     char **pstr = (char **) malloc(len*sizeof(char *));
 
     /*绑定IP地址*/
-    char servInetAddr[] = "104.129.182.145";
-    //char servInetAddr[] = "127.0.0.1";
+    char servInetAddr[] = "127.0.0.1";
     struct sockaddr_in sockaddr;
 
     int socketfd;
