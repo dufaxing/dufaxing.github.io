@@ -45,7 +45,7 @@ mathjax: true
 ### UML协作图
 
 
-[![F9kf4H.md.png](https://s1.ax1x.com/2018/11/20/F9kf4H.md.png)](https://imgchr.com/i/F9kf4H)
+[![F9A0Z8.md.png](https://s1.ax1x.com/2018/11/20/F9A0Z8.md.png)](https://imgchr.com/i/F9A0Z8)
 
 
 ### 效果图
