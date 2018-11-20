@@ -42,6 +42,11 @@ mathjax: true
 
 
 
+### UML协作图
+
+
+[![F9kf4H.md.png](https://s1.ax1x.com/2018/11/20/F9kf4H.md.png)](https://imgchr.com/i/F9kf4H)
+
 
 ### 效果图
 
@@ -54,6 +59,16 @@ mathjax: true
 ---
 
 ## Android端
+
+
+### 界面设计
+
+- 安卓界面放置了一个button，用于上传同时保存通讯录操作；<br/>
+- textView用于显示上传状态；<br/>
+- ListView显示本机通讯录；<br/>
+
+
+[![F9kbb8.md.png](https://s1.ax1x.com/2018/11/20/F9kbb8.md.png)](https://imgchr.com/i/F9kbb8)
 
 
 ### JNI
