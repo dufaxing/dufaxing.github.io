@@ -50,11 +50,21 @@ mathjax: true
 
 ### 效果图
 
+- 上传到服务器并保存到数据库<br/>
+
 ![ixVfHg.png](https://s1.ax1x.com/2018/11/16/ixVfHg.png)
 
+- 查看数据库<br/>
 
 ![ixV5Nj.png](https://s1.ax1x.com/2018/11/16/ixV5Nj.png)
 
+
+-通讯录保存到SD卡<br/>
+
+![Fk3JJJ.png](https://s1.ax1x.com/2018/11/25/Fk3JJJ.png)
+
+
+- 通讯录写入文件<br/>
 
 ![Fk3YW9.png](https://s1.ax1x.com/2018/11/25/Fk3YW9.png)
 
