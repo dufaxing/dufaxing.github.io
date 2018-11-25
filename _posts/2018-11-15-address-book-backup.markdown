@@ -59,7 +59,7 @@ mathjax: true
 ![ixV5Nj.png](https://s1.ax1x.com/2018/11/16/ixV5Nj.png)
 
 
--通讯录保存到SD卡<br/>
+- 通讯录保存到SD卡<br/>
 
 ![Fk3JJJ.png](https://s1.ax1x.com/2018/11/25/Fk3JJJ.png)
 
