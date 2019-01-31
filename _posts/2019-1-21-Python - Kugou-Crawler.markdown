@@ -17,10 +17,10 @@ mathjax: true
 
 爬取网址：[http://www.kugou.com/yy/rank/home/1-8888.html](http://www.kugou.com/yy/rank/home/1-8888.html){:target="_blank"}
 
-网页版的酷狗不能手动翻页进行下一步的浏览，但通过观察第一页的URL:
+网页版的酷狗不能手动翻页进行下一步的浏览，但通过观察第一页的URL:<br/>
 
-> `http://www.kugou.com/yy/rank/home/1-8888.html`
-> `http://www.kugou.com/yy/rank/home/2-8888.html`
+> `http://www.kugou.com/yy/rank/home/1-8888.html` <br/>
+> `http://www.kugou.com/yy/rank/home/2-8888.html`<br/>
 
 
 尝试把数字1改成2，发现恰好返回的是第二页的信息。所以爬取TOP500的歌曲只需要改home后面的数字即可。
