@@ -40,10 +40,9 @@ mathjax: true
 - c语言支持安装 
 
 
-```
-cd ~/.vim/bundle/YouCompleteMe
-./install.py --clang-completer
-```
+`cd ~/.vim/bundle/YouCompleteMe`
+
+`./install.py --clang-completer`
 
 
 
