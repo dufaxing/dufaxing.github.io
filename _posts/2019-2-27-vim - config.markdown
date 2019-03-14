@@ -342,3 +342,7 @@ set nofoldenable
 
 
 ---
+
+
+
+https://github.com/zhangjikai/vim_learn

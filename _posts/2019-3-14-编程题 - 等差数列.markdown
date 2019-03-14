@@ -1,0 +1,100 @@
+---
+layout: post
+title:  "[编程题]等差数列"
+date:   2019-3-14 00:00:00
+categories: 牛客网在线编程题
+tags: C++
+excerpt: C++
+mathjax: true
+---
+* content
+{:toc}
+---
+
+链接：https://www.nowcoder.com/questionTerminal/e11bc3a213d24fc1989b21a7c8b50c3f
+来源：牛客网
+
+如果一个数列S满足对于所有的合法的i,都有S[i + 1] = S[i] + d, 这里的d也可以是负数和零,我们就称数列S为等差数列。
+小易现在有一个长度为n的数列x,小易想把x变为一个等差数列。小易允许在数列上做交换任意两个位置的数值的操作,并且交换操作允许交换多次。但是有些数列通过交换还是不能变成等差数列,小易需要判别一个数列是否能通过交换操作变成等差数列 
+
+
+
+> 输入描述:<br/>
+输入包括两行,第一行包含整数n(2 ≤ n ≤ 50),即数列的长度。<br/>
+第二行n个元素x[i](0 ≤ x[i] ≤ 1000),即数列中的每个整数。
+
+
+> 输出描述:<br/>
+如果可以变成等差数列输出"Possible",否则输出"Impossible"。
+
+
+```
+输入
+3
+3 1 2
+输出
+Possible
+
+```
+
+
+
+
+---
+
+### 解题思路:
+
+
+
+- 既然可以通过交换元素位置使之成为等差数列，则先用`sort()`函数排序，在验证是否是等差数列，将提高程序效率；<br/>
+- 除array外，所有标准库容器都提供灵活的内存管理。在运行时可以动态添加或删除元素来改变容器大小。<br/>
+
+
+
+
+---
+
+### 实现代码
+
+```
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+using namespace std;
+#include<algorithm>
+#include<vector>
+
+
+int main() {
+    int n,value;
+    cin >> n;
+    vector<int> vec;
+    for(int i = 0;i < n;i++) {
+        cin >> value;
+        vec.push_back(value);//向容器末尾创建一个元素
+    }
+    sort(vec.begin(), vec.end());
+    vector<int>::iterator it;//迭代器
+    if (vec.size()<3) {
+        cout << "Impossible" << endl;
+        return 0;
+    }
+    for(it=vec.begin();it<vec.end()-1;it++){//因为使用到了*(it+1)为不不越界，所以it<vec.end()-1
+        static int check;//等差数列的差值
+        int diff = *(it+1) - *it;
+        if (it != vec.begin()) {
+            if (check != diff) {
+                cout << "Impossible" << endl;
+                return 0;
+
+            }
+        }
+        check = diff;
+    }
+    cout << "Possible" << endl;
+    return 0;
+}
+```
+
+
+---
