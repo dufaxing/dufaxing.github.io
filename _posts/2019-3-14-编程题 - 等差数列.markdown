@@ -2,9 +2,9 @@
 layout: post
 title:  "[编程题]等差数列"
 date:   2019-3-14 00:00:00
-categories: 牛客网在线编程题
+categories: C++
 tags: C++
-excerpt: C++
+excerpt: 牛客网在线编程题
 mathjax: true
 ---
 * content
