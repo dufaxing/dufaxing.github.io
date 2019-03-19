@@ -67,3 +67,65 @@ public:
 
 
 ---
+
+## 左旋转字符串
+
+链接：https://www.nowcoder.com/questionTerminal/12d959b108cb42b1ab72cef4d36af5ec
+来源：牛客网
+
+> 汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！<br/>
+
+
+### 解题思路
+
+- 我自己的解法是将需要移动的字符剪切出来，在进行拼接<br/>
+
+- 大牛的代码，用的是两次翻转字符串。
+
+
+
+### 实现代码
+
+
+```
+//自己的代码
+
+class Solution {
+public:
+    string LeftRotateString(string str, int n) {
+        int len = str.size();
+        if(len < n) {
+            return "";               //不满足要求的n，需要返回"",不然过不去测试例(:
+        }
+        string ans,temp;
+        for(int i = 0;i < n;i++) {
+            ans.push_back(str[i]);
+        }
+        for(int i = n;i < len;i++) {
+             temp.push_back(str[i]);
+        }
+        ans = temp + ans;
+
+        return ans;
+    }
+};
+
+```
+
+
+
+```
+//大牛的代码
+
+class Solution {
+public:
+    string LeftRotateString(string str, int n) {
+        reverse(str.begin(), str.end());
+        reverse(str.begin(), str.begin() + str.size() - n);
+        reverse(str.begin() + str.size() - n, str.end());
+        return str;
+    }
+};
+
+
+```
