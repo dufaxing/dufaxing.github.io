@@ -129,3 +129,55 @@ public:
 
 
 ```
+
+---
+
+
+## 数字在排序数组中出现的次数
+
+
+> 统计一个数字在排序数组中出现的次数。
+
+
+### 解题思路
+
+- 自己的想法是用的历遍查找，实现起来确实很简单，但是没什么意义。发现大家都是用的二分法查找····
+
+
+### 实现代码
+
+
+```
+
+
+class Solution {
+public:
+    int GetNumberOfK(vector<int> data, int k) {
+        //return upper_bound(data.begin(), data.end(), k) - lower_bound(data.begin(), data.end(), k);//库函数
+        return upper(data, k) - lower(data, k);
+    }
+private:
+    int lower(vector<int>& data, int num)
+    {
+        int x = 0, y = data.size();
+        while (x<y)
+        {
+            int mid = x + (y - x) / 2;
+            if (data[mid] >= num) y = mid;
+            else x = mid + 1;
+        }
+        return x;
+    }
+    int upper(vector<int>& data, int num)
+    {
+        int x = 0, y = data.size();
+        while (x<y)
+        {
+            int mid = x + (y - x) / 2;
+            if (data[mid] <= num) x = mid+1;
+            else y = mid;
+        }
+        return x;
+    }
+};
+```
