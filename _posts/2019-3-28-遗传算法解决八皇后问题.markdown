@@ -1,0 +1,188 @@
+---
+layout: post
+title:  "遗传算法解决八皇后问题"
+date:   2019-3-28 00:00:00
+categories: C++
+tags: 算法
+excerpt: 八皇后是个经典的 NP 问题，有许多的求解算法。 本文用遗传算法求解八皇后问题，给出详细的实现过程。
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+
+### 八皇后问题描述
+
+19 世纪著名的数学家 Gauss 在 1850 年提出八皇后问题后， 该问题成为各类语言程序设计的经典题目。 八皇后问题要求在 8×8 格的国际象棋上摆放八个皇后，使横、竖、斜方向上都不能有两个及两个以上皇后在同一条直线上， 问题也可以推广到 N 个皇后。 穷举法在问题规模不大的情况
+下还可适用，回溯法是求解此问题的经典算法。但N 皇后问题是个 NP 难问题， 随着皇后数目的增多， 求解复杂度激增， 就需利用非常规的技术求
+解。 遗传算法在求解一些 NP 完全问题上得到了广泛地应用，本文用遗传算法求解八皇后问题，给出详细的实现过程。
+
+
+---
+
+### 基本遗传算法求解过程
+
+基本遗传以初始种群为基点， 经过选择、交叉、变异操作生成新的种群，如此更新种群直到满足终止条件。 其计算步骤如下：<br/>
+    
+- （1） 将问题空间转换为遗传空间， 也就是编码；<br/>
+- （2）随机生成 P 个染色体作为初始种群；<br/>
+- （3）染色体评价，也就是按确定的适应度函数计算各个染色体的适应度；<br/>
+- （4）根据染色体适应度，按选择算子进行染色体的选择；<br/>
+- （5）按交叉概率进行交叉操作；<br/>
+- （6）按变异概率进行变异操作；<br/>
+- （7）返回（4）形成新的种群，继续迭代，直到满足终止条件。<br/>
+
+
+基本遗传算法给出了基本框架， 针对求解的问题不同， 遗传算法在相应的计算步骤中有不同的设计。 本文针对八皇后问题， 设计了相应的编码，适应度计算方法，交叉和变异操作。
+
+
+---
+
+### 实现过程
+
+
+#### 遗传算法
+
+```
+// 遗传算法
+bool Genetic::genetic_algorithn(vector<vector<int> > &p, float mutateRate)
+{
+    vector<vector<int> > old_p = p;
+    vector<vector<int> > new_p(p.size());
+    // 遗传代数设置为 10000 代
+    for (int n = 0; n < 10000; ++n) {
+        for (unsigned int i = 0; i < p.size(); ++i) {
+            // 挑选参与繁殖的两个个体
+            vector<int> x = random_selection(old_p);
+            vector<int> y = random_selection(old_p);
+
+            // 产生后代
+            vector<int> child = reproduce(x, y);
+
+            // 后代变异
+            mutate(child, mutateRate);
+
+            new_p[i] = child;
+
+            if(fitness(child) == 0) {
+                for(int ii=0;ii<(int)child.size();ii++) {
+                    state[ii] = child[ii];
+                }
+                return 1;
+            }
+        }
+
+
+        old_p = new_p;
+    }
+    return false;
+}
+```
+
+#### 根据适应度选择种群
+
+```
+// 用于挑选种群 p 中参与繁殖的个体，适应度函数评价越高的个体越容易被挑选
+vector<int> Genetic::random_selection(vector<vector<int> > &p)
+{
+#if 1
+    vector<int> temp;
+    temp.resize(pSize);
+    int total=0;
+    float probability[pSize] = { 0 };
+    for(int i = 0;i < pSize;i++) {
+        temp[i] = 28 - fitness(p[i]);
+        total+=temp[i];
+    }
+    for(int i = 0;i < pSize;i++) {
+       probability[i] =  (float)(temp[i] / total);
+    }
+    float r = (float)rand() / RAND_MAX;
+    for(int i = 0;i < pSize;i++) {
+        static float a = 0;
+        a += probability[i];
+        if (r<a)
+            return p[i];
+    }
+#endif
+
+#if 0
+    vector<int> temp;
+    temp.resize(pSize);
+    for(int i = 0;i < pSize;i++) {
+        temp[i] = fitness(p[i]);
+    }
+    auto smallest = std::min_element(std::begin(temp), std::end(temp));
+    int postion = std::distance(std::begin(temp), smallest);
+    return p[postion];
+#endif
+    return p[rand()%pSize];
+}
+```
+
+#### 染色体交叉
+
+```
+// 杂交产生后代，给定参与配对的父母状态 x 和 y
+vector<int> Genetic::reproduce(vector<int> x, vector<int> y)
+{
+    // 确保杂交点不是第一个数字之前和最后一个数字之后，也即后代一定包括了父母双方的信息
+    int cut = rand() % 7;	// 0 1 2 3 4 5 6
+    cut++;					// 1 2 3 4 5 6 7
+
+    vector<int> ans;
+    for(int i = 0;i<cut;i++) {
+        ans.push_back(x[i]);
+    }
+    for(unsigned int i = cut;i<y.size();i++) {
+        ans.push_back(y[i]);
+    }
+    return ans;
+}
+```
+
+
+#### 染色体变异
+
+```
+// 变异，给定的个体状态 s 以 rate 的几率发生变异
+bool Genetic::mutate(vector<int> &s, float rate)
+{
+    vector<int> new_s = s;
+    if ( ((float)rand() / RAND_MAX ) <= rate) {
+        new_s[rand()%8] = rand()%8;
+        if (fitness(new_s) <= fitness(s)) {
+            s = new_s;
+        }
+    }
+    return false;
+}
+```
+
+#### 适应度函数
+
+```
+//适应度判断，不在同一条直线和对角线上
+int Genetic::fitness(vector<int> s)
+{
+    int value = 0;
+    for(int i = 0;i<(int)s.size();i++) {
+        for(int j = i+1;j<(int)s.size();j++) {
+            if (s[i] == s[j]) {
+                value++;
+            }
+            if (abs(i - j) == abs(s[i] - s[j])) {
+                value++;
+            }
+        }
+
+    }
+
+
+    return value;
+}
+
+```
+---
