@@ -35,12 +35,49 @@ mathjax: true
 - （7）返回（4）形成新的种群，继续迭代，直到满足终止条件。<br/>
 
 
-基本遗传算法给出了基本框架， 针对求解的问题不同， 遗传算法在相应的计算步骤中有不同的设计。 本文针对八皇后问题， 设计了相应的编码，适应度计算方法，交叉和变异操作。
+基本遗传算法给出了基本框架， 针对求解的问题不同， 遗传算法在相应的计算步骤中有不同的设计。 本文针对八皇后问题， 设计了相应的编码，适应度计算方法，交叉和变异操作。<br/>
+
+
 
 
 ---
 
-### 实现过程
+
+### 实现过程和主要代码
+
+
+随机生成4个长度为8位的种群放入`vector<vector<int> >p`容器，设置变异率0.6，进行迭代。迭代出的后代若适应度前代比前代好，则更新种群，否则放弃。<br/>
+
+
+#### 设置种群和变异率
+
+```
+void MainWindow::calc()
+{
+    loc.resize(0);
+
+    srand((unsigned)time(NULL));
+    vector<vector<int> > p(gen.pSize);
+    for(int num = 0;num < gen.pSize;num++) {
+        p[num] = gen.random_initial_state();
+    }
+    //将种群p已经变异率0.6进行迭代
+    if (gen.genetic_algorithn(p, 0.6) == 1) {
+         int i=0,j=0;
+
+        for(i = 0;i<8;i++) {
+            point.resize(0);
+            point.push_back(++j);
+            point.push_back(gen.state[i]+1);
+            loc.push_back(point);
+        }
+        //更新棋盘
+        MainWindow::update();
+    }
+
+}
+
+```
 
 
 #### 遗传算法
