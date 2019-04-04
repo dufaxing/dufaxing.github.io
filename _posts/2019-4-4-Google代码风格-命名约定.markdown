@@ -2,9 +2,9 @@
 layout: post
 title:  "Google代码风格(C++)命名约定"
 date:   2019-4-4 00:00:00
-categories: NULL
-tags: NULL
-excerpt: NULL
+categories: C++
+tags: C++
+excerpt: 谢昊飞老师建议参考Google等公司的编码标准，提高代码质量。非常中肯，自己的代码风格确实不够严谨科学，在大工程中，代码不规范，非常影响可读性。今整理了下Google公司开源项目C++代码风格。
 mathjax: true
 ---
 * content
@@ -21,8 +21,10 @@ mathjax: true
 命名规则具有一定随意性, 但相比按个人喜好命名, 一致性更重要, 所以无论你认为它们是否重要, 规则总归是规则.<br/>
 
 
-### 0. 一张图总结Google C++编程规范(Google C++ Style Guide)
+### 0. Google C++ Style Guide
 
+
+*一张图总结Google C++编程规范*
 
 ![A27IbR.png](https://s2.ax1x.com/2019/04/04/A27IbR.png)
 
@@ -123,7 +125,7 @@ string tablename;   // 好 - 全小写.
 string tableName;  // 差 - 混合大小写
 ```
 
-##### 类数据成员
+#### 类数据成员
 
 - 不管是静态的还是非静态的, 类数据成员都可以和普通变量一样, 但要接下划线.<br/>
 
