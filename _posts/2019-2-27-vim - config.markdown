@@ -17,20 +17,20 @@ mathjax: true
 - 工程项目文件列表 `<leader>fl` <br/>
 - 刷新工程目录文件列表`<leader>I`（大写）<br/>
 <br/>
-<br/>
+
 - 标签列表`<leader>ilt` <br/>
 <br/>
-<br/>
+
 - 跳转至右方的窗口 `<Leader>lw` <br/>
 - 跳转至左方的窗口 `<Leader>hw` <br/>
 - 跳转至上方的子窗口 `<Leader>kw` <br/>
 - 跳转至下方的子窗口 `<Leader>jw` <br/>
 <br/>
-<br/>
+
 - 注释当前选中文本 `<leader>cc` <br/>
 - 取消选中文本块的注释`<leader>cu` <br/>
 <br/>
-<br/>
+
 - 基于语义的定义跳转`<leader>jc` :YcmCompleter GoToDeclaration <br/>
 - 基于语义的定义跳转`<leader>jd`:YcmCompleter GoToDefinition <br/>
 
