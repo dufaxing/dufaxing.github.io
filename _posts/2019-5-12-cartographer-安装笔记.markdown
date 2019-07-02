@@ -102,9 +102,9 @@ $ sudo ninja install
 
 catkin_google_ws/src目录下：
 
-`$ git clone https://github.com/googlecartographer/cartographer_ros.git`
-`$ cd ..`
-`$ catkin_make`
+`$ git clone https://github.com/googlecartographer/cartographer_ros.git` <br/>
+`$ cd ..` <br/>
+`$ catkin_make` <br/>
 
 
 ---
@@ -114,15 +114,15 @@ catkin_google_ws/src目录下：
 
 ### 运行2D测试数据
 
-`$ wget -P ~/download/slam_data/catographer https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/cartographer_paper_deutsches_museum.bag`
+`$ wget -P ~/download/slam_data/catographer https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/cartographer_paper_deutsches_museum.bag`<br/>
 
 
-`$ roslaunch cartographer_ros demo_backpack_2d.launch bag_filename:= ~/download/slam_data/ cartographer /cartographer_paper_deutsches_museum.bag`
+`$ roslaunch cartographer_ros demo_backpack_2d.launch bag_filename:= ~/download/slam_data/ cartographer /cartographer_paper_deutsches_museum.bag`<br/>
 
 
 ### 运行3D测试数据
 
-`$ wget -P ~/download/slam_data/cartographer https://storage.googleapis.com/cartographer-public-data/bags/backpack_3d/with_intensities/b3-2016-04-05-14-14-00.bag`
+`$ wget -P ~/download/slam_data/cartographer https://storage.googleapis.com/cartographer-public-data/bags/backpack_3d/with_intensities/b3-2016-04-05-14-14-00.bag` <br/>
 
-`$ roslaunch cartographer_ros demo_backpack_3d.launch bag_filename:= ~/download/slam_data/cartographer/ b3-2016-04-05-14-14-00.bag`
+`$ roslaunch cartographer_ros demo_backpack_3d.launch bag_filename:= ~/download/slam_data/cartographer/ b3-2016-04-05-14-14-00.bag` <br/>
 
