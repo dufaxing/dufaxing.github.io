@@ -2,8 +2,8 @@
 layout: post
 title:  "参赛创意与解决方案-研电赛[0]"
 date:   2019-6-29 00:00:00
-categories: 嵌入式
-tags: C语言C++ Linux
+categories: 研电赛
+tags: C语言 C++ Linux
 excerpt: 耗时近三个月的第十四届研究生电子设计大赛结束了，虽然没有达到我预期的成绩，但深入了解了ROS机器人操作系统，回顾了单片机嵌入式的开发和电路的知识，也算有所得吧~
 mathjax: true
 ---
