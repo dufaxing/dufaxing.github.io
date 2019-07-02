@@ -34,8 +34,25 @@ mathjax: true
 - 基于语义的定义跳转`<leader>jc` :YcmCompleter GoToDeclaration <br/>
 - 基于语义的定义跳转`<leader>jd`:YcmCompleter GoToDefinition <br/>
 
+- buff切换向后`<leader>Ctrl+j`
+- buff切换向前`<leader>Ctrl+k`
 
 
+
+### 源码编译安装VIM
+
+
+- 下载VIM<br/>
+`git clone https://github.com/vim/vim.git`
+
+
+- 编译安装
+```
+cd vim/src
+make clean
+./configure --with-features=huge --enable-python3interp --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu/ --enable-rubyinterp --enable-luainterp --enable-perlinterp --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu/ --enable-multibyte --enable-cscope      --prefix=/usr/local/vim/
+sudo make install
+```
 
 
 ### 用户目录下创建vimrc文件
@@ -57,15 +74,19 @@ mathjax: true
 
 ### YouCompleteMe
 
-- 首先安装Cmake 
+- 安装Cmake 
 
 `sudo apt-get install build-essential cmake`
 
 
-- c语言支持安装 
+- YouCompleteMe安装 
 
+
+`git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe`
 
 `cd ~/.vim/bundle/YouCompleteMe`
+
+`git submodule update --init --recursive`
 
 `./install.py --clang-completer`
 
