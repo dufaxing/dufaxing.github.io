@@ -30,22 +30,25 @@ mathjax: true
 
 ### 建立端口映射关系
 
-`$ sudo touch /etc/udev/rules.d/base.rules`<br/>
+- 创建base映射关系<br/>
+
+
 `$ sudo vim /etc/udev/rules.d/base.rules`<br/>
 
-
-- 在文件中添加如下内容：<br/>
+在文件中添加如下内容：<br/>
 
 
 `KERNEL=="ttyUSB*", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", MODE:="0666", SYMLINK+="base"  `<br/>
 
 
+- 创建lidar映射关系<br/>
 
-`$ sudo touch /etc/udev/rules.d/lidar.rules`<br/>
+
 `$ sudo vim /etc/udev/rules.d/lidar.rules`<br/>
 
 
-- 在文件中添加如下内容：<br/>
+在文件中添加如下内容：<br/>
+
 `KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0666", SYMLINK+="lidar"`<br/>
 
 
@@ -53,7 +56,7 @@ mathjax: true
 
 ### 查看映射结果
 
-`ll /dev | grep ttyUSB`
+`$ ll /dev | grep ttyUSB`
 
 ![ZtElQA.png](https://s2.ax1x.com/2019/07/03/ZtElQA.png)
 
