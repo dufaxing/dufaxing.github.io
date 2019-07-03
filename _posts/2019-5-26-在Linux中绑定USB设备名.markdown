@@ -17,20 +17,44 @@ mathjax: true
 
 
 
-### 标题1:
+### 查看USB端口信息
+
+`$ lsusb`
+
+![ZtEZdK.png](https://s2.ax1x.com/2019/07/03/ZtEZdK.png)
+
+
+第一个设备是移动机器人底盘，第二个设备是激光雷达。我们需要的是这两个设备的ID，分别是`1a86:7523`和`10c4:ea60`。
+
+---
+
+### 建立端口映射关系
+
+`$ sudo touch /etc/udev/rules.d/base.rules`<br/>
+`$ sudo vim /etc/udev/rules.d/base.rules`<br/>
+
+
+- 在文件中添加如下内容：<br/>
+
+
+`KERNEL=="ttyUSB*", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", MODE:="0666", SYMLINK+="base"  `<br/>
+
+
+
+`$ sudo touch /etc/udev/rules.d/lidar.rules`<br/>
+`$ sudo vim /etc/udev/rules.d/lidar.rules`<br/>
+
+
+- 在文件中添加如下内容：<br/>
+`KERNEL=="ttyUSB*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE:="0666", SYMLINK+="lidar"`<br/>
 
 
 ---
 
-### 标题2:
+### 查看映射结果
 
+`ll /dev | grep ttyUSB`
 
-
-
----
-
-### 标题3:
-
-
+![ZtElQA.png](https://s2.ax1x.com/2019/07/03/ZtElQA.png)
 
 ---
