@@ -4,7 +4,7 @@ title:  "基于ROS的二维码定位-研电赛[1]"
 date:   2019-6-30 00:00:00
 categories: 研电赛
 tags: ROS C++
-excerpt: NULL
+excerpt: 基于Kinect深度相机识别二维码，精确定位
 mathjax: true
 ---
 * content
