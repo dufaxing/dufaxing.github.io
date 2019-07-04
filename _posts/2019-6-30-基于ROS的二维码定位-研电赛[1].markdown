@@ -12,21 +12,108 @@ mathjax: true
 ---
 
 
+> 生活中越来越多的场景会使用到二维码，无论是商场购物还是共享单车，二维码作为一种入口标志已经得到广泛应用。ROS中提供了多种二维码识别的功能包，我们选用其中的一个功能包`ar_track_alvar`来识别二维码。
 
-### 标题1:
+
+### ar_track_alvar功能包
+
+功能包`ar_track_alvar`的安装非常简单，直接使用以下命令即可：<br/>
+
+`$ sudo apt-get install ros-kinetic-ar-track-alvar`
+
+安装完成后，可以进入ROS的默认安装目录中查看：<br/>
+
+`$ roscd ar_track_alvar`
+
+- 创建二维码<br/>
+
+` ar_track_alvar`功能包提供了二维码标签的生成功能，可以使用如下命名创建相应标号的二维码标签：<br/>
+
+`$ rosrun ar_track_alvar createMarker AR_ID`<br/>
+
+其中AR_ID可以是从0到65535之间任意数字的标号。创建的二维码标签图片，会被放置在终端的当前路径下。<br/>
+
+---
+
+### Kinect摄像头识别二维码
+
+
+`ar_track_alvar`功能包支持USB摄像头或者RGB-D摄像头作为识别二维码的视觉传感器，分别对应于individualMarkersNoKinect和individualMarkers这两个不同的识别节点。在本次研电赛的设计方案中，选用的是Kinect摄像头，他拥有景深摄像头，可以更好的获取机器人的位姿信息。<br/>
+
+在ROS功能包robot_vision中创建`ar_track_kinect.launch`文件。<br/>
+
+```
+<launch>
+
+    <node pkg="tf" type="static_transform_publisher" name="world_to_cam" 
+          args="0 0 0.5 0 1.57 0 world camera_rgb_optical_frame 10" />
+
+    <arg name="marker_size" default="5.0" />
+    <arg name="max_new_marker_error" default="0.08" />
+    <arg name="max_track_error" default="0.2" />
+
+    <arg name="cam_image_topic" default="/camera/depth_registered/points" />
+    <arg name="cam_info_topic" default="/camera/rgb/camera_info" />
+    <arg name="output_frame" default="/camera_rgb_optical_frame" />
+
+    <node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkers" respawn="false" output="screen">
+        <param name="marker_size" type="double" value="$(arg marker_size)" />
+        <param name="max_new_marker_error" type="double" value="$(arg max_new_marker_error)" />
+        <param name="max_track_error" type="double" value="$(arg max_track_error)" />
+        <param name="output_frame" type="string" value="$(arg output_frame)" />
+
+        <remap from="camera_image"  to="$(arg cam_image_topic)" />
+        <remap from="camera_info"   to="$(arg cam_info_topic)" />
+    </node>
+
+    <!-- rviz view /-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find robot_vision)/config/ar_track_kinect.rviz"/>
+
+</launch>
+```
+
+
+在ROS功能包robot_vision中创建`freenect.launch`文件。<br/>
+
+
+```
+<launch>
+    <!-- Launch the freenect driver -->
+    <include file="$(find freenect_launch)/launch/freenect.launch">
+        <arg name="publish_tf"                      value="false" /> 
+
+        <!-- use device registration -->
+        <arg name="depth_registration"              value="true" /> 
+
+        <arg name="rgb_processing"                  value="true" />
+        <arg name="ir_processing"                   value="false" />
+        <arg name="depth_processing"                value="false" />
+        <arg name="depth_registered_processing"     value="true" />
+        <arg name="disparity_processing"            value="false" />
+        <arg name="disparity_registered_processing" value="false" />
+        <arg name="sw_registered_processing"        value="false" />
+        <arg name="hw_registered_processing"        value="true" />
+    </include>
+</launch>
+```
 
 
 ---
 
-### 标题2:
+### 运行效果
 
 
+接下来使用以下命令启动Kinect，并且运行`ar_track_kinect.launch`文件启动二维码识别功能：<br/>
+
+```
+$ roslaunch robot_vision freenect.launch
+$ roslaunch robot_vision ar-track-alvar.launch
+```
+
+启动成功后，讲二维码放置在Kinect视野范围内，可以在rviz中看到识别结果。
 
 
----
-
-### 标题3:
-
+![ZU9jaD.png](https://s2.ax1x.com/2019/07/04/ZU9jaD.png)
 
 
 ---
