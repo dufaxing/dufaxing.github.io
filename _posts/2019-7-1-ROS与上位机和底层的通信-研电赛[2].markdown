@@ -1,0 +1,179 @@
+---
+layout: post
+title:  "ROS与上位机和底层的通信-研电赛[2]"
+date:   2019-7-1 00:00:00
+categories: 研电赛
+tags: Linux 
+excerpt: 机器人的调试离不开上位机的监控与debug，机器人充电请求也需要与无线充电副边交互
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+
+### 上位机与机器人通信
+
+上位机与机器人连接在同一个路由器下，然后通过ssh远程登录机器人进行调试
+
+`dufaxing@ubuntu:~$ ssh stone@192.168.1.100`<br/>
+stone@192.168.1.100's password: `8662182`<br/>
+
+
+```
+Welcome to Ubuntu 16.04.5 LTS (GNU/Linux 4.15.0-42-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+531 packages can be updated.
+270 updates are security updates.
+
+Last login: Wed Jun 19 10:12:23 2019 from 192.168.1.103
+```
+
+
+---
+
+### 机器人通过串口与无线充电副边交互
+
+- `crobot_vision_base.py`文件<br/>
+
+```
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import pyttsx3
+engine = pyttsx3.init()
+voices = engine.setProperty('voice','zh')#其中zh表示合成中文
+# 播放速度
+rate = engine.getProperty('rate')
+engine.setProperty('rate', rate-65)
+# 声音
+volume = engine.getProperty('volume')
+engine.setProperty('volume', volume-0.5)
+
+#engine.say('机器人进入充电区域，开始充电')
+engine.say('I am ready!')
+engine.runAndWait()
+
+
+
+import rospy
+
+from std_msgs.msg import String
+
+import serial
+import thread
+import time
+
+ser = serial.Serial('/dev/ttyUSB1', 115200, timeout=0.5)
+flag = 0
+# 为线程定义一个函数
+def send_data( threadName, delay):
+   count = 0
+   while True:
+      global flag
+      time.sleep(delay)
+      if flag != 1 :
+          continue;
+      ser.write("charging\n")
+
+def rcv_data( threadName, delay):
+   count = 0
+   while True:
+      global flag
+      time.sleep(delay)
+      #if flag != 1:
+          #continue;
+      data = ser.read(30)
+      print(data)
+      if "OK" in data :
+          flag = 2;
+
+# 创建两个线程
+try:
+   thread.start_new_thread( rcv_data, ("Thread-1", 0.2, ) )
+   thread.start_new_thread( send_data, ("Thread-2", 1, ) )
+except:
+   print "Error: unable to start thread"
+
+def callback(data):
+    global flag
+    
+    if "ready" in data.data :
+        if flag != 2:
+             flag = 1
+        rospy.loginfo('I heard %s', data.data)
+        rospy.loginfo('%d', flag)
+
+if __name__ == "__main__":
+
+    rospy.init_node('crobot_vision_base')
+    rospy.Subscriber('chatter',String,callback)
+    rospy.spin()
+
+
+
+```
+
+
+---
+
+### 机器人启动充电模式
+
+
+- `crobot_vision_1.launch` 文件<br/>
+
+```
+<launch>
+
+
+    <include file="$(find crobot_bringup)/launch/crobot.launch" />
+    <include file="$(find crobot_bringup)/launch/include/lidar.launch" />
+
+    <include file="$(find crobot_vision)/launch/crobot_freenect.launch" />
+
+
+    <!--<node pkg="crobot_vision" type="crobot_vision_position" name="crobot_vision_position" output="screen" /> -->
+    <!-- <node pkg="crobot_vision" type="crobot_vision_guide" name="crobot_vision_guide" output="screen" />  -->
+
+
+</launch>
+
+```
+
+- `crobot_vision_2.launch` 文件<br/>
+
+```
+<launch> 
+ 
+ 
+ 
+    <include file="$(find crobot_navigation)/launch/navigation.launch" /> 
+ 
+    <include file="$(find crobot_vision)/launch/ar_track_kinect.launch" /> 
+ 
+ 
+    <node pkg="crobot_vision" type="crobot_vision_guide" name="crobot_vision_guide" output="screen" /> 
+ 
+ 
+</launch> 
+
+```
+
+
+
+运行以下命令可以启动机器人，开始返航充电
+
+```
+stone@crobot:~$ roslaunch crobot_vision crobot_vision_1.launch 
+stone@crobot:~$ roslaunch crobot_vision crobot_vision_2.launch 
+stone@crobot:~$ rosrun crobot_vision crobot_vision_base.py 
+```
+
+
+
+---
