@@ -33,7 +33,7 @@ type: page
 
 - [微雪课堂](http://www.waveshare.net/study/portal.php?mod=list&catid=40){:target="_blank"}   *(STM32CubeMX系列教程)*
 
-- [七牛云](https://portal.qiniu.com/bucket/image/resource){:target="_blank"}	*(七牛云，好用的图床工具，有10G免费空间)*
+- [路过图床](https://imgchr.com/){:target="_blank"}	*(免费图床，使用谷歌账号即可登录)*
 
 - [tiny png](https://tinypng.com/){:target="_blank"}	*(用于压缩 png 或 jpg 的在线工具)*
 
