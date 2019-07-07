@@ -4,7 +4,7 @@ title:  "基于IIC的OLED液晶屏12864-研电赛[5]"
 date:   2019-7-4 00:00:00
 categories: 研电赛
 tags: 单片机
-excerpt: NULL
+excerpt: 无线充电机器人的无线充电副边部分外接一块OLED显示器，用于显示电量和logo等~
 mathjax: true
 ---
 * content
