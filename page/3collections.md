@@ -17,6 +17,8 @@ type: page
 
 - [知网](http://www.cnki.net/){:target="_blank"}
 
+- [MSDN,我告诉你](https://msdn.itellyou.cn/){:target="_blank"}
+
 - [系统之家](http://www.xitongzhijia.net/){:target="_blank"}
 
 - [维普网](http://www.cqvip.com/){:target="_blank"}
