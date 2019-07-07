@@ -2,8 +2,8 @@
 layout: post
 title:  "基于QT的随机数发生器"
 date:   2017-10-23 00:00:00
-categories: GUI
-tags: C++
+categories: C++
+tags: C++ QT
 excerpt: 用QT写了一个简单的随机数发生器
 mathjax: true
 ---
