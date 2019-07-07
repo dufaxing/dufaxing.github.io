@@ -3,7 +3,7 @@ layout: post
 title:  "配置STM32两对带死区反向的PMW波-研电赛[3]"
 date:   2019-7-2 00:00:00
 categories: 研电赛
-tags: C语言 cube
+tags: 单片机 cube
 excerpt: 在这次研电赛设计中需要四路85K占空比50%的PWM波，反向波形为了防止桥臂直连，需要200到300纳秒的死区延时
 mathjax: true
 ---
