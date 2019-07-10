@@ -1,0 +1,79 @@
+---
+layout: post
+title:  "剑指Offer-1-1"
+date:   2019-7-10 00:00:00
+categories: 剑指Offer
+tags: 笔试题
+excerpt: 剑指Offer一到十题
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+### 目录
+
+
+![Zcn8Et.png](https://s2.ax1x.com/2019/07/10/Zcn8Et.png)
+
+
+### 1.二叉树的镜像
+
+
+![Zcn0Ds.png](https://s2.ax1x.com/2019/07/10/Zcn0Ds.png)
+
+
+```
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+
+/* 先前序遍历这棵树的每个结点，如果遍历到的结点有子结点，就交换它的两个子节点，
+当交换完所有的非叶子结点的左右子结点之后，就得到了树的镜像 */
+
+class Solution {
+public:
+    void Mirror(TreeNode *pRoot) {
+        if(pRoot == NULL) {
+            return;
+        }
+        if(pRoot->left == NULL && pRoot->right == NULL) {
+            return;
+        }
+         
+        TreeNode *pTemp = pRoot->left;
+        pRoot->left = pRoot->right;
+        pRoot->right = pTemp;
+         
+        if(pRoot->left != NULL) {
+            Mirror(pRoot->left);
+        }
+        if(pRoot->right != NULL) {
+            Mirror(pRoot->right);
+        }
+    }
+};
+```
+
+
+---
+
+### 标题2:
+
+
+
+
+---
+
+### 标题3:
+
+
+
+---
