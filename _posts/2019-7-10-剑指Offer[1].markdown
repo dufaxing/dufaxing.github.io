@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "剑指Offer-1-1"
+title:  "剑指Offer[1]"
 date:   2019-7-10 00:00:00
 categories: 剑指Offer
 tags: 笔试题
