@@ -12,6 +12,10 @@ mathjax: true
 ---
 
 
+> [所需即所获：像 IDE 一样使用 vim](https://github.com/yangyangwithgnu/use_vim_as_ide){:target="_blank"}
+
+
+
 ### 快捷键
 
 - 工程项目文件列表 `<leader>fl` <br/>
@@ -33,6 +37,8 @@ mathjax: true
 
 - 基于语义的定义跳转`<leader>jc` :YcmCompleter GoToDeclaration <br/>
 - 基于语义的定义跳转`<leader>jd`:YcmCompleter GoToDefinition <br/>
+- 返回上个标签 `ctrl-o`
+- 再次进入`ctrl-i`
 
 - buff切换向后`<leader>Ctrl+j`
 - buff切换向前`<leader>Ctrl+k`
