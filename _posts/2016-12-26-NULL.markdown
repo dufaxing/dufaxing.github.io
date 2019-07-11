@@ -12,6 +12,8 @@ mathjax: true
 ---
 
 
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
 
 ### 标题1:
 

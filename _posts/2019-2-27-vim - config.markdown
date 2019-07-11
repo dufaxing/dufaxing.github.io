@@ -39,6 +39,7 @@ mathjax: true
 - 基于语义的定义跳转`<leader>jd`:YcmCompleter GoToDefinition <br/>
 - 返回上个标签 `ctrl-o`
 - 再次进入`ctrl-i`
+<br/>
 
 - buff切换向后`<leader>Ctrl+j`
 - buff切换向前`<leader>Ctrl+k`
