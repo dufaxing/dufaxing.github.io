@@ -4,7 +4,7 @@ title:  "《剑指Offer》第二章——面试需要的基础知识"
 date:   2019-7-10 00:00:00
 categories: 剑指Offer
 tags: 笔试题
-excerpt: 《剑指Offer》面试题
+excerpt: 《剑指Offer》第二章面试题
 mathjax: true
 ---
 * content
