@@ -16,7 +16,8 @@ mathjax: true
 
 
 > 题目：如下为类型CMyString的声明，请为改类型添加赋值运算符函数。<br/>
-> ```
+>
+```
 class CMyString
 {
     public:
@@ -26,7 +27,7 @@ class CMyString
     private:
         char* m_pData;
 };
-
+```
 
 
 
