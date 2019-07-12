@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "剑指Offer[0]"
+title:  "《剑指Offer》第二章——面试需要的基础知识"
 date:   2019-7-10 00:00:00
 categories: 剑指Offer
 tags: 笔试题
-excerpt: 剑指Offer一到十题
+excerpt: 《剑指Offer》面试题
 mathjax: true
 ---
 * content
@@ -12,7 +12,9 @@ mathjax: true
 ---
 
 
-### 面试题1：赋值运算符函数
+## 编程语言
+
+### 面试题1：赋值运算符函数(C++)
 
 
 > 题目：如下为类型CMyString的声明，请为改类型添加赋值运算符函数。<br/>
@@ -29,6 +31,40 @@ class CMyString
 };
 ```
 
+
+
+
+```
+CMyString& CMyString::operator = (const CMyString& str)
+{
+    if(this == &str)
+        return *this;
+
+    delete []m_pData;
+    m_pData = nullptr;
+
+    m_pData = new char[strlen(str.m_pData) + 1];
+    strcpy(m_pData, str.m_pData);
+
+    return *this;
+}
+
+```
+
+
+### 面试题2：实现Singleton模式 (C#)
+
+> 题目：设计一个类，我们只能生成该类的一个实例。<br/>
+
+
+- C#的语法中有一个函数能够确保只调用一次，那就是静态构造函数，我们可以利用C#的这个特性实现单例模式。<br/>
+
+
+## 数据结构
+
+### 面试题3：数组中重复的数字
+
+> 在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2或者3。
 
 
 
