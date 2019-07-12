@@ -41,11 +41,10 @@ mathjax: true
 
 - [2TU影院](http://www.82tu.cc/){:target="_blank"}
 
-- [影视大全](http://www.yingshidaquan.cc/){:target="_blank"}
+- [影视大全](http://www.yingshidaquan.info/){:target="_blank"}
 
 - [蛋蛋赞](https://www.dandanzan.com){:target="_blank"}
 
-- [yse影视](http://www.yse123.com/){:target="_blank"}
 
 - [樱花动漫](http://www.imomoe.tv){:target="_blank"}
 
