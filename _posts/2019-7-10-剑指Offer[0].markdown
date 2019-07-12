@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "剑指Offer[1]"
+title:  "剑指Offer[0]"
 date:   2019-7-10 00:00:00
 categories: 剑指Offer
 tags: 笔试题
@@ -12,10 +12,23 @@ mathjax: true
 ---
 
 
-### 目录
+### 面试题1：赋值运算符函数
 
 
-![Zcn8Et.png](https://s2.ax1x.com/2019/07/10/Zcn8Et.png)
+> 题目：如下为类型CMyString的声明，请为改类型添加赋值运算符函数。<br/>
+> ```
+class CMyString
+{
+    public:
+        CMyString(char* pData = nullptr);
+        CMyString(const CMyString& str);
+        ~CMyString(void);
+    private:
+        char* m_pData;
+};
+
+
+
 
 
 ### 1.二叉树的镜像
