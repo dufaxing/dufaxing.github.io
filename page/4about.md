@@ -39,6 +39,12 @@ type: page
 
 
 
+# 友情链接
+
+
+[yandan](https://adamyandan.github.io/){:target="_blank"}
+
+
 
 # 关于本站
 
