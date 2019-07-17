@@ -12,8 +12,9 @@ mathjax: true
 ---
 
 > 我们知道，在运行所有的ROS节点之前，一定要先使用指令roscore，实际上roscore指令是运行了一个ros master，ros master相当于一个服务器，所有节点都可以通过ros master发布消息和订阅消息，还包括发布和订阅服务，以及参数服务，只有连接在相同ros master下的节点才能互相通信。 
-怎样才能知道节点是运行在哪个master下的呢？实际上ROS中默认一个机器上只运行一个ros master，其运行的端口默认为http://localhost:11311,这个端口默认值存于ROS环境变量ROS_MASTER_URI中，可以通过下面指令查看检验，或者在运行roscore的命令行输出中也可以看到</br>
-`echo $ROS_MASTER_URI`</br>
+怎样才能知道节点是运行在哪个master下的呢？实际上ROS中默认一个机器上只运行一个ros master，其运行的端口默认为http://localhost:11311,这个端口默认值存于ROS环境变量ROS_MASTER_URI中，可以通过下面指令查看检验，或者在运行roscore的命令行输出中也可以看到 <br/>
+
+`echo $ROS_MASTER_URI`<br/>
 
 
 ```
@@ -91,7 +92,7 @@ lo        Link encap:Local Loopback
 
 
 
-- 设置工作区的环境变量</br>
+- 设置工作区的环境变量  
 
 ```
 source /home/dufaxing/Project/my_robot/devel/setup.bash
@@ -101,17 +102,16 @@ source /home/dufaxing/Project/my_robot/devel/setup.bash
 
  
 
-- bashrc中添加环境变量：<br/>
-
-
-`dufaxing@ubuntu:~$ vim ~/.bashrc `
+- bashrc中添加环境变量：
+`dufaxing@ubuntu:~$ vim ~/.bashrc ` <br/>
 
 ```
 export ROS_IP=ubuntu
 export ROS_MASTER_URI=http://crobot:11311
 ```
 
-- 在远程端(crobot)中添加环境变量：<br/>
+- 在远程端(crobot)中添加环境变量：
+
 ```
 export ROS_HOSTNAME=crobot
 export ROS_MASTER_URI=http://crobot:11311
