@@ -24,68 +24,110 @@ http://localhost:11311
 即使是不同机器上的程序节点，只要通过网络连接到ros master的运行端口，就能实现消息的发布和订阅，并且发布的消息就能被所有连接到ros master端口的机器和节点所订阅，同样也可以订阅连接到这个端口的其他节点所发布的消息。有了这样的通讯方式，我们完全不用往我们的程序节点中添加任何与通讯相关的代码，就能订阅到其他机器发布的话题，与获取本机上其他节点发布的话题没有任何区别。 
 
 
-### 配置bashrc文件
+### 配置hosts文件
 
 
-- 设置工作区的环境变量</br>
-```
-source /home/dufaxing/Project/my_robot/devel/setup.bash
-```
 
-
-- 获取IP地址
- 
-`dufaxing@ubuntu:~$ ifconfig `
-
-```
-ens33     Link encap:Ethernet  HWaddr 00:0c:29:c2:d1:be  
-          inet addr:172.18.17.152  Bcast:172.18.19.255  Mask:255.255.252.0
-          inet6 addr: fe80::d609:7497:6022:b8d8/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:880 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:162 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
-          RX bytes:56852 (56.8 KB)  TX bytes:14845 (14.8 KB)
-
-lo        Link encap:Local Loopback  
-          inet addr:127.0.0.1  Mask:255.0.0.0
-          inet6 addr: ::1/128 Scope:Host
-          UP LOOPBACK RUNNING  MTU:65536  Metric:1
-          RX packets:678 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:678 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000 
-          RX bytes:76798 (76.7 KB)  TX bytes:76798 (76.7 KB)
-```
- 
-- 获取主机名
+- 获取本机名
 
 ```
 dufaxing@ubuntu:~$ hostname
 ubuntu
 ```
 
+- 获取本机IP<br/>
 
----
+`dufaxing@ubuntu:~$ ifconfig`<br/>
 
-### 设置环境变量
-
-- master中添加环境变量：<br/>
 ```
-export ROS_IP=ubuntu.local
-export ROS_MASTER_URI=http://crobot.local:11311
+ens33     Link encap:Ethernet  HWaddr 00:0c:29:d7:36:58  
+          inet addr:192.168.1.105  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::c61e:539f:d42f:7137/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:617351 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:359629 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:589000305 (589.0 MB)  TX bytes:58190976 (58.1 MB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:1261 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1261 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:252666 (252.6 KB)  TX bytes:252666 (252.6 KB)
+
+```
+
+
+
+- 在本地加入crobot的IP地址<br/>
+
+
+
+`dufaxing@ubuntu:~$ sudo vim /etc/hosts`<br/>
+
+```
+127.0.0.1       localhost
+127.0.1.1       ubuntu
+
+192.168.1.100   crobot
+
+```
+
+
+- 在从robot中加入上位机的IP地址
+
+```
+127.0.0.1       localhost
+127.0.1.1       crobot
+
+192.168.1.105   ubuntu
+```
+
+
+### 配置bashrc文件
+
+
+
+- 设置工作区的环境变量</br>
+
+```
+source /home/dufaxing/Project/my_robot/devel/setup.bash
+```
+
+
+
+ 
+
+- bashrc中添加环境变量：<br/>
+
+
+`dufaxing@ubuntu:~$ vim ~/.bashrc `
+
+```
+export ROS_IP=ubuntu
+export ROS_MASTER_URI=http://crobot:11311
 ```
 
 - 在远程端(crobot)中添加环境变量：<br/>
 ```
-export ROS_MASTER_URI=http://192.168.0.100(crobot_ip):11311
-export ROS_IP=192.168.0.100(crobot_ip)
+export ROS_HOSTNAME=crobot
+export ROS_MASTER_URI=http://crobot:11311
 ```
+
+
+- 重新加载bashrc配置文件
+
+`dufaxing@ubuntu:~$ source ~/.bashrc `
+
 
 ---
 
 ### ssh远程登陆
 
-`ssh user@crobot_ip`
+`ssh user_name@192.168.1.xxx  -X`通过-X登录和平时ssh连接没有什么区别，除了会转发X11的数据，你可以在终端里面用命令运行你想要运行的gui程序。
 
 
 
