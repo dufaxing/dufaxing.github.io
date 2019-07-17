@@ -29,16 +29,14 @@ http://localhost:11311
 
 
 
-- 获取本机名
-
-```
-dufaxing@ubuntu:~$ hostname
-ubuntu
-```
+- 获取本机名<br/>
+  ```
+  dufaxing@ubuntu:~$ hostname
+  ubuntu
+  ```
 
 - 获取本机IP<br/>
-
-`dufaxing@ubuntu:~$ ifconfig`<br/>
+  `dufaxing@ubuntu:~$ ifconfig`<br/>
 
 ```
 ens33     Link encap:Ethernet  HWaddr 00:0c:29:d7:36:58  
