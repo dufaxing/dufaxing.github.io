@@ -15,12 +15,17 @@ mathjax: true
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
 
+
+### 所使用的WiFi
+
+WiFi：`someone`<br/>
+密码：`20171225ymd`<br/>
+
 ### SSH远程登录
 
 
-`xiaoqiang@xiaoqiang:~$ ssh xiaoqiang@192.168.1.105`
-
-xiaoqiang@192.168.1.105's password: `xiaoqiang`
+`xiaoqiang@xiaoqiang:~$ ssh xiaoqiang@192.168.1.105`<br/>
+xiaoqiang@192.168.1.105's password: `xiaoqiang`<br/>
 
 
 
@@ -29,14 +34,14 @@ xiaoqiang@192.168.1.105's password: `xiaoqiang`
 ### 启动键盘控制
 
 
-`xiaoqiang@xiaoqiang-desktop:~$ rosrun nav_test control.py `
+`xiaoqiang@xiaoqiang-desktop:~$ rosrun nav_test control.py `<br/>
 
-电脑键盘上的上下左右对应这方向键，空格停止运动。
+电脑键盘上的上下左右对应这方向键，空格停止运动。<br/>
 
 ---
 
 ### 上传数据
 
-`xiaoqiang@xiaoqiang-desktop:~$ rosrun crobot_application serial_data_transfer_server.py `
+`xiaoqiang@xiaoqiang-desktop:~$ rosrun crobot_application serial_data_transfer_server.py `<br/>
 
 ---
