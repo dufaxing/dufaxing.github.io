@@ -18,7 +18,10 @@ mathjax: true
 ### SSH远程登录
 
 
-``
+`xiaoqiang@xiaoqiang:~$ ssh xiaoqiang@192.168.1.105`
+
+xiaoqiang@192.168.1.105's password: `xiaoqiang`
+
 
 
 ---
@@ -26,12 +29,14 @@ mathjax: true
 ### 启动键盘控制
 
 
+`xiaoqiang@xiaoqiang-desktop:~$ rosrun nav_test control.py `
 
+电脑键盘上的上下左右对应这方向键，空格停止运动。
 
 ---
 
 ### 上传数据
 
-
+`xiaoqiang@xiaoqiang-desktop:~$ rosrun crobot_application serial_data_transfer_server.py `
 
 ---
