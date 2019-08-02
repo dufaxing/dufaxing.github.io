@@ -188,6 +188,42 @@ public:
 ```
 
 
+### 面试题6：从头到尾打印链表（链表）
+
+> 输入一个链表，按链表值从尾到头的顺序返回一个ArrayList。
+
+
+
+```
+//利用栈先进后出特性
+
+/**
+*  struct ListNode {
+*        int val;
+*        struct ListNode *next;
+*        ListNode(int x) :
+*              val(x), next(NULL) {
+*        }
+*  };
+*/
+class Solution {
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        std::stack<int> nodes;
+        vector <int> res;
+        ListNode* pNode = head;
+        while(pNode != nullptr) {
+            nodes.push(pNode->val);
+            pNode = pNode->next;
+        }
+        while(!nodes.empty()) {
+            res.push_back(nodes.top());
+            nodes.pop();
+        }
+        return res;
+    }
+};
+```
 
 
 ### 1.二叉树的镜像
