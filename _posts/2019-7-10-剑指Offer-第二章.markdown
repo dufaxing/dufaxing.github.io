@@ -213,8 +213,8 @@ public:
         vector <int> res;
         ListNode* pNode = head;
         while(pNode != nullptr) {
-            nodes.push(pNode->val);
-            pNode = pNode->next;
+            nodes.push(pNode->val);//取栈顶元素
+            pNode = pNode->next;//弹出栈顶元素
         }
         while(!nodes.empty()) {
             res.push_back(nodes.top());
