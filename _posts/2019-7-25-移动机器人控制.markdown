@@ -28,6 +28,25 @@ WiFi：`someone`<br/>
 xiaoqiang@192.168.1.105's password: `xiaoqiang`<br/>
 
 
+### 查看串口
+
+- 插上设备看看新增了那个USB口
+
+`xiaoqiang@xiaoqiang:~$ ll /dev | grep ttyUSB`
+
+### 绑定串口
+
+`xiaoqiang@xiaoqiang:~$ cd ~/Documents/ros/src/crobot_application/scripts/`
+
+`vim serial_data_transfer_server.py `
+
+
+```
+    # 打开串口，更改ttyUSB设备号
+    os.system("sudo chmod 666 /dev/ttyUSB0")
+    pyserial = PythonSerial(portName = "/dev/ttyUSB0", baudRate = 115200)
+
+```
 
 ---
 
