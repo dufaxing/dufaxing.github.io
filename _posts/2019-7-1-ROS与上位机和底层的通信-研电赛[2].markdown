@@ -17,6 +17,10 @@ mathjax: true
 
 上位机与机器人连接在同一个路由器下，然后通过ssh远程登录机器人进行调试
 
+`wifi:crobot`
+`password:20180604ymd`
+
+
 `dufaxing@ubuntu:~$ ssh stone@192.168.1.100`<br/>
 stone@192.168.1.100's password: `8662182`<br/>
 
