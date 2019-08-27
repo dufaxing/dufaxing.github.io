@@ -226,6 +226,44 @@ public:
 ```
 
 
+### 面试题9：用两个栈实现队列（栈和队列）
+
+> 用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。
+
+
+
+```
+class Solution
+{
+public:
+    void push(int node) {
+        stack1.push(node);
+    }
+ 
+    int pop() {
+        int data = 0;
+        if(stack2.empty()) {
+            while(stack1.size()>0) {
+                data = stack1.top();
+                stack1.pop();
+                stack2.push(data);
+            }
+        }
+ 
+ 
+        data = stack2.top();
+        stack2.pop();
+        return data;
+    }
+ 
+private:
+    stack<int> stack1;
+    stack<int> stack2;
+};
+
+```
+
+
 ### 1.二叉树的镜像
 
 
