@@ -263,6 +263,39 @@ private:
 
 ```
 
+### 面试题10：斐波那契数列（算法和数据操作）
+
+> 大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项（从0开始，第0项为0）。n<=39
+
+
+```
+/*
+* 首先根据f(0)和f(1)算出f(2)，再根据f(1)和f(2)算出f(3)······以此类推就可以算出第n项了。这种算法的时间复杂度是O(n).
+*/
+class Solution {
+public:
+    int Fibonacci(int n) {
+        int result[2] = {0,1};
+        if(n < 2) {
+            return result[n];
+        }
+        long long fibNMinusOne = 1;
+        long long fibNMinusTwo = 0;
+        long long fibN = 0;
+        for(unsigned int i = 2;i <= n;i++) {
+            fibN = fibNMinusOne + fibNMinusTwo;
+            
+            fibNMinusTwo = fibNMinusOne;
+            fibNMinusOne = fibN;
+        }
+        return fibN;
+    }
+};
+
+```
+
+
+
 
 ### 1.二叉树的镜像
 
