@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "NULL"
+title:  "linux中安装QQ与微信等工具"
 date:   2019-9-7 00:00:00
 categories: linux
 tags: 工具
