@@ -1,0 +1,256 @@
+---
+layout: post
+title:  "数据结构-链表"
+date:   2019-9-21 00:00:00
+categories: 数据结构
+tags: C++
+excerpt: NULL
+mathjax: true
+---
+* content
+{:toc}
+---
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+### 单链表
+
+
+#include <iostream>
+#include <stdlib.h>
+#include <malloc.h>
+#include <time.h>
+#include <string.h>
+
+using namespace std;
+
+#define ERROR 0
+#define OK    1
+typedef int ElemType; 
+typedef int Status;
+typedef struct Node {
+    ElemType data;
+    struct Node* next;
+}Node;
+typedef struct Node * LinkList;
+//创建一个含有n个元素的链表，data为100以内的随机值
+void CreateListTail(LinkList& L,int n)
+{
+    srand(time(0));
+    L = (LinkList)malloc(sizeof(Node));
+    LinkList r = L,p;
+    for(int j = 0;j < n;j++) {
+        p = (LinkList)malloc(sizeof(Node));
+        p -> data = rand()%100;
+        r -> next = p;
+        r = p;
+    }
+    r -> next = NULL;
+}
+
+//在链表的第i个元素后插入新元素e
+Status ListInsert(LinkList& L,int i,ElemType e) 
+{
+    int j = 1;
+    LinkList p = L,s;
+    while (p && j < i) {
+        p = p->next;
+        ++j;
+    }
+    if (!p || j>i) {
+        return ERROR;
+    }
+    s = (LinkList)malloc(sizeof(Node));
+    s->data = e;
+    s->next = p -> next;
+    p->next = s;
+    return OK;
+
+}
+//删除链表的第i个元素，并用e返回其data值，链表长度减一
+Status ListDelete(LinkList& L,int i,ElemType* e)
+{
+    int j = 1;
+    LinkList p = L,q;
+    while(p && j < i) {
+        p = p->next;
+        ++j;
+    }
+
+    if (!p || j>i) {
+        return ERROR;
+    }
+    q = p -> next;
+    p->next = q -> next;
+    *e = q->data;
+    free(q);
+    free(p);
+}
+
+
+Status ListClear(LinkList& L)
+{
+    LinkList p,q;
+    p = L -> next;
+    while(p) {
+        q= p->next;
+        free(q);
+        p = q;
+    }
+    L -> next = NULL;
+    return OK;
+}
+
+int main()
+{
+    LinkList L;
+    int n = 10;
+    CreateListTail(L,n);
+    for(int i=0;i<n;i++){
+        static LinkList temp = L;
+        cout << temp -> data << endl;
+        temp = temp->next;
+    }
+    return 0;
+}
+
+---
+
+### 双向链表
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+typedef struct DOUBLE_LIST
+{
+    int data;
+    struct DOUBLE_LIST *prev;
+    struct DOUBLE_LIST *next;
+}double_list;
+double_list *createlist()       //创建有n个元素的双向链表 并输入元素
+{
+    double_list *head, *p, *q;
+    int n,x;
+    head = (double_list *)malloc(sizeof(double_list));
+    head->prev = head;
+    head->next = head;
+    p = head;
+    printf("输入要创建双向链表的元素的个数：\n");
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d", &x);
+        q = (double_list *)malloc(sizeof(double_list));
+        q->data = x;
+        p->next = q;
+        head->prev = q;
+        q->prev = p;
+        q->next = head;
+        p = q;
+    }
+    return head;
+}
+//遍历并且输出这些元素
+void printlist(double_list *head)
+{
+    double_list *p;
+    p = head;
+    p = p->next;
+    while(p!=head)
+    {
+        printf("%d  ", p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+//得到现在双向链表中的元素的个数
+int lengthlist(double_list *head)
+{
+    double_list *p;
+    p = head;
+    p = p->next;
+    int coun = 0;
+    while(p!=head)
+    {
+        coun++;
+        p = p->next;
+    }
+    return coun;
+}
+//在第i个元素之前插入数据data
+void insertlist_f(double_list *head, int i, int data)
+{
+    double_list *p = head, *q;
+    p = p->next;
+    i--;
+    while(i--)
+        p = p->next;
+    q = (double_list *)malloc(sizeof(double_list));
+    q->data = data;
+    (p->prev)->next = q;
+    q->prev = p->prev;
+    q->next = p;
+    p->prev = q;
+}
+//删除第i个位置的元素
+void deletelist_i(double_list *head, int i)
+{
+    double_list *p = head;
+    p = p->next;
+    i--;
+    while(i--)
+        p = p->next;
+    (p->prev)->next = p->next;
+    (p->next)->prev = p->prev;
+    free(p);
+}
+//删除值为x的元素
+void deletelist_x(double_list *head, int x)
+{
+    double_list *p = head, *q;
+    p = p->next;
+    while(p!=head)
+        if(p->data == x)
+        {
+            q = p->next;
+            (p->prev)->next = p->next;
+            (p->next)->prev = p->prev;
+            free(p);
+            p = q;
+        }
+        else
+            p = p->next;
+}
+//对双向链表进行排序
+void sortlist(double_list *head)  //升序
+{
+    double_list *p = head, *q, *t;
+    p = p->next;
+    for(;p!=head;p=p->next)
+        for(t = p->next;t!=head;t=t->next)
+        {
+            if(p->data > t->data)
+            {
+                int a = p->data;
+                p->data = t->data;
+                t->data = a;
+            }
+        }
+}
+int main()
+{
+    double_list *head;
+    head = createlist();
+    deletelist_x(head, 2);
+    //sortlist(head);
+    printlist(head);
+    insertlist_f(head, 2, 2);
+    printlist(head);
+ 
+    return 0;
+}
+
+
+---
