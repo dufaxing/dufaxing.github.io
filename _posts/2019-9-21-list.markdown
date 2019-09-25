@@ -4,7 +4,7 @@ title:  "数据结构-链表"
 date:   2019-9-21 00:00:00
 categories: 数据结构
 tags: C++
-excerpt: NULL
+excerpt: 链表
 mathjax: true
 ---
 * content
