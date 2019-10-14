@@ -59,6 +59,7 @@ type: page
 
 > [截图工具](http://pan.baidu.com/s/1i4OAOM5){:target="_blank"}
 
+> [win10激活工具](https://pan.baidu.com/s/1uvJ_gc4axoagN78qpn-bDA){:target="_blank"}
 
 ---
 
