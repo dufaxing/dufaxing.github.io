@@ -17,7 +17,7 @@ mathjax: true
 
 ### 单链表
 
-
+```
 #include <iostream>
 #include <stdlib.h>
 #include <malloc.h>
@@ -115,11 +115,13 @@ int main()
     }
     return 0;
 }
+```
 
 ---
 
 ### 双向链表
 
+```
 #include<stdio.h>
 #include<stdlib.h>
 #include<malloc.h>
@@ -251,6 +253,6 @@ int main()
  
     return 0;
 }
-
+```
 
 ---
