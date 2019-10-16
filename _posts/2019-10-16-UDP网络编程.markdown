@@ -18,16 +18,16 @@ mathjax: true
 
 ### 基于qt的网络编程
 
-在QT中编写网络发报端/客户端，时build时出现</br>
-error: undefined reference to `_imp__WSAStartup@8’等，很多网络类似的错误</br>
-等大约10条error，原因是socket库的编译链接问题。</br>
+在QT中编写网络发报端/客户端，时build时出现<br/>
+error: undefined reference to `_imp__WSAStartup@8’等，很多网络类似的错误<br/>
+等大约10条error，原因是socket库的编译链接问题。<br/>
 
 
-错误原因：因为没有联接socket库ws2_32.lib。因此要链接该库</br>
-总结：所有运用到WinSock2的程序在编译连接时都要用的该库</br>
+错误原因：因为没有联接socket库ws2_32.lib。因此要链接该库<br/>
+总结：所有运用到WinSock2的程序在编译连接时都要用的该库<br/>
 
-解决办法：</br>
-在项目的pro文件中添加：</br>
+解决办法：<br/>
+在项目的pro文件中添加：<br/>
 `LIBS += -lpthread libwsock32 libws2_32`
 
 ---
