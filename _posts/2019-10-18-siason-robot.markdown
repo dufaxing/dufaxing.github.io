@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "NULL"
+title:  "新松机器人调试与接口"
 date:   2019-10-18 00:00:00
 categories: 工具
 tags: 工具
-excerpt: 新松机器人调试与接口
+excerpt: 信科三楼实验室展示机器人调试与接口
 mathjax: true
 ---
 * content
