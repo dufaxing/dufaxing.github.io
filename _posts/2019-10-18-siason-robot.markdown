@@ -30,6 +30,7 @@ mathjax: true
 连接上机器人WiFi后，配置本机网络。
 
 - 查看本机网卡<br/>
+
 ```
 dufaxing@ubuntu:~$ ifconfig 
 ens33     Link encap:Ethernet  HWaddr 00:0c:29:c2:d1:be  
