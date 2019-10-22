@@ -4,7 +4,7 @@ title:  "冒泡排序"
 date:   2019-10-22 00:00:00
 categories: 计算机基础
 tags: C++
-excerpt: NULL
+excerpt: 冒泡排序算法原理与优化
 mathjax: true
 ---
 * content
