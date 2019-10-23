@@ -25,30 +25,7 @@ mathjax: true
 
 - `<br>`换行
 
-- 字体大小、颜色、类型、加粗、倾斜
 
-```
-< font size=5> Hello
-
-< font color=red>color
-
-< font face=“微软雅黑”>微软雅黑
-
-** 内容 ** 　(*与内容之间没有空格)
-
-*内容 * 　　 (*与内容之间没有空格)
-```
-
-
-< font size=5> Hello
-
-< font color=red>color
-
-< font face=“微软雅黑”>微软雅黑
-
-** 内容 ** 　(*与内容之间没有空格)
-
-*内容 * 　　 (*与内容之间没有空格)
 
 ---
 
