@@ -11,7 +11,7 @@ mathjax: true
 {:toc}
 ---
 
-[![KY5fZq.th.jpg](https://s2.ax1x.com/2019/10/23/KY5fZq.th.jpg)]
+[![KY5fZq.md.jpg](https://s2.ax1x.com/2019/10/23/KY5fZq.md.jpg)]
 
 
 > [博客地址](https://dufaxing.com){:target="_blank"}
