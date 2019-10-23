@@ -15,19 +15,40 @@ mathjax: true
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
 
-### markdowm首行缩进方法
+### markdowm语法
 
 
-
-- `&ensp;`  “半角空格”
-
+- `&ensp;`  “&ensp;半角空格”
 
 
-- `&emsp;` “全角空格”
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+- 字体大小、颜色、类型、加粗、倾斜
+
+```
+< font size=5> Hello
+
+< font color=red>color
+
+< font face=“微软雅黑”>微软雅黑
+
+** 内容 ** 　(*与内容之间没有空格)
+
+*内容 * 　　 (*与内容之间没有空格)
+```
 
 
+< font size=5> Hello
 
+< font color=red>color
 
+< font face=“微软雅黑”>微软雅黑
+
+** 内容 ** 　(*与内容之间没有空格)
+
+*内容 * 　　 (*与内容之间没有空格)
 
 ---
 
