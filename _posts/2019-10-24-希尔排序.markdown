@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "希尔排序算法"
+title:  "希尔排序"
 date:   2019-10-24 00:00:00
 categories: 计算机基础
 tags: C++
