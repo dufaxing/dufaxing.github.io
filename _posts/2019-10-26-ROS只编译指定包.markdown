@@ -1,0 +1,41 @@
+---
+layout: post
+title:  "ROS只编译指定包"
+date:   2019-12-26 00:00:00
+categories: ROS
+tags: NULL
+excerpt: catkin_make只编译工作空间下指定的包文件
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+
+当工作区里面的包很多，大部分时间，只对某几个包进行了修改。编译整个工作区的包，非常耗时，而且重新编译一边未更改过的包，没多大意义；所以在开发的过程中，专注于当前包的编译情况，是非常高效的。
+
+
+
+### 编译指定包
+
+
+`$ catkin_make -DCATKIN_WHITELIST_PACKAGES="package1;package2"`
+
+
+
+---
+
+### 编译整个工作区
+
+
+
+`$ catkin_make -DCATKIN_WHITELIST_PACKAGES=""`
+
+---
