@@ -32,4 +32,22 @@ mathjax: true
 - `PC_wifi IP:192.168.1.105` 
 
 
+# 路由密码
+
+- AGV上华为路由：
+    - `wifi:视觉导航机器人 `
+    - `Passwd：BlueWhale`
+    - `管理员密码：BlueWhale`
+
+- 101实验室分流水星路由器：
+    - `wifi:someone `
+    - `Passwd：20171225ymd`
+    - `管理员密码：8662182`
+
+- crobot移动机器人内置思科路由：
+    - `wifi:crobot `
+    - `Passwd：20180604ymd`
+    - `管理员账号：cisco`
+    - `管理员密码：cisco`
+
 ---
