@@ -50,4 +50,9 @@ mathjax: true
     - `管理员账号：cisco`
     - `管理员密码：cisco`
 
+- 新松语音播报移动机器人内置小米路由：
+    - `wifi:SIASUN_ERO1_5G `
+    - `Passwd：siasun01`
+    - `管理员密码：siasun01`
+
 ---
