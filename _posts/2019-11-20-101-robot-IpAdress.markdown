@@ -32,7 +32,11 @@ mathjax: true
 - `PC_wifi IP:192.168.1.105` 
 
 
-# 路由密码
+# 交换机与路由密码
+
+- TP-link交换机:
+    - `管理员账号：tplink`
+    - `管理员密码：tplink`
 
 - AGV上华为路由：
     - `wifi:视觉导航机器人 `
