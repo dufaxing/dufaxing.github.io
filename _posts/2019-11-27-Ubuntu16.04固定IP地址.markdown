@@ -1,0 +1,71 @@
+---
+layout: post
+title:  "Ubuntu16.04固定IP地址"
+date:   2019-11-26700:00:00
+categories: 工具
+tags: 工具
+excerpt: 在配置101机械臂实验室AGV网络的时候，发现就算在路由中绑定了MAC与IP，有时候设备重新上线任然分配了一个新IP，为了更好的使用TCP/IP编程，固定设备的IP地址很有必要
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+### 配置路由
+
+登录路由，开启DHCP服务器，地址池开始到结束区间，不能包含你要固定分配的IP地址，如我要将192.168.1.104分配给AGV，地址池区间从105到199，这样DHCP动态分配的就不会冲突。
+
+
+![QCRHiR.png](https://s2.ax1x.com/2019/11/27/QCRHiR.png)
+
+
+### 打开系统设置里的网络设置
+
+
+- `&ensp;`  “&ensp;半角空格”
+
+
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+
+![QCgff0.png](https://s2.ax1x.com/2019/11/27/QCgff0.png)
+
+
+
+---
+
+### 配置所选网卡与网络属性
+
+记录该网络的DNS，打开设置
+
+![QC2s9x.png](https://s2.ax1x.com/2019/11/27/QC2s9x.png)
+
+
+![QC26gK.png](https://s2.ax1x.com/2019/11/27/QC26gK.png)
+
+---
+
+### 固定IP地址
+
+
+- 1.选择IPv4设置
+- 2.方式选择手动模式
+- 3.绑定IP地址，我这里给AGV分配的是192.168.1.104地址
+- 4.子网掩码：255.255.255.0
+- 5.网关：192.168.1.1
+- 6.DNS配置与网络属性里的DNS一样，否则可能无法上网
+- 7.保存后，`reboot`即可
+
+![QC2hEd.png](https://s2.ax1x.com/2019/11/27/QC2hEd.png)
+
+
+---
