@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "101机械臂IP地址配置与路由密码"
+title:  "101机械臂IP地址配置、路由密码、PC密码"
 date:   2019-11-20 00:00:00
 categories: 工具
 tags: 工具
@@ -58,5 +58,19 @@ mathjax: true
     - `wifi:SIASUN_ERO1_5G `
     - `Passwd：siasun01`
     - `管理员密码：siasun01`
+
+---
+
+### PC机密码
+
+- 视觉PC机：
+    - `开机密码：554262`
+
+- 组态软件PC机：
+    - `开机密码：0000`
+
+- PLC控制台：
+    - `管理员密码：1122`
+
 
 ---
