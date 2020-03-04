@@ -1,0 +1,94 @@
+---
+layout: post
+title:  "Linux下查找命令"
+date:   2020-03-03 00:00:00
+categories: linux
+tags: linux
+excerpt: 查找文件，查找信息，查找错误是应用起来更为具体的一些工作，而Linux命令行为我们提供了很多快捷强大的查找方式。
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+### 命令/可执行程序查找
+
+- `whereis program_name`
+  - 会在系统默认安装目录(一般是有root权限时默认安装的软件)查找二进制文件、源码、文档中包含给定查询关键词的文件。(默认目录有 `/bin`, `/sbin`,` /usr/bin`, `/usr/lib`, `/usr/local/man`等类似路径)
+
+- `which program_name`
+  - 会给出所有在环境变量中的程序的路径，一来方便知道运行的程序在哪，二来方便修改。
+  - 如果运行`which bwa`，系统返回是 `/usr/bin/which: no bwa in (/home/usr/bin:/bin)`则说明bwa没有放置在环境变量中，不可以直接写名字调用。
+
+- `&ensp;`  “&ensp;半角空格”
+
+
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+
+
+---
+
+### 普通文件快速定位 locate
+
+- `locate`是快速查找定位文件的好方法，但其依赖于`updatedb`建立的索引。而`updatedb`一般是每天运行一次，所以当天的新文件是索引不到的。
+  - 如果有根用户权限，可以手动运行`updatedb`做个更新，然后再`locate bwa`。
+  - 个人用户也可以构建自己的`updatedb`, 使用`locate`在局部环境中查找。
+
+
+
+
+---
+
+### 普通文件多条件查找 find
+
+`find / -name bwa`可以搜索根目录下所有名字为`bwa`的文件.
+
+运行上面的命令时会输出很多`Permission denied`，是因为 作为普通用户，无权限访问一些目录，因此会有提示输出，可以使用`find / -name bwa 2>/dev/null`重定向标准错误到空设备，报错信息就被扔掉了，还不影响正常输出。
+
+- 按时间查找
+  - `find . -name *.log -mmine -60`可以查看当前目录下(包括所有子目录)一小时内修改的日志文件。再配合`head`就可以查看每个日志文件的内容，以方便查看使用过程中出现了哪些错误.
+  - `find . -name *.log -mtime -1`查看从现在起24小时内的日志了。
+
+- 按类型和大小查找
+  - 如果我想得到当前目录下所有png和jpg照片呢？使用` find . \( -name "*.png" -o -name "*.jpg" \) | less`或 `find . -regex ".*\(\.png\|\.jpg\)$"  `
+  - `find . -type f -size +100G`可以获取大小超过100G的文件。
+
+- 限制查找深度
+  - 只看当前目录2层子目录内的文件`find . -maxdepth 2 -name *.log`。
+  - 查看不是log结尾的文件`find . -not -name *.log`。
+
+---
+
+### 按文件内容查找 grep
+
+find可以查找包含某句话的文件吗？拿我们的log来说:
+- `find . -name *.log -exec grep -l 'Error' {} \` 就可以返回所有包含Error单词的文件名。
+- `find . -name *.log | xargs grep -l 'Error'`也可以。
+- `grep -rl 'Error' *`也可以，不加-l还可以顺便返回匹配的行。
+
+匹配行的前后行
+- `grep -A 5 -B 1 'Bioinfo' ehbio.log`可以查看匹配行的前1行(B, before)和后5行(A, after)。
+
+匹配次数
+- `grep -c 'Bioinfo' ehbio.log`可以统计包含Bioinfo的行数
+- `grep -ci 'Bioinfo' ehbio.log`则会在匹配时忽略大小写。
+- 统计FASTA序列中的序列数 `grep '^>' ehbio.fa`
+- 统计FASTQ序列中的序列数 `grep '^+$' ehbio.fq`。(^表示以什么开头，$表示以什么结尾)。
+
+---
+
+
+
+
+
+---
