@@ -27,12 +27,7 @@ mathjax: true
   - 会给出所有在环境变量中的程序的路径，一来方便知道运行的程序在哪，二来方便修改。
   - 如果运行`which bwa`，系统返回是 `/usr/bin/which: no bwa in (/home/usr/bin:/bin)`则说明bwa没有放置在环境变量中，不可以直接写名字调用。
 
-- `&ensp;`  “&ensp;半角空格”
 
-
-- `&emsp;` “&emsp;全角空格”
-
-- `<br>`换行
 
 
 
