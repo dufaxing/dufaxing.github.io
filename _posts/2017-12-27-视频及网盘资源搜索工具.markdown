@@ -51,6 +51,12 @@ mathjax: true
 
 - [八哥网](http://www.8gw.com/){:target="_blank"}
 
+- [奈菲影视](https://www.nfmovies.com/){:target="_blank"}
+
+- [去看TV](https://qukantv.net/){:target="_blank"}
+
+- [片库](https://www.pianku.tv/){:target="_blank"}
+
 ---
 
 ### 百度云盘资源搜索
