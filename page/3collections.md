@@ -15,6 +15,8 @@ type: page
 
 - [谷歌翻译](https://translate.google.cn/){:target="_blank"}
 
+- [Google 开源项目风格指南](https://zh-google-styleguide.readthedocs.io/en/latest/){:target="_blank"}
+
 - [知网](http://www.cnki.net/){:target="_blank"}
 
 - [MSDN,我告诉你](https://msdn.itellyou.cn/){:target="_blank"}
