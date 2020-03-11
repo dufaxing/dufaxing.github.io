@@ -21,7 +21,82 @@ mathjax: true
 链表是一种常见的基础数据结构，是一种线性表，但是并不会按线性的顺序存储数据，而是在每一个节点里存到下一个节点的指针(Pointer).<br/>
 从本质上来讲,链表与数组的确有相似之处,他们的相同点是都是线性数据结构,这与树和图不同,而它们的不同之处在于数组是一块连续的内存,而链表可以不是连续内存,链表的节点与节点之间通过指针来联系.<br/>
 
+### 单链表反转
+- 分析（头结点插入法）
+  - 实现链表反转，我们需要从第二个节点开始遍历，将当前节点的 next 指向前一个节点。这里需要注意的是，该变当前节点的 next 时，需要提前保存 next，不然遍历就会中断。
 
+```
+#include<iostream>
+#include<string.h>
+#include<math.h>
+#include<stdlib.h>
+#include <algorithm>
+#include<vector>
+using namespace std;
+
+#include <stdio.h>
+
+#include <malloc.h>
+#include <time.h>
+typedef struct LinkNode{
+    int data;
+    struct LinkNode* next;
+}LinkNode;
+
+void printLink(LinkNode* header)
+{
+    while(header != NULL) {
+        cout<< header->data;
+        header = header->next;
+        if (header != NULL) {
+            cout<< "->";
+        }
+    }
+    cout<<endl;
+}
+
+LinkNode* linkReverse(LinkNode* header)
+{
+    if(header == NULL || header->next == NULL){
+        return header;
+    }
+
+    LinkNode* per = header;//保存原链表头结点
+    LinkNode* cur = header->next;//保存原链表第二个节点
+    per->next = NULL;//反转后，原链表头结点变成最后一个节点
+    while (cur != NULL) {
+        LinkNode* next = cur->next;//保存下一个待反转的节点
+        cur->next = per;//将带反转的节点插入头结点前
+        per = cur;//当前反转后的节点更新为头结点
+        cur = next;//更新下一个待反转节点
+    }
+    return per;
+}
+
+int main()
+{
+    LinkNode* header =  NULL;
+    LinkNode* cur =  NULL;
+    for(int i = 1;i<=10;i++) {
+        LinkNode* node = (LinkNode*)malloc(sizeof(LinkNode));
+        node->data = i;
+        node->next = NULL;
+        if(header == NULL && cur == NULL){
+            header = node;
+            cur = node;
+        } else {
+            cur->next = node;
+            cur = cur->next;
+        }
+    }
+    printLink(header);
+
+    LinkNode* reverse_link = linkReverse(header);
+    printLink(reverse_link);
+    return 0;
+}
+
+```
 
 ### 单链表
 
