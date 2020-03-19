@@ -1,0 +1,178 @@
+---
+layout: post
+title:  "《程序员面试宝典》第五六七章总结"
+date:   2016-12-26 00:00:00
+categories: 程序员面试宝典
+tags: 读书笔记
+excerpt: 《程序设计基本概念》、《预处理、const、sizeof》、《指针与引用》章节的总结记录
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+## 第5章&emsp;程序设计基本概念
+
+### 类型存储与大小端问题
+
+- 小端存储：低位存放在低地址单元，高位存放在高地址单元；
+- 大端存储：低位存放在高地址单元，高位存放在低地址单元；
+
+```
+#include <stdio.h>
+
+int main()
+{
+    unsigned int a = 0xFFFFFFF7;
+    unsigned char i = (unsigned char)a;
+    char* b = (char*)&a;
+
+    printf("%08x,%08x",i,*b);
+}
+ ```
+
+在X86系列的机器中，数据的存储是“小端模式”。所以在执行`char* b = (char*)&a; `这句话时，`&a` 可以认为是个指向`unsigned int`类型数据的指针，`(char*)&a`把`&a`强制转换成了`char *`类型的指针，而且这个时候发生了截断。截断后，指针`b`只指向了`0xf7`这个数据，又由于指针`b`是`char*`型的，属于有符号数，所以有符号数`0xf7`在`printf()`的作用下输出`fffffff7`.
+ 
+
+  - 答案：`000000f7`,`fffffff7`
+  
+### union判断大小端
+
+```
+int checkCPUendian()//返回1，为小端；反之，为大端；
+{  
+	union
+    {  
+        unsigned int  a;  
+        unsigned char b;  
+    }c;  
+    c.a = 1;  
+	return 1 == c.b;  
+}
+```
+
+### 运算符问题
+
+- 用一个表达式，判断一个数X是否是2的N次方，不可用虚幻语句。
+  
+    ```
+    !(X&(X-1))
+    ```
+
+- 求解以下代码`f(729,271)`
+    ```
+    int f(int x,int y)
+    {
+        return (x&y)+((x^y)>>1);
+    }
+    ```
+    `x&y`是取相同的位与，这个结果是x和y相同位的和的一半，`x^y`是取x和y的不同位，右移相当于除以2，所以这个函数的功能是取两个数的平均值。
+    - 答案：500
+
+### a、b交换与比较
+
+- 有两个变量a和b，不用if,三目运算符，switch等其他判断语句。
+    ```
+    int max = ((a+b)+abs(a=b))/2;
+    ```
+- 有两个数据，写一个交换的宏。
+    ```
+    #include<string.h>
+    #define swap(a,b) \
+    {
+        char tempBuf[10];
+        memcpy(tempBuf,&a,sizeof(a));
+        memcpy(&a,&b,sizeof(b));
+        memcpy(&b,tempBuf,sizeof(b));
+    }
+    ```
+
+    ```
+    //需要考虑越界问题
+    #define SWAP(a,b) \
+    a= a + b ;\
+    b= a - b;\
+    a= a - b;
+    ```
+### C和C++的关系
+
+- 在C++程序中调用被C编译器编译后的函数，为什么要加`extern "C"`
+    - C++语言支持函数重载，C语言不支持函数重载。函数被C++编译后在库中的名字与C语言的不同。假设某个函数的原型为`void foo(int x,int y)`,该函数被C编译器编译后在库中的名字为`_foo`，而C++编译则会产生像`_foo_int_int`之类的名字。`<br>
+    C++提供了C连接交换指定符号`extern "C"`解决名字匹配问题。
+
+
+- 评价一下C与C++的各自特点。
+    - C语言是一种结构化语言，重点在于算法和数据结构。C程序的设计首先考虑的是如何通过一个过程，对输入（或环境条件）进行运算处理得到输出（或实现过程控制）。
+    - C++首先考虑的是如何构件一个对象模型，让这个模型能够契合与之对应的问题域，这样就可以通过获取对象的状态信息得到输出或实现输出或实现过程控制。
+
+
+
+---
+
+## 第6章&emsp;预处理、const、sizeof
+
+- 任何不修改成员数据的函数都应该声明为`const`函数，这样有助于提高程序的可读性和可靠性。
+
+- `const`与`#define`相比有什么不同
+    - const常量有数据类型，而宏函数没有数据类型。编译器可以对前者进行类型安全检查，而后者只进行字符替换，没有类型安全检查。
+    - 有些集成化的调试工具可以对const常量进行调试，但是不能对宏常量进行调试。
+
+- 修改下面类的成员变量
+    ```
+    class A{
+        void f() const
+        {
+            
+        }
+    }
+    ```
+    - 答案：类里面的数据成员加上`mutable`，修饰为const的成员变量，就可以修改它了。
+
+- 数据对齐：是指数据所在的内存地址必须是该数据长度的整数倍。
+- 结构体或类的自身对齐值：其成员自身对齐值最大的那个值。
+- sizeof与strlen的理解
+    - sizeof是运算符，strlen是函数。
+    - sizeof操作符的结果类型为size_t，它在头文件中的typedef为`unsigned int`类型。该类型保证能容纳所建立的最大对象的字节大小。
+
+---
+
+## 第7章&emsp;指针与引用
+
+### char str[] = “hello world”;和char *str = “hello world”区别
+
+```
+char *strA()
+{
+    char str[] = "hello world";
+    return str;
+}
+```
+`str[] = "hello world"`"hello world"常量字符串在内存中有两份拷贝，一份在动态分配的栈中，一份在静态存储区，str[]数组为函数内部局部变量，存储在栈上，在strA()函数退出时，栈要清空，局部变量的内存也被清空
+```
+char *strA()
+{
+    char *str = "hello world";
+    return str;
+}
+```
+`char *str = "hello world"`一份拷贝，"hello world"是常量字符串存在静态数据区，把该字符串常量存在的静态数据区的首地址赋给指针str，所以strA()函数退出时，该字符串常量所在内存不会被回收，故能通过指针访问；
+
+ ```
+char *strA()
+
+{
+
+     static char str[] = "hello world";//static变量被保存在静态存储区而不是堆栈，
+
+     return str;
+
+}
+```
+---
