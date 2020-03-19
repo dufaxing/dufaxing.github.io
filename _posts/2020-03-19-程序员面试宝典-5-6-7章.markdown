@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "《程序员面试宝典》第五六七章总结"
-date:   2016-12-26 00:00:00
+date:   2020-3-19 00:00:00
 categories: 程序员面试宝典
 tags: 读书笔记
 excerpt: 《程序设计基本概念》、《预处理、const、sizeof》、《指针与引用》章节的总结记录
