@@ -2,8 +2,8 @@
 layout: post
 title:  "[剑指Offer编程题]知识迁移能力"
 date:   2019-3-17 00:00:00
-categories: 剑指Offer
-tags: C++
+categories: 读书笔记
+tags: C++ 剑指Offer
 excerpt: 牛客网在线编程题
 mathjax: true
 ---
