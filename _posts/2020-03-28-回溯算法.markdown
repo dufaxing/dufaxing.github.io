@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "回溯算法"
+title:  "回溯算法+剪枝"
 date:   2020-3-28 00:00:00
 categories: 计算机基础
 tags: 算法
-excerpt: LeetCode第39题，回溯算法+剪枝
+excerpt: LeetCode第39题:组合总和
 mathjax: true
 ---
 * content
@@ -37,8 +37,8 @@ candidates 中的数字可以无限制重复被选取。<br>
 ]
 ```
 
-输入: candidates = [2,3,5], target = 8,
 ```
+输入: candidates = [2,3,5], target = 8,
 所求解集为:
 [
   [2,2,2,2],
