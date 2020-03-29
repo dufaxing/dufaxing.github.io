@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "动态规划算法"
-date:   2019-03-29 00:00:00
+date:   2020-03-29 00:00:00
 categories: 计算机基础
 tags: 算法
 excerpt: LeetCode第53题： 最大子序和
@@ -21,6 +21,8 @@ mathjax: true
 # 题目描述
 
 > 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+
 ```
 示例:
 
@@ -54,6 +56,7 @@ mathjax: true
 ## 使用动态规划算法解决问题举例——斐波那契（Fibonacci ）
 
 ###  暴力的递归算法
+
 ```
 int fib(int N) {
     if (N == 1 || N == 2) return 1;
