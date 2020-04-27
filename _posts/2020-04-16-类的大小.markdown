@@ -18,19 +18,6 @@ mathjax: true
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
 
-# markdowm语法
-
-
-- `&ensp;`  “&ensp;半角空格”
-
-
-- `&emsp;` “&emsp;全角空格”
-
-- `<br>`换行
-
-
-
----
 
 # 空类
 
@@ -159,7 +146,3 @@ sizeof(B); //12
 
 ---
 
-# 静态数据成员
-
-
----
