@@ -1,0 +1,154 @@
+---
+layout: post
+title:  "华为软件精英挑战赛2020"
+date:   2020-05-18 00:00:00
+categories: C++
+tags: C++
+excerpt: 2020华为软挑赛题与代码
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+***写在前面：从20年3、4月份就开始准备华为的这个软件精英挑战赛，到5月16号复赛结束，也差不多肝了两个月了，看了自己备份的代码已有51份。赛制为各个赛区1-32晋级赛区复赛。各个赛区33-64，晋级复活赛区复赛，各个赛区(包含复活赛区)的32强可获得华为手环+笔试绿卡。区域赛区TOP4晋级总决赛，竞争20W奖金。***<br>
+
+最终成绩：队名：龙卷风筝，初赛成渝赛区`rank35`，复赛复活赛区`rank11`。
+
+![YWN1SK.png](https://s1.ax1x.com/2020/05/18/YWN1SK.png)
+
+# 初赛赛题
+
+```
+1.1 输入信息:
+输入为包含资金流水的文本文件，每一行代表一次资金交易记录，包含本端账号ID, 对端账号ID, 转账金额，用逗号隔开。
+	本端账号ID和对端账号ID为一个32位的正整数
+	转账金额为一个32位的正整数
+	转账记录最多为28万条
+	每个账号平均转账记录数< 10
+	账号A给账号B最多转账一次
+举例如下，其中第一行[1,2,100]表示ID为1的账户给ID为2的账户转账100元：
+1,2,100
+1,3,100
+2,4,90
+3,4,50
+4,1,95
+2,5,95
+5,4,90
+4,6,30
+6,7,29
+7,4,28
+
+1.2 输出信息
+输出信息为一个文件，包含如下信息:
+	第一行输出：满足限制条件下的循环转账个数
+	第二行开始：输出所有满足限制条件的循环转账路径详情。
+输出循环转账路径要按照指定排序策略进行排序：总体按照循环转账路径长度升序排序；同一级别的路径长度下循环转账账号ID序列，按照字典序（ID转为无符号整数后）升序排序。
+举例如下：
+4
+1,2,4
+1,3,4
+4,6,7
+1,2,5,4
+
+1.3 限制条件
+循环转账的路径长度最小为3（包含3）最大为7（包含7），例如账户A给账户B转账，账户B给账户A转账，循环转账的路径长度为2，不满足循环转账条件。
+
+
+```
+
+
+---
+
+# 初赛方案
+
+分析赛题其实可以简要概述为：
+
+- 题意：给定一个有向图，求出图中所有长度在[3,7]之间的环。
+
+- 输入：格式为[IDU,IDV,Weight]的边表，ID为32位无符号整数，边最多28W条，不重复，结点平均度数小于10。环中同一个ID不可以重复出现（若大环包括小环，则需要分开统计），环的个数不大于300W。
+
+- 输出：环的个数，按照1.环长度；2.环的数字字典序输出所有环。
+
+## mmap读取文件，fwrite写入文件
+
+因为线上数据较小，算法找环时间前排大佬普遍用时很短，所以导致I/O占比较大，`mmap`读取数据比`fscanf`快不少；`mmap`写入数据，需要通过写入答案的大小，预设文件的大小，通过测试`fwrite`比`mmap`写入文件快0.02以上，所以最后一直沿用`mmap`读取文件，`fwrite`写入文件的方案。
+
+```
+void read_file(string fileName)
+{
+    int fd;
+    char *start;
+    unsigned int dataSize = 0;
+    fd = open(fileName.c_str(), O_RDONLY);
+
+    // struct stat st; //定义文件信息结构体
+
+    unsigned int len = lseek(fd, 0, SEEK_END);
+    start = (char *)mmap(NULL, len, PROT_READ, MAP_PRIVATE, fd, 0);
+    if(start == MAP_FAILED) /* 判断是否映射成功 */
+        return;
+
+    unsigned int temp = 0;
+    unsigned int commaCount = 0;
+    for(unsigned int i = 0;i < len;i++) {
+           if(start[i] != ',' && start[i]!= '\n') {
+               temp = temp*10 + (start[i] - '0');
+           } else if (start[i] == ','){
+               if (commaCount == 0) {
+                   vecData.emplace_back (temp);
+                   temp = 0;
+                   commaCount++;
+               } else if (commaCount == 1){
+                   vecData.emplace_back (temp);
+                   temp = 0;
+                   commaCount=0;
+               }
+           } else if (start[i] == '\n') {
+               dataSize++;
+               temp = 0;
+           }
+           if (start[i] == 0) {
+               break;
+           }
+    }
+#ifdef __TEST__
+    cout << dataSize<<endl;
+#endif
+    munmap(start, len); /* 解除映射 */
+    close(fd);
+
+}
+```
+
+## 建图
+
+ID为32位无符号整数，读入数据后对ID大多是不连续的，所以讲ID映射到一个连续的区间是十分必要的。图的数据结构用二维数组当做邻接表,因为一个有向环的各个节点必定是有出度和入度的，通过*拓扑排序*删除不能成环的节点。
+
+![YW2CxH.png](https://s1.ax1x.com/2020/05/18/YW2CxH.png)
+
+如上图所示，节点1是没有入度，所以改节点必不可能成环。我们将与节点1相连的边全部删除，发现节点2的入度也为0了，也将其删除。同理出度为0的节点，也可以用这种方法删除。
+
+## 5+2的双向DFS算法
+
+![YWfWSU.png](https://s1.ax1x.com/2020/05/18/YWfWSU.png)
+
+如果用dfs寻找环长度为7的环，最大递归深度为7。非常深，层次越大，遍历的节点数目呈指数级上升。上图所示为1->2->3->4->5->6->7的有向环，我们发现从节点1出发，向前走5步来到节点6；从节点1出发，向后走2步也来到了节点6。即使说，正向DFS遍历走到第五层，就能知道是否有7环存在。
+用数据结构`vector<unordered_map<unsigned int,vector<unsigned int> > > P2`来保存反向2节点的数据。
+
+
+---
+
+## 初赛代码
+
+链接：https://pan.baidu.com/s/1FVTxJlbm3JMHsuId3eV2RA <br>
+提取码：xk0r 
+
+
+---
