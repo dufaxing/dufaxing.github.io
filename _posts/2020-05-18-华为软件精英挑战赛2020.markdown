@@ -129,7 +129,7 @@ void read_file(string fileName)
 
 ## 建图
 
-ID为32位无符号整数，读入数据后对ID大多是不连续的，所以讲ID映射到一个连续的区间是十分必要的。图的数据结构用二维数组当做邻接表,因为一个有向环的各个节点必定是有出度和入度的，通过*拓扑排序*删除不能成环的节点。
+ID为32位无符号整数，读入数据后对ID大多是不连续的，所以讲ID映射到一个连续的区间是十分必要的。图的数据结构用二维数组当做邻接表,因为一个有向环的各个节点必定是有出度和入度的，通过**拓扑排序**删除不能成环的节点。
 
 ![YW2CxH.png](https://s1.ax1x.com/2020/05/18/YW2CxH.png)
 
@@ -223,6 +223,47 @@ ID为32位无符号整数，读入数据后对ID大多是不连续的，所以�
 
 赛后了解到，很多队伍由于正式比赛只有2个半小时，没有来得及成功修改好代码，导致复赛没有成功提交，非常遗憾。**策略选择也同样重要。**
 
+## 转账金额处理
+
+因为转账精度要满足`0.2 <= Y/X <= 3`的条件,考虑到使用浮点型判断等于，会产生精度问题，所以将金额乘以100以`unsigned long long`类型保存，将判断表达式，左右同乘以`5X`得`X<=5Y<=15X`,以整形来处理，处理速度和精度都有所保障。
+
+`#define CONDITION(value1,value2) ( ((unsigned long long)value2<=(unsigned long long)value1*5 && (unsigned long long)value1*5<=(unsigned long long)value2*15) )`
+
+```
+vector<unsigned int> vecData;
+vector<unsigned long long> vecMoney;
+void read_file(string testFile)
+{
+    vecData.reserve(2000000*2);
+    vecMoney.reserve(2000000);
+        FILE* file=fopen(testFile.c_str(),"r");
+        unsigned int u,v;
+        char c[100] = {0};
+        while(fscanf(file,"%d,%d,%s",&u,&v,&c)!=EOF){
+            vecData.push_back(u);
+            vecData.push_back(v);
+            unsigned long long tmp = 0;
+            unsigned int i =0;
+            for(;c[i]!=0;++i) {
+                if (c[i] == '.') {break;}
+                tmp = tmp*10 + c[i]-'0';
+            }
+            if(c[i]=='.') {
+                for(unsigned int j =i+1;j<i+3;j++) {
+                    if(c[j]>='0') {
+                        tmp = tmp*10 + c[j]-'0';
+                    } else {
+                        tmp = tmp*10 + c[j]-0;
+                    }
+                }
+            } else {
+                tmp = tmp*100;
+            }
+            vecMoney.push_back(tmp);
+        }
+
+ }
+```
 
 ---
 
