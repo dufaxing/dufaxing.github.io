@@ -84,7 +84,7 @@ dufaxing@ubuntu:~$ roslaunch crobot_teleoperation keyboard_teleoperation.launch
 dufaxing@ubuntu:~$ rosrun map_server map_saver -f map
 ```
 
-**注意建图过程中，应使键盘控制crobot速度较慢，同时不允许crobot论坛打滑、空转。**<br>
+**注意建图过程中，应使键盘控制crobot速度较慢，同时不允许crobot轮胎打滑、空转。**<br>
 建图效果如下所示：<br>
 ![Y43R8f.png](https://s1.ax1x.com/2020/05/19/Y43R8f.png)
 
