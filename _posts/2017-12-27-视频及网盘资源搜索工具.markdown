@@ -47,15 +47,18 @@ mathjax: true
 
 - [嘀哩哩](https://www.dililitv.com/){:target="_blank"}
 
-- [樱花动漫](http://www.imomoe.tv){:target="_blank"}
-
-- [八哥网](http://www.8gw.com/){:target="_blank"}
-
 - [奈菲影视](https://www.nfmovies.com/){:target="_blank"}
 
 - [去看TV](https://qukantv.net/){:target="_blank"}
 
 - [片库](https://www.pianku.tv/){:target="_blank"}
+
+- [独播库](https://www.duboku.net/){:target="_blank"}
+
+- [樱花动漫](http://www.imomoe.tv){:target="_blank"}
+
+- [八哥网](http://www.8gw.com/){:target="_blank"}
+
 
 ---
 
