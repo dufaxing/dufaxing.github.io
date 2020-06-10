@@ -1,0 +1,256 @@
+---
+layout: post
+title:  "二叉树遍历"
+date:   2020-06-06 00:00:00
+categories: 计算机基础
+tags: C++
+excerpt: 二叉树前序，中序，后序遍历
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# markdowm语法
+
+
+- `&ensp;`  “&ensp;半角空格”
+
+
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+
+
+---
+
+```
+struct TreeNode {
+    int data;
+    TreeNode *left;
+    TreeNode *right;
+};
+```
+
+
+![t50w59.png](https://s1.ax1x.com/2020/06/09/t50w59.png)
+
+![t50cDO.png](https://s1.ax1x.com/2020/06/09/t50cDO.png)
+
+# 前序遍历
+
+![t50f5d.png](https://s1.ax1x.com/2020/06/09/t50f5d.png)
+
+## 递归算法
+
+先序遍历的递归算法定义为，若二叉树非空，则依次执行如下操作：
+- 1.访问根节点。
+- 2.遍历左子树。
+- 3.遍历右子树。
+
+```
+void Tree::perOrderTree()
+{
+    if(root == NULL){
+        return;
+    }
+    perOrderTree(root);
+}
+void Tree::perOrderTree(TreeNode* current)
+{
+    cout << current->data << " ";
+    perOrderTree(current->left);
+    perOrderTree(current->right);
+}
+```
+
+## 迭代算法
+
+![toi16U.gif](https://s1.ax1x.com/2020/06/10/toi16U.gif)
+
+对于先序遍历非递归算法，使用一个栈(stack)来临时存储节点，方法如下。
+- 1.打印节点数据。
+- 2.把根节点的right入栈，遍历左子树。
+- 3.遍历完左子树返回时，栈顶元素因为right，出栈，遍历以该指针为根的子树。
+  
+```
+void Tree::perOrderTreeUnRec()
+{
+    stack<TreeNode *> s;
+    TreeNode *p = root;
+    while (p!=NULL || !s.empty()) {
+        while (p!=NULL) { //遍历左子树
+            cout << p->data << " ";//打印节点
+            s.push(p);//把遍历的节点入栈
+            p = p->left;
+        }
+        if (!s.empty()) {
+            p = s.top();
+            s.pop();
+            p=p->right;//指向右子节点，下次循环时就会先遍历左子树
+        }
+    }
+}
+```
+
+
+
+---
+
+# 中序遍历
+
+![tou2q0.png](https://s1.ax1x.com/2020/06/10/tou2q0.png)
+
+## 递归算法
+
+中序遍历的递归算法定义为，若二叉树非空，则依次执行如下操作：
+- 1.遍历左子树。
+- 2.访问根节点。
+- 3.遍历右子树。
+
+```
+void Tree::inOrderTree()
+{
+    if(root == NULL){
+        return;
+    }
+    inOrderTree(root);
+}
+void Tree::inOrderTree(TreeNode* current)
+{
+    inOrderTree(current->left);
+    cout << current->data << " ";
+    inOrderTree(current->right);
+}
+```
+
+## 迭代算法
+
+![toKcfe.gif](https://s1.ax1x.com/2020/06/10/toKcfe.gif)
+
+对于中序遍历非递归算法，使用一个栈(stack)来临时存储节点，方法如下。
+- 1.先将根节点入栈，遍历左子树。
+- 2.遍历完左子树返回时，栈顶元素应为根节点，此时出栈，并打印节点数据。
+- 3.在中序遍历右子树。
+
+```
+void Tree::inOrderTreeUnRec()
+{
+    stack<TreeNode *> s;
+    TreeNode *p = root;
+    while (p!=NULL || !s.empty()) {
+        while (p!=NULL) { //遍历左子树
+            s.push(p);//把遍历的节点入栈
+            p = p->left;
+        }
+        if (!s.empty()) {
+            p = s.top();
+            s.pop();
+            cout << p->data << " ";//打印节点
+            p=p->right;//指向右子节点，下次循环时就会中序遍历右子树
+        }
+    }
+}
+``` 
+
+
+---
+
+# 中序遍历
+
+![to7eSI.png](https://s1.ax1x.com/2020/06/10/to7eSI.png)
+
+## 递归算法
+
+后序遍历的递归算法定义为，若二叉树非空，则依次执行如下操作：
+- 1.遍历左子树。
+- 2.遍历右子树。
+- 3.访问根节点。
+
+```
+void Tree::postOrderTree()
+{
+    if(root == NULL){
+        return;
+    }
+    postOrderTree(root);
+}
+void Tree::postOrderTree(TreeNode* current)
+{
+    postOrderTree(current->left);
+    postOrderTree(current->right);
+    cout << current->data << " ";
+}
+```
+
+## 迭代算法
+
+假设T是要遍历树的指针，后序遍历要求在遍历完左、右子树后再访问根。需要判断根节点的左、右子树是否均遍历过。<br>
+可采用标记法，阶段入栈时，配一个标志tag一同入栈（tag为0表示遍历左子树前的现场保护，tag为1表示遍历右子树前的现场保护）。<br>
+首先将T和tag（为0）入栈，遍历左子树；返回后，修改栈顶为1，遍历右子树；最后访问根节点。<br>
+
+```
+struct TreeNode {
+    int data;
+    TreeNode *left;
+    TreeNode *right;
+    int tag;
+};
+void Tree::postOrderTreeRec()
+{
+    stack<TreeNode *>s;
+    TreeNode *p = root;
+    while(p!=NULL || !s.empty()) {
+        while (p != NULL) {
+            s.push(p);
+            p=p->left;//遍历左子树
+        }
+        if (!s.empty()) {
+            p = s.top();
+            if (p->tag) {
+                cout << p->data << " ";//打印节点
+                s.pop();
+                p = NULL;//第二次访问标志其右子树已经遍历
+            } else {
+                p->tag = 1;
+                p = p->right;//指向右节点，下次遍历其左子树
+            }
+        }
+    }
+}
+```
+
+---
+
+# 层序遍历
+
+![toOAz9.png](https://s1.ax1x.com/2020/06/10/toOAz9.png)
+
+```
+void Tree::levelOrderTree()
+{
+    queue<TreeNode *>q;
+    TreeNode *ptr = NULL;
+    
+    q.push(root);
+    while (!q.empty()) {
+        ptr = q.front();
+        q.pop();
+        cout << ptr->data << " ";
+        if (prt->left) {
+            q.push(ptr->left);
+        }
+        if (prt->right) {
+            q.push(ptr->right);
+        }
+    }
+}
+```
