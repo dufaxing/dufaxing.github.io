@@ -1,0 +1,58 @@
+---
+layout: post
+title:  "101实验室AGV二维码引导使用指南"
+date:   2020-09-09 00:00:00
+categories: ROS
+tags: ROS
+excerpt: AGV小车跑机械臂加工抓取工具——模式二
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# markdowm语法
+
+
+- `&ensp;`  “&ensp;半角空格”
+
+
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+
+
+---
+
+# 禁用开机启动项
+
+
+`sudo service startup stop`
+
+---
+
+# 开启摄像头
+
+`roslaunch robot_vision usb_cam_with_calibration.launch`
+
+---
+
+# 二维码引导
+
+`roslaunch robot_vision robot_vision.launch`
+
+---
+
+# tcp/ip modbus连接
+
+`roslaunch robot_vision tcp_ip_server.launch`
+
+---
