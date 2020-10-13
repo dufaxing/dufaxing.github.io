@@ -37,11 +37,11 @@ mathjax: true
 # 二维码引导
 
 `roslaunch robot_vision robot_vision.launch`
-
+ 
 ---
 
 # tcp/ip modbus连接
 
-`roslaunch robot_vision tcp_ip_server.launch`
+`rosrun robot_vision tcp_ip_server.py`
 
 ---
