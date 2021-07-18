@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "NULL"
+title:  "5G-NR架构"
 date:   2021-07-18 00:00:00
-categories: NULL
-tags: NULL
-excerpt: NULL
+categories: 5G协议栈
+tags: 5G协议栈
+excerpt: 5GNR架构
 mathjax: true
 ---
 * content
