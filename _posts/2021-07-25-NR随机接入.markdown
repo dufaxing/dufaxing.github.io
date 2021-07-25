@@ -1,0 +1,56 @@
+---
+layout: post
+title:  "NR随机接入"
+date:   2021-07-25 00:00:00
+categories: 5G协议栈
+tags: NR
+excerpt: NR-PRACH随机接入学习记录
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# 参考文献
+
+> [孙老师NR系列(更新版)1：NR物理层基础知识简介 V2.0](https://mp.weixin.qq.com/s/Mu4s66HNauacMLfhheBFlw){:target="_blank"}<br>
+[孙老师NR系列(更新版)2：NR初始搜索流程简析 V2.0](https://mp.weixin.qq.com/s/pYBUorrVeYUedqGJxVi9Xg){:target="_blank"}<br>
+[孙老师NR系列(更新版)3：NR PRACH信道和随机接入流程简析 V2.0](https://mp.weixin.qq.com/s/R58pneWFc6gOhHLb-NVnlQ){:target="_blank"}<br>
+[孙老师NR系列(更新版)4：NR下行物理信道（PDCCH）简介 V2.0](https://mp.weixin.qq.com/s/srVwk_mv8JFfjtSKzOJFlA){:target="_blank"}<br>
+[孙老师NR系列(更新版)5：NR PDSCH信道简介 V2.0](https://mp.weixin.qq.com/s/SZwf4bJEzWa8RfJDiCC-CA){:target="_blank"}<br>
+[孙老师NR系列(更新版)6：NR 上行物理信道（PUCCH/PUSCH）简介 V2.0](https://mp.weixin.qq.com/s/83D25ABb2YURSbLQ3fOYsg){:target="_blank"}<br>
+[孙老师NR系列(更新版)7：NR中的波束和QCL简介 V2.0](https://mp.weixin.qq.com/s/OGBKiweD8R4LUSMzNCSNtg){:target="_blank"}<br>
+
+# markdowm语法
+
+
+- `&ensp;`  “&ensp;半角空格”
+
+
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+
+
+---
+
+# 标题2:
+
+
+
+
+---
+
+# 标题3:
+
+
+
+---
