@@ -28,29 +28,11 @@ mathjax: true
 [孙老师NR系列(更新版)6：NR 上行物理信道（PUCCH/PUSCH）简介 V2.0](https://mp.weixin.qq.com/s/83D25ABb2YURSbLQ3fOYsg){:target="_blank"}<br>
 [孙老师NR系列(更新版)7：NR中的波束和QCL简介 V2.0](https://mp.weixin.qq.com/s/OGBKiweD8R4LUSMzNCSNtg){:target="_blank"}<br>
 
-# markdowm语法
-
-
-- `&ensp;`  “&ensp;半角空格”
-
-
-- `&emsp;` “&emsp;全角空格”
-
-- `<br>`换行
-
-
 
 ---
 
-# 标题2:
+# 随机接入过程总结
 
-
-
-
----
-
-# 标题3:
-
-
+[![fl555V.jpg](https://z3.ax1x.com/2021/08/08/fl555V.jpg)](https://imgtu.com/i/fl555V)
 
 ---
