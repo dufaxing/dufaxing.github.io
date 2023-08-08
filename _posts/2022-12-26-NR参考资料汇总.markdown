@@ -4,7 +4,7 @@ title:  "NR参考资料汇总"
 date:   2022-12-26 00:00:00
 categories: NR
 tags: NR
-excerpt: R16,R17新特性
+excerpt: 搜集的NR资料
 mathjax: true
 ---
 * content
@@ -17,6 +17,11 @@ mathjax: true
 
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
+> [3GPP](https://www.3gpp.org/)
+
+# 网页
+
+> [sharetechnote](https://sharetechnote.com/)
 
 # MAC
 
@@ -24,14 +29,19 @@ mathjax: true
 
 ---
 
-# 标题2:
-
+# RLC
 
 
 
 ---
 
-# 标题3:
+# PDCP
+
+
+
+---
+
+# SDAP
 
 
 
