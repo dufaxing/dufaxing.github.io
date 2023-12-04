@@ -4,7 +4,7 @@ title:  "随机接入与preamble分隔"
 date:   2023-12-03 00:00:00
 categories: 5G协议栈
 tags: NR
-excerpt: NULL
+excerpt: 3GPP R17特性
 mathjax: true
 ---
 * content
