@@ -19,6 +19,8 @@ mathjax: true
 
 > [3GPP](https://www.3gpp.org/)
 
+> [协议FTP](https://www.3gpp.org/ftp/Specs/)
+
 # 网页
 
 > [sharetechnote](https://sharetechnote.com/)
