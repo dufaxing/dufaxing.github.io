@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "随机接入与preamble分隔"
+title:  "随机接入与preamble选择"
 date:   2023-12-03 00:00:00
 categories: 5G协议栈
 tags: NR
@@ -17,6 +17,7 @@ mathjax: true
 
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
+# BWP
 
 # SSB与PRACH
 
@@ -28,8 +29,17 @@ SSB在时域周期内有多次发送机会，可以分别对应不同波束;
 
 即: PRACH的发送时刻(RO)需要和SSB发送的时刻(索引) 建立映射关系。同时基站根据UE上行PRACH的资源位置，决定下行RAR发送的波束。
 
+高层通过参数`ssb-perRACH-OccasionAndCB-PreamblesPerSSB`配置N(参数：`SSB-per-rach-occasion`)个SSB关联一个PRACH occasion(频域)，和每个SSB在每个有效PRACH occasion上基于竞争的preamble数(参数：`CB-preambles-per-SSB`)。其中对于N的配置有如下两种：
+
+> 38.213-i30
+For Type-1 random access procedure, a UE is provided a number N of SS/PBCH block indexes associated with one PRACH occasion and a number R of contention based preambles per SS/PBCH block index per valid PRACH occasion by ssb-perRACH-OccasionAndCB-PreamblesPerSSB. 
 
 
+[![pk2azz6.png](https://s21.ax1x.com/2024/07/03/pk2azz6.png)](https://imgse.com/i/pk2azz6)
+
+[![pk2dotA.png](https://s21.ax1x.com/2024/07/03/pk2dotA.png)](https://imgse.com/i/pk2dotA)
+
+举例
 RACH参数配置中ssb perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
     - 每个RACH时刻对应的SSB个数N,从1/8-16
     - 当ssb-perRACH-Occasion>=1, N>=1时，即多个SSB对应1个RACH Occasion,从n*64/N开始的连续CB PreamblesPerSSB个CB preambles对应于SSB n, 0<=n<=N-1 。
@@ -61,14 +71,17 @@ RACH参数配置中ssb perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
 
 ---
 
-# 标题2:
+# Legacy RA
 
+## 4-step RA
+
+## 2-step RA
 
 
 
 ---
 
-# 标题3:
+# RACH partition
 
 
 
