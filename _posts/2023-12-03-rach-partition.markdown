@@ -80,28 +80,28 @@ ssb-perRACH-OccasionAndCB-PreamblesPerSSB 指定可以映射到一个RO的SSB数
 
 ### Example 01 
 
-msg1-FDM = one
+msg1-FDM = one<br/>
 ssb-perRACH-OccasionAndCB-PreamblesPerSSB = one
 
 [![pkWUu1x.png](https://s21.ax1x.com/2024/07/07/pkWUu1x.png)](https://imgse.com/i/pkWUu1x)
 
 ### Example 02 
 
-msg1-FDM = two
+msg1-FDM = two<br/>
 ssb-perRACH-OccasionAndCB-PreamblesPerSSB = one
 
 [![pkWUKc6.png](https://s21.ax1x.com/2024/07/07/pkWUKc6.png)](https://imgse.com/i/pkWUKc6)
 
 ### Example 03 
 
-msg1-FDM = two
+msg1-FDM = two<br/>
 ssb-perRACH-OccasionAndCB-PreamblesPerSSB = eight
 
 [![pkWUlnO.png](https://s21.ax1x.com/2024/07/07/pkWUlnO.png)](https://imgse.com/i/pkWUlnO)
 
 ### Example 04 
 
-msg1-FDM = two
+msg1-FDM = two<br/>
 ssb-perRACH-OccasionAndCB-PreamblesPerSSB = oneHalf
 
 [![pkWU3He.png](https://s21.ax1x.com/2024/07/07/pkWU3He.png)](https://imgse.com/i/pkWU3He)
@@ -124,6 +124,12 @@ For Type-1 random access procedure, a UE is provided a number N of SS/PBCH block
 RACH参数配置中ssb-perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
     - 每个RACH时刻对应的SSB个数N,从1/8-16
     - 当ssb-perRACH-Occasion>=1, N>=1时，即多个SSB对应1个RACH Occasion,从n*N<sup>total</sup><sub>preamble</sub>/N开始的连续CB PreamblesPerSSB个CB preambles对应于SSB n, 0<=n<=N-1 。
+
+列举两个图片来说明RO与SSB的关系：
+
+[![pkfcbsH.jpg](https://s21.ax1x.com/2024/07/09/pkfcbsH.jpg)](https://imgse.com/i/pkfcbsH)
+
+[![pkfcXdI.jpg](https://s21.ax1x.com/2024/07/09/pkfcXdI.jpg)](https://imgse.com/i/pkfcXdI)
 
 ## 举例
 
@@ -149,13 +155,6 @@ RACH参数配置中ssb-perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
 
 [![pi6CDzt.png](https://z1.ax1x.com/2023/12/04/pi6CDzt.png)](https://imgse.com/i/pi6CDzt)
 
-## CBRA
-
-[![pkfsbss.png](https://s21.ax1x.com/2024/07/09/pkfsbss.png)](https://imgse.com/i/pkfsbss)
-
-## CFRA
-
-[![pkfsOZq.png](https://s21.ax1x.com/2024/07/09/pkfsOZq.png)](https://imgse.com/i/pkfsOZq)
 
 ---
 
@@ -167,8 +166,10 @@ RACH参数配置中ssb-perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
 
 # 参考文献
 
-> [sharetechnote_5G_RACH](https://wirelessbrew.com/5g-nr/5g-nr-cell-scan-and-rach-procedure-poster/){:target="_blank"}
-> 
+> [5g-nr-cell-scan-and-rach-procedure-poster](https://wirelessbrew.com/5g-nr/5g-nr-cell-scan-and-rach-procedure-poster/){:target="_blank"}
+
 > [sharetechnote_5G_RACH](https://sharetechnote.com/html/5G/5G_RACH.html){:target="_blank"}
 
 > [5G NR: 2-Step Random Access Procedure (Release-16)](https://howltestuffworks.blogspot.com/2020/04/5g-nr-2-step-random-access-procedure.html){:target="_blank"}
+
+>  [ra_msg1](https://www.nrexplained.com/ra_msg1){:target="_blank"}
