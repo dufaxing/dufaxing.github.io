@@ -13,6 +13,9 @@ mathjax: true
 
 ![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
 
+# 小区搜索与RACH流程
+
+[![pkf6DjH.png](https://s21.ax1x.com/2024/07/09/pkf6DjH.png)](https://imgse.com/i/pkf6DjH)
 
 
 > [博客地址](https://dufaxing.com){:target="_blank"}
@@ -72,7 +75,7 @@ ssb-perRACH-OccasionAndCB-PreamblesPerSSB 指定可以映射到一个RO的SSB数
 >-	Fourth, in increasing order of indexes for PRACH slots
 
 ## 举例
-下图38.331 对于的定义
+下图38.331 对于ssb-perRACH-OccasionAndCB-PreamblesPerSSB的定义
 [![pkWUA74.jpg](https://s21.ax1x.com/2024/07/07/pkWUA74.jpg)](https://imgse.com/i/pkWUA74)
 
 ### Example 01 
@@ -107,7 +110,7 @@ ssb-perRACH-OccasionAndCB-PreamblesPerSSB = oneHalf
 
 # Legacy RA
 
-高层通过参数`ssb-perRACH-OccasionAndCB-PreamblesPerSSB`配置`N`个SSB关联一个PRACH occasion(频域)，和每个SSB在每个有效PRACH occasion上基于竞争的preamble数(参数：`CB-preambles-per-SSB`)。其中对于N的配置有如下两种：
+高层通过参数`ssb-perRACH-OccasionAndCB-PreamblesPerSSB`配置`N`个SSB关联一个PRACH occasion(参数`ssb-perRACH-Occasion`)，和每个SSB在每个有效PRACH occasion上基于竞争的preamble数(参数：`CB-preambles-per-SSB`)。其中对于N的配置有如下两种：
 
 > 38.213-i30：
 For Type-1 random access procedure, a UE is provided a number N of SS/PBCH block indexes associated with one PRACH occasion and a number R of contention based preambles per SS/PBCH block index per valid PRACH occasion by ssb-perRACH-OccasionAndCB-PreamblesPerSSB. 
@@ -146,7 +149,13 @@ RACH参数配置中ssb-perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
 
 [![pi6CDzt.png](https://z1.ax1x.com/2023/12/04/pi6CDzt.png)](https://imgse.com/i/pi6CDzt)
 
+## CBRA
 
+[![pkfsbss.png](https://s21.ax1x.com/2024/07/09/pkfsbss.png)](https://imgse.com/i/pkfsbss)
+
+## CFRA
+
+[![pkfsOZq.png](https://s21.ax1x.com/2024/07/09/pkfsOZq.png)](https://imgse.com/i/pkfsOZq)
 
 ---
 
@@ -155,3 +164,11 @@ RACH参数配置中ssb-perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
 
 
 ---
+
+# 参考文献
+
+> [sharetechnote_5G_RACH](https://wirelessbrew.com/5g-nr/5g-nr-cell-scan-and-rach-procedure-poster/){:target="_blank"}
+> 
+> [sharetechnote_5G_RACH](https://sharetechnote.com/html/5G/5G_RACH.html){:target="_blank"}
+
+> [5G NR: 2-Step Random Access Procedure (Release-16)](https://howltestuffworks.blogspot.com/2020/04/5g-nr-2-step-random-access-procedure.html){:target="_blank"}
