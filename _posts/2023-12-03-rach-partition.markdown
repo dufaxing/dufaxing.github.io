@@ -78,31 +78,31 @@ ssb-perRACH-OccasionAndCB-PreamblesPerSSB 指定可以映射到一个RO的SSB数
 下图38.331 对于ssb-perRACH-OccasionAndCB-PreamblesPerSSB的定义
 [![pkWUA74.jpg](https://s21.ax1x.com/2024/07/07/pkWUA74.jpg)](https://imgse.com/i/pkWUA74)
 
-### Example 01 
+- **Example 01**
 
-msg1-FDM = one<br/>
-ssb-perRACH-OccasionAndCB-PreamblesPerSSB = one
+    - msg1-FDM = one<br/>
+    - ssb-perRACH-OccasionAndCB-PreamblesPerSSB = one
 
 [![pkWUu1x.png](https://s21.ax1x.com/2024/07/07/pkWUu1x.png)](https://imgse.com/i/pkWUu1x)
 
-### Example 02 
+- **Example 02**
 
-msg1-FDM = two<br/>
-ssb-perRACH-OccasionAndCB-PreamblesPerSSB = one
+    - msg1-FDM = two<br/>
+    - ssb-perRACH-OccasionAndCB-PreamblesPerSSB = one
 
 [![pkWUKc6.png](https://s21.ax1x.com/2024/07/07/pkWUKc6.png)](https://imgse.com/i/pkWUKc6)
 
-### Example 03 
+- **Example 03**
 
-msg1-FDM = two<br/>
-ssb-perRACH-OccasionAndCB-PreamblesPerSSB = eight
+    - msg1-FDM = two<br/>
+    - ssb-perRACH-OccasionAndCB-PreamblesPerSSB = eight
 
 [![pkWUlnO.png](https://s21.ax1x.com/2024/07/07/pkWUlnO.png)](https://imgse.com/i/pkWUlnO)
 
-### Example 04 
+- **Example 04**
 
-msg1-FDM = two<br/>
-ssb-perRACH-OccasionAndCB-PreamblesPerSSB = oneHalf
+    - msg1-FDM = two<br/>
+    - ssb-perRACH-OccasionAndCB-PreamblesPerSSB = oneHalf
 
 [![pkWU3He.png](https://s21.ax1x.com/2024/07/07/pkWU3He.png)](https://imgse.com/i/pkWU3He)
 
@@ -159,6 +159,30 @@ RACH参数配置中ssb-perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
 ---
 
 # RACH partition
+
+RACH partition为R17引入的新特性，旨在通过RACH流程，告知网络UE支持的特性（redCap，smallData，nsag，msg3-Repetitions）。
+
+[![pkhnHIK.jpg](https://s21.ax1x.com/2024/07/10/pkhnHIK.jpg)](https://imgse.com/i/pkhnHIK)
+
+- numberOfPreamblesPerSSB-ForThisPartition
+    - It determines how many consecutive preambles are associated to the Feature Combination starting from the starting preamble(s) per SSB.
+
+
+[![pkhuFJS.jpg](https://s21.ax1x.com/2024/07/10/pkhuFJS.jpg)](https://imgse.com/i/pkhuFJS)
+
+> 38213 clause 8.1
+[![pkhu3z4.jpg](https://s21.ax1x.com/2024/07/10/pkhu3z4.jpg)](https://imgse.com/i/pkhu3z4)
+
+
+RACH partition有两个关键参数，分别为`numberOfPreamblesPerSSB-ForThisPartition` 和`startPreambleForThisPartition` ，其中`startPreambleForThisPartition` 标识了每个RACH partition的起始位置，`numberOfPreamblesPerSSB-ForThisPartition`标识了从这个起始位置开始，属于这个RACH partition的连续的P码个数。
+
+1. 对于一个SSB映射到多个RO的情况，即`N<1`的情况，在`totalNumberOfRA-Preambles`个P码对于发起RACH的SSB都可以使用，所以RACH partition的P码范围为`[startPreambleForThisPartition,startPreambleForThisPartition+numberOfPreamblesPerSSB-ForThisPartition)`
+
+[![pkhMPgg.png](https://s21.ax1x.com/2024/07/10/pkhMPgg.png)](https://imgse.com/i/pkhMPgg)
+
+2. 对于多个SSB映射到一个RO的情况，即`N>=1`的情况,每个SSB其实只有N<sup>total</sup><sub>preamble</sub>/N个P码可以使用，其中CB preambles个数为开始的连续CB-PreamblesPerSSB，所以RACH partition的P码范围为`[n*Ntotalpreamble/N + startPreambleForThisPartition,n*Ntotalpreamble/N + startPreambleForThisPartition+numberOfPreamblesPerSSB-ForThisPartition)`
+
+[![pkhKjHI.png](https://s21.ax1x.com/2024/07/10/pkhKjHI.png)](https://imgse.com/i/pkhKjHI)
 
 
 
