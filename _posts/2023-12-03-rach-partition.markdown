@@ -13,38 +13,40 @@ mathjax: true
 
 ![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
 
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
 # 小区搜索与RACH流程
 
 [![pkf6DjH.png](https://s21.ax1x.com/2024/07/09/pkf6DjH.png)](https://imgse.com/i/pkf6DjH)
 
 
-> [博客地址](https://dufaxing.com){:target="_blank"}
+
 
 # BWP
 
-部分带宽（BWP）是在给定载波和给定 Numerology 条件下的一组连续的PRB。由于 NR 支持小至 5 MHz、大至 400 MHz 的工作带宽，如果要求所有UE 均支持最大的 400 MHz 带宽，无疑会对 UE 的性能提出较高要求，也不利于降低 UE 的成本。同时，由于一个 UE 不可能同时占满整个 400 MHz 带宽，且高带宽意味着高采样率，而高采样率意味着更高功耗，如果 UE 全部按照支持 400 MHz 的带宽进行设计，无疑是对性能的极大浪费。因此，NR 引入了带宽自适应（Bandwidth Adaptation）技术，针对性地解决上述问题。带宽自适应意味着，UE 在低业务周期可以使用适度的带宽监测控制信道，而只在必要时才启用大的接收带宽以应对高业务负荷。
-在 LTE 中，UE 的带宽与系统带宽保持一致，在解码 MIB 信息配置带宽后便保持不变。而在 NR 中，不同的 UE 可以配置不同的 BWP，也就是说，UE 的带宽可以动态变化。如图 3-26 所示，在 T0 时段，UE 业务负荷较大且对时延要求不敏感，系统为 UE 配置大带宽 BWP1（BW 为 40 MHz，SCS 为15 kHz）；在 T1 时段，由于业务负荷趋降，UE 由 BWP1 切换至小带宽 BWP2（BW 为 10 MHz，SCS 为 15 kHz），在满足基本通信需求的前提下，可达到减低功耗的目的；在 T2 时段，UE 可能突发时延敏感业务，或者发现 BWP1 所在频段内资源紧缺，于是切换到新的 BWP3（BW 为 20 MHz，SCS 为 60 kHz）上；同理，在 T3 和 T4 等其他不同时段，UE 均根据实时业务需求，在不同 BWP之间切换。
+&emsp;&emsp;部分带宽（BWP）是在给定载波和给定 Numerology 条件下的一组连续的PRB。由于 NR 支持小至 5 MHz、大至 400 MHz 的工作带宽，如果要求所有UE 均支持最大的 400 MHz 带宽，无疑会对 UE 的性能提出较高要求，也不利于降低 UE 的成本。同时，由于一个 UE 不可能同时占满整个 400 MHz 带宽，且高带宽意味着高采样率，而高采样率意味着更高功耗，如果 UE 全部按照支持 400 MHz 的带宽进行设计，无疑是对性能的极大浪费。因此，NR 引入了带宽自适应（Bandwidth Adaptation）技术，针对性地解决上述问题。带宽自适应意味着，UE 在低业务周期可以使用适度的带宽监测控制信道，而只在必要时才启用大的接收带宽以应对高业务负荷。<br/>
+&emsp;&emsp;在 LTE 中，UE 的带宽与系统带宽保持一致，在解码 MIB 信息配置带宽后便保持不变。而在 NR 中，不同的 UE 可以配置不同的 BWP，也就是说，UE 的带宽可以动态变化。如图 3-26 所示，在 T0 时段，UE 业务负荷较大且对时延要求不敏感，系统为 UE 配置大带宽 BWP1（BW 为 40 MHz，SCS 为15 kHz）；在 T1 时段，由于业务负荷趋降，UE 由 BWP1 切换至小带宽 BWP2（BW 为 10 MHz，SCS 为 15 kHz），在满足基本通信需求的前提下，可达到减低功耗的目的；在 T2 时段，UE 可能突发时延敏感业务，或者发现 BWP1 所在频段内资源紧缺，于是切换到新的 BWP3（BW 为 20 MHz，SCS 为 60 kHz）上；同理，在 T3 和 T4 等其他不同时段，UE 均根据实时业务需求，在不同 BWP之间切换。
 
 
 
 [![pkR9Hwn.png](https://s21.ax1x.com/2024/07/04/pkR9Hwn.png)](https://imgse.com/i/pkR9Hwn)
 
 ## BWP的分类
-BWP 具体可以分为 Initial BWP 和 Dedicated BWP 两类，其中，Initial BWP是 UE 在初始接入阶段使用的 BWP，主要用于发起随机接入等。Dedicated BWP是 UE 在 RRC 连接态时配置的 BWP，主要用于数据业务传输。根据 R15，一个 UE 可以通过 RRC 信令分别在上、下行链路各自独立配置最多 4 个 DedicatedBWP，如果 UE 配置了 SUL，则在 SUL 链路上可以额外配置最多 4 个 Dedicated BWP。需要特别指出的是，对于 NR TDD 系统，DL BWP 和 UL BWP 是成对的，其中心频点保持一致，但带宽和子载波间隔的配置可以不同。<br/>
-UE 在 RRC 连接态时，某一时刻有且只能激活一个 Dedicated BWP，称为Active BWP。当其 BWPinactivitytimer 超时，UE 所工作的 Dedicated BWP，称为 Default BWP。图 3-30 示出了 BWP 的分类及切换流程的示意。
+&emsp;&emsp; BWP 具体可以分为 Initial BWP 和 Dedicated BWP 两类，其中，Initial BWP是 UE 在初始接入阶段使用的 BWP，主要用于发起随机接入等。Dedicated BWP是 UE 在 RRC 连接态时配置的 BWP，主要用于数据业务传输。根据 R15，一个 UE 可以通过 RRC 信令分别在上、下行链路各自独立配置最多 4 个 DedicatedBWP，如果 UE 配置了 SUL，则在 SUL 链路上可以额外配置最多 4 个 Dedicated BWP。需要特别指出的是，对于 NR TDD 系统，DL BWP 和 UL BWP 是成对的，其中心频点保持一致，但带宽和子载波间隔的配置可以不同。<br/>
+&emsp;&emsp;UE 在 RRC 连接态时，某一时刻有且只能激活一个 Dedicated BWP，称为Active BWP。当其 BWPinactivitytimer 超时，UE 所工作的 Dedicated BWP，称为 Default BWP。图 3-30 示出了 BWP 的分类及切换流程的示意。
 [![pkRCSOJ.png](https://s21.ax1x.com/2024/07/04/pkRCSOJ.png)](https://imgse.com/i/pkRCSOJ)
 
 ---
 
 # SSB与PRACH
 
-NR中，下行广行播信息SSB/RMSI,初始接入也可以支持波束Beam管理机制;
+&emsp;&emsp;NR中，下行广行播信息SSB/RMSI,初始接入也可以支持波束Beam管理机制;
 
-SSB在时域周期内有多次发送机会，可以分别对应不同波束;
+&emsp;&emsp;SSB在时域周期内有多次发送机会，可以分别对应不同波束;
 
-因此NR中，只有当SSB的波束扫描信号“ 覆盖"到UE时，UE才 有机会发送PRACH随机接入。
+&emsp;&emsp;因此NR中，只有当SSB的波束扫描信号“ 覆盖"到UE时，UE才 有机会发送PRACH随机接入。
 
-即: PRACH的发送时刻(RO)需要和SSB发送的时刻(索引) 建立映射关系。同时基站根据UE上行PRACH的资源位置，决定下行RAR发送的波束。
+&emsp;&emsp;即: PRACH的发送时刻(RO)需要和SSB发送的时刻(索引) 建立映射关系。同时基站根据UE上行PRACH的资源位置，决定下行RAR发送的波束。
 
 [![pkWUGAH.png](https://s21.ax1x.com/2024/07/07/pkWUGAH.png)](https://imgse.com/i/pkWUGAH)
 
@@ -54,19 +56,19 @@ SSB在时域周期内有多次发送机会，可以分别对应不同波束;
 
 > RACH Occasion is an area specified in time and frequency domain that are available for the reception of RACH preamble.
 
-RACH Occasion是一种特定的时域和频域资源，可用于接收RACH前导码。
+&emsp;&emsp;RACH Occasion是一种特定的时域和频域资源，可用于接收RACH前导码。
 
-在LTE中，对于所有可能的preamble码都使用SIB2中规定的RO。
+&emsp;&emsp;在LTE中，对于所有可能的preamble码都使用SIB2中规定的RO。
 
-在NR中，同步信号（SSB）与不同的波束相关联，UE选择某个波束并使用该波束发送PRACH。为了让 网络 弄清楚 UE 选择了哪个波束，3GPP 定义了 SSB 和 RO之间的特定映射。通过确定 UE在哪个RO上发送了PRACH，NW 就可以确定 UE 选择了哪个 SSB 波束。
+&emsp;&emsp;在NR中，同步信号（SSB）与不同的波束相关联，UE选择某个波束并使用该波束发送PRACH。为了让 网络 弄清楚 UE 选择了哪个波束，3GPP 定义了 SSB 和 RO之间的特定映射。通过确定 UE在哪个RO上发送了PRACH，NW 就可以确定 UE 选择了哪个 SSB 波束。
 
 SSB 和 RACH Occasion 之间的映射由以下两个 RRC 参数定义：
 
 - msg1-FDM
 - ssb-perRACH-OccasionAndCB-PreamblesPerSSB
 
-msg-FDM 指定在频域中分配了多少个 RO（在时域中的同一位置）。
-ssb-perRACH-OccasionAndCB-PreamblesPerSSB 指定可以映射到一个RO的SSB数量，以及可以映射到一个SSB的preamble的数量。
+&emsp;&emsp;msg-FDM 指定在频域中分配了多少个 RO（在时域中的同一位置）。
+&emsp;&emsp;ssb-perRACH-OccasionAndCB-PreamblesPerSSB 指定可以映射到一个RO的SSB数量，以及可以映射到一个SSB的preamble的数量。
 
 > 38.213-8.1:SS/PBCH block indexes provided by ssb-PositionsInBurst in SIB1 or in ServingCellConfigCommon are mapped to valid PRACH occasions in the following order where the parameters are described in [4, TS 38.211].
 >-	First, in increasing order of preamble indexes within a single PRACH occasion
@@ -110,7 +112,7 @@ ssb-perRACH-OccasionAndCB-PreamblesPerSSB 指定可以映射到一个RO的SSB数
 
 # Legacy RA
 
-高层通过参数`ssb-perRACH-OccasionAndCB-PreamblesPerSSB`配置`N`个SSB关联一个PRACH occasion(参数`ssb-perRACH-Occasion`)，和每个SSB在每个有效PRACH occasion上基于竞争的preamble数(参数：`CB-preambles-per-SSB`)。其中对于N的配置有如下两种：
+&emsp;&emsp;高层通过参数`ssb-perRACH-OccasionAndCB-PreamblesPerSSB`配置`N`个SSB关联一个PRACH occasion(参数`ssb-perRACH-Occasion`)，和每个SSB在每个有效PRACH occasion上基于竞争的preamble数(参数：`CB-preambles-per-SSB`)。其中对于N的配置有如下两种：
 
 > 38.213-i30：
 For Type-1 random access procedure, a UE is provided a number N of SS/PBCH block indexes associated with one PRACH occasion and a number R of contention based preambles per SS/PBCH block index per valid PRACH occasion by ssb-perRACH-OccasionAndCB-PreamblesPerSSB. 
@@ -176,11 +178,15 @@ RACH partition为R17引入的新特性，旨在通过RACH流程，告知网络UE
 
 RACH partition有两个关键参数，分别为`numberOfPreamblesPerSSB-ForThisPartition` 和`startPreambleForThisPartition` ，其中`startPreambleForThisPartition` 标识了每个RACH partition的起始位置，`numberOfPreamblesPerSSB-ForThisPartition`标识了从这个起始位置开始，属于这个RACH partition的连续的P码个数。
 
-1. 对于一个SSB映射到多个RO的情况，即`N<1`的情况，在`totalNumberOfRA-Preambles`个P码对于发起RACH的SSB都可以使用，所以RACH partition的P码范围为`[startPreambleForThisPartition,startPreambleForThisPartition+numberOfPreamblesPerSSB-ForThisPartition)`
+## 一个SSB映射到多个RO
+
+ 对于一个SSB映射到多个RO的情况，即`N<1`的情况，在`totalNumberOfRA-Preambles`个P码对于发起RACH的SSB都可以使用，所以RACH partition的P码范围为`[startPreambleForThisPartition,startPreambleForThisPartition+numberOfPreamblesPerSSB-ForThisPartition)`
 
 [![pkhMPgg.png](https://s21.ax1x.com/2024/07/10/pkhMPgg.png)](https://imgse.com/i/pkhMPgg)
 
-2. 对于多个SSB映射到一个RO的情况，即`N>=1`的情况,每个SSB其实只有N<sup>total</sup><sub>preamble</sub>/N个P码可以使用，其中CB preambles个数为开始的连续CB-PreamblesPerSSB，所以RACH partition的P码范围为`[n*Ntotalpreamble/N + startPreambleForThisPartition,n*Ntotalpreamble/N + startPreambleForThisPartition+numberOfPreamblesPerSSB-ForThisPartition)`
+## 多个SSB映射到一个RO
+
+ 对于多个SSB映射到一个RO的情况，即`N>=1`的情况,每个SSB其实只有N<sup>total</sup><sub>preamble</sub>/N个P码可以使用，其中CB preambles个数为开始的连续CB-PreamblesPerSSB，所以RACH partition的P码范围为`[n*Ntotalpreamble/N + startPreambleForThisPartition,n*Ntotalpreamble/N + startPreambleForThisPartition+numberOfPreamblesPerSSB-ForThisPartition)`
 
 [![pkhKjHI.png](https://s21.ax1x.com/2024/07/10/pkhKjHI.png)](https://imgse.com/i/pkhKjHI)
 
