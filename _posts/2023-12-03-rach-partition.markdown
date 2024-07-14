@@ -153,21 +153,21 @@ RACH参数配置中ssb-perRACH-OccasionAndCB-PreamblesPerSSB用于配置:
 
 ## 举例
 
-- ssb-perRACH-Occasion = 1/8，totalNumberOfRA-Preambles=60
+- ssb-perRACH-Occasion = 1/8，，CB-PreamblesPerSSB=60，totalNumberOfRA-Preambles=64
     - 一个SSB映射到8个RO
-    - 每个RO.上的CB Preamble分别为0-59
-    - 每个RO.上的CB Preamble分别为60-63
+    - 每个RO的CB Preamble分别为0-59
+    - 每个RO上的CF Preamble分别为60-63
 
 [![pi6C0JA.png](https://z1.ax1x.com/2023/12/04/pi6C0JA.png)](https://imgse.com/i/pi6C0JA)
 
-- ssb-perRACH-Occasion = 1, totalNumberOfRA-Preambles=56
+- ssb-perRACH-Occasion = 1, CB-PreamblesPerSSB=56，totalNumberOfRA-Preambles=64
     - 一个SSB映射到1个RO
-    - 每个RO.上的CB Preamble分别为0-55
-    - 每个RO.上的CF Preamble分别为56-63
+    - 每个RO上的CB Preamble分别为0-55
+    - 每个RO上的CF Preamble分别为56-63
 
 [![pi6CBRI.png](https://z1.ax1x.com/2023/12/04/pi6CBRI.png)](https://imgse.com/i/pi6CBRI)
 
-- ssb-perRACH-Occasion = 4, totalNumberOfRA-Preambles=12
+- ssb-perRACH-Occasion = 4,CB-PreamblesPerSSB=12， totalNumberOfRA-Preambles=64，
     - 4个SSB映射到一个RO，
     - 对应的CB Preamble分别为0-11，16-27,32-43, 48-59
     - 对应的CF Preamble分别为12-15，28-31,44-47, 60-63
