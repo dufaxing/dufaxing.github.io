@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "2步随机接入与共享RO"
+date:   2024-12-22 00:00:00
+categories: 5G协议栈
+tags: NR
+excerpt:  3GPP R16特性
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# markdowm语法
+
+
+- `&ensp;`  “&ensp;半角空格”
+
+
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+
+
+---
+
+# 标题2:
+
+
+
+
+---
+
+# 标题3:
+
+
+
+---
