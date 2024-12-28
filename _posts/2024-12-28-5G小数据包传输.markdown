@@ -1,0 +1,59 @@
+---
+layout: post
+title:  "5G小数据包传输"
+date:   2016-12-26 00:00:00
+categories: 5G协议栈
+tags: R17 NR
+excerpt: SDT
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# markdowm语法
+
+
+- `&ensp;`  “&ensp;半角空格”
+
+
+- `&emsp;` “&emsp;全角空格”
+
+- `<br>`换行
+
+
+
+---
+
+# 概述
+
+&emsp;&emsp;在R16及以前的协议版本中，UE不支持在RRC_INACTIVE态的数据传输。当有上行数据或下行数据到底时，UE需要恢复RRC连接，待数据传输完成后，基站在选择指示终端释放到非激活态。对于数据量小且传输频率低的UE，这样的状态转换会导致不必要的功耗和信令开销。因此，R17开展了以支持UE在RRC_INACTIVE态下执行少量的数据传输过程的立项，即小数据包传输（small data transmissions，SDT）。SDT支持两种数据方案，分别为基于随机接入的SDT(RA-SDT),以及基于预配置资源的SDT（CG-SDT）。
+
+
+
+---
+
+# SDT流程
+
+
+
+---
+
+# RA-SDT
+
+
+
+---
+
+# CG-SDT
+
+
+
+---
