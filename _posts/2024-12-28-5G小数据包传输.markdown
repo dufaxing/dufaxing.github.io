@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "5G小数据包传输"
-date:   2016-12-26 00:00:00
+date:   2024-12-28 00:00:00
 categories: 5G协议栈
 tags: R17 NR
 excerpt: SDT
