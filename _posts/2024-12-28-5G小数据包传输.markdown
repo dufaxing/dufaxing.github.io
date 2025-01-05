@@ -17,19 +17,6 @@ mathjax: true
 
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
-
-# markdowm语法
-
-
-- `&ensp;`  “&ensp;半角空格”
-
-
-- `&emsp;` “&emsp;全角空格”
-
-- `<br>`换行
-
-
-
 ---
 
 # 概述
@@ -42,18 +29,54 @@ mathjax: true
 
 # SDT流程
 
+&emsp;&emsp;UE触发SDT过程需要同时满足以下条件：
+- 待传输的上行数据全部映射到支持SDT的无线承载（SDT-RB）。考虑到5G NR精细的QoS模型下，并不是所有业务类型都适合在RRC_INACTIVE态传输，例如URLLC这类对时延较为敏感的业务，需要恢复到链接态以确保连续实时的数据调度和较为完善的链路质量保证。因此，SDT引入了基于无线承载的触发机制，网络为UE配置SDT-RB，只有映射到SDT-RB的数据，才能触发SDT过程并在SDT过程中传输。
+- 待传输的上行数据的数据量不能大于网络配置的数据量门限。
+- 下行RSRP测量结果不小于网络配置的触发SDT的RSRP门限。
+- 存在有效的SDT资源，包括RA-SDT资源或CG-SDT资源。
+
+&emsp;&emsp;UE触发SDT后，需要恢复处于挂起状态的SDT-RB，并衍生用于SDT数据及信令加密和完保的密钥信息。UE选择有效的SDT资源向网络发送上行数据。对于RA-SDT，上行数据通过MSG3/MSGA传输。对于CG-SDT，上行数据通过CG资源传输。但无论哪种方案，UE都需要包含RRCResumeRequest消息，用于网络识别和验证UE身份。或剩余的上行资源不足以将待传输的上行SDT数据一次性传输完，UE还可以携带用于请求后续传输上行资源的BSR。<br>
+
+&emsp;&emsp;网络成功收到包含RRCResumeRequest的上行消息后，可以根据当前数据传输情况选择将UE保持在RRC_INACTIVE态继续执行上下行调度，包括：
+- 网络侧有待传输的下行数据，且下行数据映射到SDT-RB。
+- UE测有待传输的SDT数据。
+
+&emsp;&emsp;SDT过程只允许SDT数据传输，因此，当有新传数据来自不支持SDT的无线承载时，网络需要将UE状态恢复到连接态。因此当UE有上行non-SDT数据到达时，需要正确指示网络。
+SDT过程发起后，网络可以向UE发送RRCRelease/RRCResume/RRCReject/RRCSetup中的一种。UE将收到RRC消息作为SDT成功完成的标志。在收到上述RRC消息前，UE在发生以下事件时，认为SDT工程失败，并进入RRC_IDLE态。
+- SDT过程发生了小区重选。
+- SDT失败监测定时器超时
+- RLC达到最大重传次数。
+- 对于RA-SDT，preamble达到最大重传次数。
+- 对于CG-SDT，UE在收到网络侧相应前用于维护TA有效性的定时器（cg-SDT-TimeAlignmentTimer）超时。
 
 
 ---
 
 # RA-SDT
 
+&emsp;&emsp;基于随机接入过程的SDT资源在系统广播消息中配置。网络通过配置SDT专用的随机接入资源，以判断UE当前发起随机接入过程的目的是否为SDT。类似于现有的RACH，用于SDT的随机接入资源同样包含基于4步随机接入的SDT资源和基于两步的随机接入SDT资源，以及groupA，groupB的划分。
 
+&emsp;&emsp;RA-SDT不支持CFRA的配置，均基于CBRA的过程。在竞争冲突解决后，若UE侧仍存在待传输的SDT数据，网络通过动态调度为UE分配上行传输资源。
+
+&emsp;&emsp;对于RA-SDT，UE接入的gNB可以不是最后提供服务的gNB。目标基站通过XnAP信令向源基站请求获取UE接入上下文，并指示当前UE发起的过程为SDT。为了避免基站间频繁的交互UE接入上下文，源基站可以决定将上下文保留在源侧，只将UE的RLC配置到目标基站。源基站和目标基站通过传递PDCP PDU传输上下行信令/数据。除了SDT指示，目标基站还可以提供其他辅助信息帮助源基站决定是否迁移UE上下文，例如数据包数量等。
 
 ---
 
 # CG-SDT
 
+&emsp;&emsp;基于预配置资源的SDT资源通过RRCrelease消息配置。不同于基于随机接入资源的SDT，UE不需要向网络发送前导码以获取TA，因此，CG资源需要在UE具有有效TA的情况下使用。判断TA是否有效的准则包含以下几个：
+- UE驻留在接收CG资源配置的小区。
+- cg-SDT-TimeAlignmentTimer处于运行状态。当UE进入RRC_INACTIVE态后，用于维护连接态定时提前量有效性的定时器timeAlignmentTimer将会停止运行。为了继续在RRC_INACTIVE态维护定时提前量且避免对现有的timeAlignmentTimer机制的影响，SDT引入了cg-SDT-TimeAlignmentTimer，这个定时器在UE收到包含预配置资源的RRCRelease消息时启动。
+- 下行RSRP变化量不超过RSRP门限。为了进一步判断UE是否在小区发生了位置移动，SDT还引入了基于RSRP变化量的TA验证准则。以接受到RRCRelease时的下行RSRP为基准，UE判断触发SDT时的RSRP变化是否超过预配置门限，若超过，则认为TA无效。
 
+&emsp;&emsp;为了获取UE发起CG-SDT时的下行波束信息，CG资源配置包含SSB与每个CG资源的关联关系，类似于现有技术中SSB和RO的映射关系。UE通过选择满足门限的SSB关联的CG资源，帮助网络确定数据传输的波束信息。
+&emsp;&emsp;由于CG-SDT资源为UE专用资源，UE在判断是否存在有效的SDT资源时，需要优先判断CG-SDT资源的有效性，包括：
+- UE存在有效的TA。
+- 所选载波上配置了CG资源。
+- 存在满足阈值且关联了CG资源的SSB。
+
+&emsp;&emsp;对于CG-SDT，UE可以在包含RRCResumeRequest的第一条上行消息被网络成功接收后，基于网络侧的动态调度或有效的CG资源传输未传完的上行SDT数据。由于CG-SDT没有竞争冲突解决过程，UE通过接收网络侧的上行新传调度或者下行配置，判断是否成功传输第一条上行消息。为了提高第一条上行消息成功传输的概率，引入了基于定时器的自动重传机制。UE利用CG资源传输第一条上行消息后，启动cg-SDT-Retransmission Timer，当cg-SDT-Retransmission Timer超时，UE选择与初传具有相同HARQ进程和SSB的CG重新传输第一条上行消息，并重启cg-SDT-Retransmission Timer。
+
+UE在TA无效或发起RA-SDT过程时，需要对CG资源进行释放。这里的释放指的是底层协议层对资源的释放。如MAC层，而CG配置依然保存在RRC层，方便网络通过delta方式重新配置CG资源，益于节省信令开销。
 
 ---
