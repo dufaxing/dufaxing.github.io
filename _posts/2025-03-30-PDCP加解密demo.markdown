@@ -1,0 +1,162 @@
+---
+layout: post
+title:  "PDCP加解密DEMO"
+date:   2025-03-30 00:00:00
+categories: 5G协议栈
+tags: NR
+excerpt: PDCP加解密简单python示例
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# 依赖库
+
+此示例使用PyCryptodome库进行加密操作,要运行此代码，需要先安装PyCryptodome
+
+>> pip install pycryptodome
+
+
+
+
+---
+
+# PDCP加解密python demo
+
+
+```
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+import binascii
+
+class PDCPEncryption:
+    def __init__(self, key, count, bearer, direction):
+        """
+        初始化PDCP加密上下文
+        :param key: 256-bit加密密钥 (32字节)
+        :param count: PDCP COUNT值 (32位)
+        :param bearer: 承载ID (5位)
+        :param direction: 方向 (0=上行, 1=下行)
+        """
+        self.key = key
+        self.count = count
+        self.bearer = bearer
+        self.direction = direction
+        
+        # 初始化加密算法 (5G使用AES-CTR)
+        self.cipher = None
+        self._update_cipher()
+    
+    def _update_cipher(self):
+        """更新加密算法的初始向量(IV)"""
+        # 5G PDCP IV构造 (3GPP TS 33.501)
+        iv = bytearray(16)
+        
+        # IV[0..4] = COUNT (32位) + BEARER (5位) + DIRECTION (1位)
+        iv[0] = (self.count >> 24) & 0xFF
+        iv[1] = (self.count >> 16) & 0xFF
+        iv[2] = (self.count >> 8) & 0xFF
+        iv[3] = self.count & 0xFF
+        iv[4] = ((self.bearer & 0x1F) << 3) | ((self.direction & 0x01) << 2)
+        
+        # IV[5..15] = 0 (保留位)
+        for i in range(5, 16):
+            iv[i] = 0x00
+            
+        # 创建AES-CTR加密器
+        self.cipher = AES.new(self.key, AES.MODE_CTR, nonce=b'', initial_value=bytes(iv))
+    
+    def encrypt(self, plaintext):
+        """
+        PDCP数据加密
+        :param plaintext: 明文数据
+        :return: 加密后的数据
+        """
+        # 加密数据
+        ciphertext = self.cipher.encrypt(plaintext)
+        
+        # 更新COUNT值 (在实际系统中需要处理COUNT回绕)
+        self.count += 1
+        self._update_cipher()
+        
+        return ciphertext
+    
+    def decrypt(self, ciphertext):
+        """
+        PDCP数据解密
+        :param ciphertext: 密文数据
+        :return: 解密后的数据
+        """
+        # 解密数据
+        plaintext = self.cipher.decrypt(ciphertext)
+        
+        # 更新COUNT值
+        self.count += 1
+        self._update_cipher()
+        
+        return plaintext
+
+# 示例用法
+if __name__ == "__main__":
+    # 示例参数
+    key = b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F' \
+          b'\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F'  # 256-bit密钥
+    count = 0x12345678  # PDCP COUNT
+    bearer = 0x1A       # 承载ID (5位)
+    direction = 0       # 上行
+    
+    # 创建PDCP加密上下文
+    pdcp = PDCPEncryption(key, count, bearer, direction)
+    
+    # 要加密的数据
+    plaintext = b'This is a test message for 5G PDCP encryption!'
+    print(f"原始明文: {plaintext}")
+    print(f"十六进制: {binascii.hexlify(plaintext)}")
+    
+    # 加密
+    ciphertext = pdcp.encrypt(plaintext)
+    print(f"\n加密后的密文: {binascii.hexlify(ciphertext)}")
+    
+    # 重置COUNT以解密
+    pdcp.count = count
+    pdcp._update_cipher()
+    
+    # 解密
+    decrypted = pdcp.decrypt(ciphertext)
+    print(f"\n解密后的明文: {decrypted}")
+    print(f"十六进制: {binascii.hexlify(decrypted)}")
+```
+
+
+
+---
+
+# 说明
+
+加密算法：5G PDCP层使用AES-CTR模式进行加密，密钥长度为256位。
+
+COUNT管理：PDCP COUNT是一个32位的计数器，对每个加密/解密的数据包递增。
+
+IV构造：初始向量(IV)根据3GPP TS 33.501规范构造，包含COUNT、承载ID和方向信息。
+
+实际系统差异：
+
+实际实现需要处理COUNT回环
+
+需要支持完整性保护
+
+需要处理PDCP头格式
+
+需要考虑ROHC头压缩
+
+
+
+---
