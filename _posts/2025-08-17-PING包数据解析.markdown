@@ -18,7 +18,7 @@ mathjax: true
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
 
-## 前言
+## 1.前言
 
 
 PING（Packet Internet Groper）是基于 **ICMP（Internet Control Message Protocol，互联网控制报文协议）** 的网络诊断工具，用于测试主机之间的连通性、测量往返时间（RTT）及检测丢包。
@@ -28,15 +28,14 @@ PING（Packet Internet Groper）是基于 **ICMP（Internet Control Message Prot
 
 ---
 
-## 数据分析
+## 2  数据分析
 
 在ICMP协议中，标识符（Identifier）和序列号（Sequence Number）是匹配PING请求（Echo Request）与回复（Echo Reply）的关键字段。
 
 
-### **1\. ICMP Echo请求/回复报文结构**
+### **2.1 ICMP Echo请求/回复报文结构**
 
 ICMP头部（Echo类型）的格式如下（以IPv4为例）：
-
 
 
 ```
@@ -69,7 +68,7 @@ ICMP头部（Echo类型）的格式如下（以IPv4为例）：
 
 ---
 
-### **2\. 标识符和序列号的作用**
+### **2.2  标识符和序列号的作用**
 
 #### **(1) Identifier（标识符）**
 
@@ -104,7 +103,7 @@ ICMP头部（Echo类型）的格式如下（以IPv4为例）：
 
 ---
 
-### **3\. 匹配请求与回复的流程**
+### **2.3 匹配请求与回复的流程**
 
 以抓包数据为例（16进制显示ICMP头部）：
 
@@ -137,7 +136,7 @@ Data=...                    ← 数据内容通常原样返回
 --- 
 
 
-### **4\. 总结**
+### **2.4  总结**
 
 -   **标识符**：区分不同PING会话（如多进程场景）。
     
@@ -149,3 +148,107 @@ Data=...                    ← 数据内容通常原样返回
 **RRT = 相同标识符与序列号下，回复报文接受时间-请求报文发送时间**
 
 
+## 3 举例
+
+**完整的 Ping 请求（Echo Request）和回复（Echo Reply）的数据链路层（Ethernet + IP + ICMP）数据包示例**，包含 **RTT（Round-Trip Time）时延计算** 的详细解析。假设通信双方如下：
+
+-   **主机A（发送请求）**
+    
+    -   MAC: `00:11:22:33:44:55`
+        
+    -   IP: `192.168.1.100`
+        
+-   **主机B（回复）**
+    
+    -   MAC: `AA:BB:CC:DD:EE:FF`
+        
+    -   IP: `8.8.8.8`
+
+
+### **3.1 Ping 请求（Echo Request）**
+
+#### **完整数据包（Hex 格式）**
+
+```
+FFFFFFFFFFFF 001122334455 0800 4500005400004000FF01 0000 C0A80164 08080808 0800 F5CA 0001 0001 6162636465666768696A6B6C6D6E6F70
+```
+
+关键字段解析
+|字段|	值|	说明|
+|---|---|---|
+|Ethernet 目标 MAC|	FFFFFFFFFFFF|	广播地址（实际场景中为网关或目标 MAC）。|
+|Ethernet 源 MAC|	001122334455|	主机A的 MAC。|
+|IP 协议|	0800|	IPv4。|
+|IP 源地址|	C0A80164|	192.168.1.100。|
+|IP 目标地址|	08080808|	8.8.8.8。|
+|ICMP 类型|	08|	Echo Request。|
+|ICMP 标识符|	0001|	用于匹配请求与回复（通常为进程 ID）。|
+|ICMP 序列号|	0001|	请求序号。|
+|数据部分|	616263...6F70|	ASCII 数据 "abcdefghijklmnop"。|
+
+
+### **3.2 Ping 回复（Echo Reply）**
+
+#### **完整数据包（Hex 格式）**
+
+```
+001122334455 AABBCCDDEEFF 0800 4500005400004000FF01 0000 08080808 C0A80164 0000 FDCA 0001 0001 6162636465666768696A6B6C6D6E6F70
+```
+
+关键字段解析
+|字段|	值|	说明|
+|---|---|---|
+|Ethernet 目标 MAC|	001122334455|	主机A的 MAC。|
+|Ethernet 源 MAC|	AABBCCDDEEFF|	主机B的 MAC。|
+|IP 协议|	0800|	IPv4。|
+|IP 源地址|	08080808|	8.8.8.8。|
+|IP 目标地址|	C0A80164|	192.168.1.100。|
+|ICMP 类型|	00|	Echo Reply。|
+|ICMP 标识符|	0001|	与请求包一致。|
+|ICMP 序列号|	0001|	与请求包一致。|
+|数据部分|	616263...6F70|	原样返回请求的数据。|
+
+
+### **3.3 RTT（Round-Trip Time）时延计算**
+
+RTT 是 **从发送 Echo Request 到接收 Echo Reply 的时间差**，通常由 `ping` 工具自动计算。以下是手动计算方法：
+
+#### **（1）抓包工具记录时间戳**
+
+-   **Wireshark** 会显示每个包的时间戳（如 `Frame 1` 和 `Frame 2` 的时间差）。
+    
+-   **tcpdump** 输出示例：
+
+```
+12:00:00.000000 IP 192.168.1.100 > 8.8.8.8: ICMP echo request, id 1, seq 1, length 64
+12:00:00.002400 IP 8.8.8.8 > 192.168.1.100: ICMP echo reply, id 1, seq 1, length 64
+```
+
+#### **（2）手动计算（需高精度时间戳）**
+
+如果通过代码抓包（如 Python 的 `scapy`），可记录发送和接收时间：
+
+```
+from scapy.all import *
+import time
+
+# 发送 Echo Request
+send_time = time.time()
+send(IP(dst="8.8.8.8")/ICMP(type=8, id=1, seq=1)/"abcdefghijklmnop")
+
+# 捕获 Echo Reply
+def callback(pkt):
+    if pkt[ICMP].type == 0 and pkt[ICMP].id == 1 and pkt[ICMP].seq == 1:
+        recv_time = time.time()
+        rtt = (recv_time - send_time) * 1000  # 转为毫秒
+        print(f"RTT: {rtt:.2f} ms")
+
+sniff(filter="icmp and host 8.8.8.8", prn=callback, timeout=1)
+```
+
+
+输出示例：
+
+```
+RTT: 2.41 ms
+```
