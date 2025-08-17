@@ -2,9 +2,9 @@
 layout: post
 title:  "PING包数据解析"
 date:   2025-08-17 00:00:00
-categories: NULL
-tags: NULL
-excerpt: NULL
+categories: 计算机网络
+tags: 读书笔记
+excerpt: PING包数据码流分析RTT
 mathjax: true
 ---
 * content
