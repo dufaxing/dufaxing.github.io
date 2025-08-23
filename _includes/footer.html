@@ -19,7 +19,9 @@
             {% endif %}
         </p>
         <p>
-            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+            本站总访问量<span id="busuanzi_value_site_pv">0</span>次，
+            本站访客数<span id="busuanzi_value_site_uv">0</span>人次，
+            本文总阅读量<span id="busuanzi_value_page_pv">0</span>次
         </p>
         <p class="power">
             <span>
@@ -32,19 +34,31 @@
     </div>
 </footer>
 
-<!-- 不蒜子统计 -->
-<script async src="https://cdn.jsdelivr.net/npm/busuanzi@2.3.0/bsz.pure.mini.js"></script>
-<!-- 使用备用域名 -->
-<!--<script async src="//cdn.jsdelivr.net/npm/busuanzi@2.3.0/bsz.pure.mini.js"></script>-->
-<!-- 加载失败检测 -->
+<!-- 不蒜子统计 - 尝试多个源 -->
+<script src="https://cdn.jsdelivr.net/npm/busuanzi@2.3.0/bsz.pure.mini.js"></script>
+
+<!-- 加载状态检测 -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 10秒后如果统计还是0，显示提示
+    console.log('不蒜子统计初始化...');
+    
+    // 5秒后检测
     setTimeout(function() {
         var pv = document.getElementById('busuanzi_value_site_pv');
+        var uv = document.getElementById('busuanzi_value_site_uv');
+        var pagePv = document.getElementById('busuanzi_value_page_pv');
+        
         if (pv && pv.innerText === '0') {
+            console.log('统计可能未加载成功');
             pv.innerText = '统计加载中';
+            uv.innerText = '统计加载中';
+            pagePv.innerText = '统计加载中';
+            
+            // 尝试备用方案
+            var fallbackScript = document.createElement('script');
+            fallbackScript.src = 'http://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+            document.head.appendChild(fallbackScript);
         }
-    }, 10000);
+    }, 5000);
 });
 </script>
