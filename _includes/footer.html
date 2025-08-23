@@ -19,9 +19,9 @@
             {% endif %}
         </p>
         <p>
-            本站总访问量<span id="busuanzi_value_site_pv">0</span>次，
-            本站访客数<span id="busuanzi_value_site_uv">0</span>人次，
-            本文总阅读量<span id="busuanzi_value_page_pv">0</span>次
+            本站总访问量<span id="busuanzi_value_site_pv" style="display:none">0</span><span id="busuanzi_loading">统计中...</span>次，
+            本站访客数<span id="busuanzi_value_site_uv" style="display:none">0</span><span id="busuanzi_loading2">统计中...</span>人次，
+            本文总阅读量<span id="busuanzi_value_page_pv" style="display:none">0</span><span id="busuanzi_loading3">统计中...</span>次
         </p>
         <p class="power">
             <span>
@@ -34,5 +34,23 @@
     </div>
 </footer>
 
-<!-- 主要CDN源 -->
+<!-- 不蒜子源，服务器不稳定时无法获取到访问量 -->
 <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<script>
+// 加载成功后显示数字，隐藏"统计中..."
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        var elements = document.querySelectorAll('[id^="busuanzi_value_"]');
+        elements.forEach(function(el) {
+            if (el.innerHTML !== '0') {
+                el.style.display = 'inline';
+                var loadingId = el.id.replace('busuanzi_value_', 'busuanzi_loading');
+                var loadingEl = document.getElementById(loadingId);
+                if (loadingEl) loadingEl.style.display = 'none';
+            }
+        });
+    }, 3000); // 3秒后检查
+});
+</script>
