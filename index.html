@@ -49,19 +49,45 @@ layout: default
         <!-- Pagination links -->
         <div class="pagination">
           {% if paginator.previous_page %}
-            <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
-            <a href="{{ paginator.previous_page_path | prepend: site.baseurl }}" class="previous"><i class="fa fa-angle-left"></i></a>
+            <a href="/index.html" class="previous" title="首页">
+              <i class="fas fa-fast-backward"></i>
+              <span class="text">首页</span>
+            </a>
+            <a href="{{ paginator.previous_page_path | prepend: site.baseurl }}" class="previous" title="上一页">
+              <i class="fas fa-chevron-left"></i>
+              <span class="text">上一页</span>
+            </a>
           {% else %}
-            <span class="previous disable"><i class="fa fa-angle-double-left"></i></span>
-            <span class="previous disable"><i class="fa fa-angle-left"></i></span>
+            <span class="previous disable" title="首页">
+              <i class="fas fa-fast-backward"></i>
+              <span class="text">首页</span>
+            </span>
+            <span class="previous disable" title="上一页">
+              <i class="fas fa-chevron-left"></i>
+              <span class="text">上一页</span>
+            </span>
           {% endif %}
-          <span class="page_number ">{{ paginator.page }}/{{ paginator.total_pages }}</span>
+          
+          <span class="page_number">{{ paginator.page }}/{{ paginator.total_pages }}</span>
+          
           {% if paginator.next_page %}
-            <a href="{{ paginator.next_page_path }}" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="{{ site.baseurl }}/page{{ paginator.total_pages }}" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="{{ paginator.next_page_path }}" class="next" title="下一页">
+              <span class="text">下一页</span>
+              <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="{{ site.baseurl }}/page{{ paginator.total_pages }}" class="next" title="末页">
+              <span class="text">末页</span>
+              <i class="fas fa-fast-forward"></i>
+            </a>
           {% else %}
-            <span class="next disable"><i class="fa fa-angle-right"></i></span>
-            <span class="next disable"><i class="fa fa-angle-double-right"></i></span>
+            <span class="next disable" title="下一页">
+              <span class="text">下一页</span>
+              <i class="fas fa-chevron-right"></i>
+            </span>
+            <span class="next disable" title="末页">
+              <span class="text">末页</span>
+              <i class="fas fa-fast-forward"></i>
+            </span>
           {% endif %}
         </div>
     </div>
