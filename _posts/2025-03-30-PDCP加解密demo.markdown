@@ -33,106 +33,154 @@ mathjax: true
 
 
 ```
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad, unpad
+import os
 import binascii
+from Crypto.Cipher import AES
+from Crypto.Util import Counter
 
-class PDCPEncryption:
+class PDCPNEA2Cipher:
     def __init__(self, key, count, bearer, direction):
         """
-        初始化PDCP加密上下文
-        :param key: 256-bit加密密钥 (32字节)
-        :param count: PDCP COUNT值 (32位)
-        :param bearer: 承载ID (5位)
-        :param direction: 方向 (0=上行, 1=下行)
+        初始化PDCP NEA2加密器
+        
+        :param key: 16字节加密密钥（十六进制字符串或字节）
+        :param count: 32位PDCP COUNT值
+        :param bearer: 5位承载标识
+        :param direction: 1位方向标识(0:上行, 1:下行)
         """
-        self.key = key
+        # 处理密钥输入
+        if isinstance(key, str):
+            # 如果是十六进制字符串，转换为字节
+            self.key = binascii.unhexlify(key)
+        else:
+            self.key = key
+            
+        if len(self.key) != 16:
+            raise ValueError("密钥必须是16字节长度")
+        
         self.count = count
         self.bearer = bearer
         self.direction = direction
         
-        # 初始化加密算法 (5G使用AES-CTR)
-        self.cipher = None
-        self._update_cipher()
-    
-    def _update_cipher(self):
-        """更新加密算法的初始向量(IV)"""
-        # 5G PDCP IV构造 (3GPP TS 33.501)
+    def _generate_iv(self):
+        """生成初始化向量(IV)"""
+        # 根据3GPP TS 33.401规范构建IV
+        # IV = COUNT[32] | BEARER[5] | DIRECTION[1] | 0[26]
         iv = bytearray(16)
         
-        # IV[0..4] = COUNT (32位) + BEARER (5位) + DIRECTION (1位)
+        # 设置COUNT (4字节，大端序)
         iv[0] = (self.count >> 24) & 0xFF
         iv[1] = (self.count >> 16) & 0xFF
         iv[2] = (self.count >> 8) & 0xFF
         iv[3] = self.count & 0xFF
+        
+        # 设置BEARER和DIRECTION
+        # 第4字节: BEARER[5] + DIRECTION[1] + 0[2]
         iv[4] = ((self.bearer & 0x1F) << 3) | ((self.direction & 0x01) << 2)
         
-        # IV[5..15] = 0 (保留位)
-        for i in range(5, 16):
-            iv[i] = 0x00
-            
-        # 创建AES-CTR加密器
-        self.cipher = AES.new(self.key, AES.MODE_CTR, nonce=b'', initial_value=bytes(iv))
+        # 剩余字节保持为0
+        return bytes(iv)
     
-    def encrypt(self, plaintext):
+    def encrypt(self, plaintext, hex_input=False, hex_output=False):
         """
-        PDCP数据加密
-        :param plaintext: 明文数据
+        加密数据
+        
+        :param plaintext: 明文数据（字节或十六进制字符串）
+        :param hex_input: 输入是否为十六进制字符串
+        :param hex_output: 是否输出十六进制字符串
         :return: 加密后的数据
         """
+        # 处理输入数据
+        if hex_input:
+            # 如果是十六进制字符串，转换为字节
+            data = binascii.unhexlify(plaintext)
+        else:
+            data = plaintext
+        
+        # 生成IV
+        iv = self._generate_iv()
+        
+        # 创建CTR模式的计数器
+        # NEA2使用完整的16字节IV作为初始计数器值
+        ctr = Counter.new(128, initial_value=int.from_bytes(iv, byteorder='big'))
+        
+        # 创建AES-CTR密码器
+        cipher = AES.new(self.key, AES.MODE_CTR, counter=ctr)
+        
         # 加密数据
-        ciphertext = self.cipher.encrypt(plaintext)
+        ciphertext = cipher.encrypt(data)
         
-        # 更新COUNT值 (在实际系统中需要处理COUNT回绕)
-        self.count += 1
-        self._update_cipher()
-        
-        return ciphertext
+        # 处理输出格式
+        if hex_output:
+            return binascii.hexlify(ciphertext).decode('utf-8')
+        else:
+            return ciphertext
     
-    def decrypt(self, ciphertext):
+    def decrypt(self, ciphertext, hex_input=False, hex_output=False):
         """
-        PDCP数据解密
-        :param ciphertext: 密文数据
+        解密数据
+        
+        :param ciphertext: 密文数据（字节或十六进制字符串）
+        :param hex_input: 输入是否为十六进制字符串
+        :param hex_output: 是否输出十六进制字符串
         :return: 解密后的数据
         """
+        # 处理输入数据
+        if hex_input:
+            # 如果是十六进制字符串，转换为字节
+            data = binascii.unhexlify(ciphertext)
+        else:
+            data = ciphertext
+        
+        # 解密过程与加密相同（CTR模式对称）
+        # 生成IV
+        iv = self._generate_iv()
+        
+        # 创建CTR模式的计数器
+        ctr = Counter.new(128, initial_value=int.from_bytes(iv, byteorder='big'))
+        
+        # 创建AES-CTR密码器
+        cipher = AES.new(self.key, AES.MODE_CTR, counter=ctr)
+        
         # 解密数据
-        plaintext = self.cipher.decrypt(ciphertext)
+        plaintext = cipher.decrypt(data)
         
-        # 更新COUNT值
-        self.count += 1
-        self._update_cipher()
-        
-        return plaintext
+        # 处理输出格式
+        if hex_output:
+            return binascii.hexlify(plaintext).decode('utf-8')
+        else:
+            return plaintext
 
-# 示例用法
+# 示例使用
 if __name__ == "__main__":
-    # 示例参数
-    key = b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F' \
-          b'\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F'  # 256-bit密钥
-    count = 0x12345678  # PDCP COUNT
-    bearer = 0x1A       # 承载ID (5位)
-    direction = 0       # 上行
+    # 测试参数 - 使用十六进制格式
+    key_hex = "00112233445566778899aabbccddeeff"  # 128位密钥（十六进制字符串）
+    count = 0x12345678    # 32位COUNT值
+    bearer = 0x1F         # 5位承载标识 (最大31)
+    direction = 1         # 1位方向标识
     
-    # 创建PDCP加密上下文
-    pdcp = PDCPEncryption(key, count, bearer, direction)
+    # 创建加密器实例
+    cipher = PDCPNEA2Cipher(key_hex, count, bearer, direction)
     
-    # 要加密的数据
-    plaintext = b'This is a test message for 5G PDCP encryption!'
-    print(f"原始明文: {plaintext}")
-    print(f"十六进制: {binascii.hexlify(plaintext)}")
+    # 示例明文数据（十六进制字符串）
+    plaintext_hex = "48656c6c6f2050444350204e45413220656e6372797074696f6e21"  # "Hello PDCP NEA2 encryption!"
     
-    # 加密
-    ciphertext = pdcp.encrypt(plaintext)
-    print(f"\n加密后的密文: {binascii.hexlify(ciphertext)}")
+    # 加密（输入和输出都使用十六进制）
+    ciphertext_hex = cipher.encrypt(plaintext_hex, hex_input=True, hex_output=True)
+    print(f"明文(hex): {plaintext_hex}")
+    print(f"密文(hex): {ciphertext_hex}")
     
-    # 重置COUNT以解密
-    pdcp.count = count
-    pdcp._update_cipher()
+    # 解密（输入和输出都使用十六进制）
+    decrypted_hex = cipher.decrypt(ciphertext_hex, hex_input=True, hex_output=True)
+    print(f"解密后(hex): {decrypted_hex}")
     
-    # 解密
-    decrypted = pdcp.decrypt(ciphertext)
-    print(f"\n解密后的明文: {decrypted}")
-    print(f"十六进制: {binascii.hexlify(decrypted)}")
+    # 验证加解密是否正确
+    assert plaintext_hex == decrypted_hex, "加解密测试失败!"
+    print("加解密测试成功!")
+    
+    # 也可以将十六进制结果转换回可读文本
+    decrypted_text = binascii.unhexlify(decrypted_hex).decode('utf-8')
+    print(f"解密文本: {decrypted_text}")
 ```
 
 
@@ -141,22 +189,6 @@ if __name__ == "__main__":
 
 # 说明
 
-加密算法：5G PDCP层使用AES-CTR模式进行加密，密钥长度为256位。
-
-COUNT管理：PDCP COUNT是一个32位的计数器，对每个加密/解密的数据包递增。
-
-IV构造：初始向量(IV)根据3GPP TS 33.501规范构造，包含COUNT、承载ID和方向信息。
-
-实际系统差异：
-
-实际实现需要处理COUNT回环
-
-需要支持完整性保护
-
-需要处理PDCP头格式
-
-需要考虑ROHC头压缩
-
-
+如果使用十六进制字符串作为密钥，必须确保是32个字符（16字节）
 
 ---
