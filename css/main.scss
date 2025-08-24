@@ -70,3 +70,22 @@
   40% { content: '..'; }
   60%, 100% { content: '...'; }
 }
+
+.giscus-frame {
+  width: 100%;
+  border: none;
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .giscus-container {
+    --color-background: #1a1a1a;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .giscus-container {
+    margin: 1.5rem 0;
+  }
+}

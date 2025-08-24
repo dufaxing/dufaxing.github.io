@@ -1,46 +1,86 @@
-{% if site.duoshuo_shortname %}
-<!-- 多说评论框 start -->
-<div class="ds-thread" data-thread-key="{{ site.url }}{{ page.url }}" data-title="{{page.title}}" data-url="{{ site.url }}{{ page.url }}"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-    var duoshuoQuery = {
-        short_name: "{{site.duoshuo_shortname}}"
-    };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';
-        ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-<!-- 多说公共JS代码 end -->
-{% endif %}
+{% if page.comments != false %}
+<div class="giscus-container">
+  <div id="giscus"></div>
+  <div id="giscus-fallback" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+    <p>💬 评论加载中...如果长时间未显示，请<a href="https://github.com/{{ site.giscus.repo }}/discussions" target="_blank" rel="noopener">访问GitHub Discussions</a>参与讨论。</p>
+    <p><small>需要拥有GitHub账号并<a href="https://github.com/apps/giscus" target="_blank" rel="noopener">授权Giscus应用</a></small></p>
+  </div>
+</div>
 
-{% if site.disqus_shortname %}
-<div id="disqus_thread"></div>
+<script src="https://giscus.app/client.js"
+        data-repo="{{ site.giscus.repo }}"
+        data-repo-id="{{ site.giscus.repo-id }}"
+        data-category="{{ site.giscus.category }}"
+        data-category-id="{{ site.giscus.category-id }}"
+        data-mapping="{{ site.giscus.mapping }}"
+        data-strict="{{ site.giscus.strict }}"
+        data-reactions-enabled="{{ site.giscus.reactions-enabled }}"
+        data-emit-metadata="{{ site.giscus.emit-metadata }}"
+        data-input-position="{{ site.giscus.input-position }}"
+        data-theme="{{ site.giscus.theme }}"
+        data-lang="{{ site.giscus.lang }}"
+        data-loading="{{ site.giscus.loading }}"
+        crossorigin="anonymous"
+        async>
+</script>
+
 <script>
-    /**
-     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-     */
+// Giscus错误处理
+document.addEventListener('DOMContentLoaded', function() {
+  const fallback = document.getElementById('giscus-fallback');
+  const giscusContainer = document.querySelector('.giscus-container');
+  
+  // 显示回退信息
+  fallback.style.display = 'block';
+  
+  // 监听Giscus加载事件
+  window.addEventListener('message', function(event) {
+    if (event.origin === 'https://giscus.app') {
+      if (event.data && event.data.giscus) {
+        // Giscus已加载，隐藏回退信息
+        setTimeout(function() {
+          fallback.style.display = 'none';
+        }, 1000);
+      }
+    }
+  });
+  
+  // 超时检查（8秒）
+  setTimeout(function() {
+    const giscusFrame = document.querySelector('iframe.giscus-frame');
+    if (!giscusFrame || giscusFrame.style.visibility === 'hidden') {
+      fallback.innerHTML = `
+        <div style="text-align: center;">
+          <p style="font-weight: bold; margin-bottom: 15px;">🚫 评论加载失败</p>
+          <div style="text-align: left; display: inline-block; margin-bottom: 15px;">
+            <p>请确保：</p>
+            <ul style="margin-left: 20px;">
+              <li>已登录GitHub账号</li>
+              <li>已<a href="https://github.com/apps/giscus" target="_blank" rel="noopener">授权Giscus应用</a></li>
+              <li>GitHub Discussions功能已启用</li>
+            </ul>
+          </div>
+          <button onclick="window.location.reload()" style="background: #4a6fc7; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 5px;">刷新页面</button>
+          <a href="https://github.com/{{ site.giscus.repo }}/discussions" target="_blank" rel="noopener" style="background: #2ea44f; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; text-decoration: none; margin: 5px; display: inline-block;">前往GitHub讨论</a>
+        </div>
+      `;
+    }
+  }, 8000);
+});
 
-    var disqus_config = function() {
-        this.page.url = '{{ site.url }}{{ page.url }}'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = '{{ site.url }}{{ page.url }}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-
-    (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document,
-            s = d.createElement('script');
-
-        s.src = '//{{site.disqus_shortname}}.disqus.com/embed.js';
-
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
+// 重新加载Giscus
+function reloadGiscus() {
+  const giscusFrame = document.querySelector('iframe.giscus-frame');
+  if (giscusFrame) {
+    giscusFrame.contentWindow.postMessage({ giscus: { setConfig: {} } }, 'https://giscus.app');
+  }
+}
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+<noscript>
+  <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+    <p>⚠️ 请启用JavaScript以查看和发表评论</p>
+    <p>或者<a href="https://github.com/{{ site.giscus.repo }}/discussions" target="_blank" rel="noopener">访问GitHub Discussions</a></p>
+  </div>
+</noscript>
 {% endif %}
