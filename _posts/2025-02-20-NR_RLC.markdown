@@ -18,7 +18,7 @@ mathjax: true
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
 
-# RLC简介
+# 1.RLC简介
 
 
 &emsp;RLC (Radio Link Control) 层位于PDCP层 (或RRC层) 和MAC层之间。它通过RLC通道 (RLC channel) 与PDCP层(或RRC层)进行通信，并通过逻辑信道与MAC层进行通信。RLC配置是逻辑信道级的配置，一个RLC实体(RLC entity) 只对应1个UE的一个逻辑信道。RLC实体从PDCP层接收到的数据，或发往PDCP层的数据被称作RLC SDU (或PDCP PDU)。RLC实体从MAC层接收到的数据，或发往MAC层的数据被称作RLC PDU(或MAC SDU) 。
@@ -42,9 +42,163 @@ RLC层主要负责 (见38.322):。分段/重组RLC SDU (segmentation /reassembly
 
 ---
 
-# 标题2:
+# 2 RLC数据过程
+
+## 2.1 数据发送
+
+### 2.1.1 发送端变量
+这些变量由发送端的RLC实体维护，用于控制数据的发送、重传和确认。
+
+|变量名|	全称/含义|	说明|
+|---|---|---|
+|TX_Next|	Next Transmission Sequence Number|	功能：这是下一个将要分配给新的、未被分段过的RLC SDU的序列号（SN）。<br>作用：每当从PDCP层收到一个新SDU，就分配当前TX_Next的值作为其SN，然后将TX_Next加1。它标志 着发送端即将使用的新SN。<br> |
+|TX_Next_Ack|	Next Acknowledgement Sequence Number|	功能：这是最早的那个尚未被对端确认的RLC SDU的SN。<br>作用：所有SN < TX_Next_Ack 的PDU都已被对端正面确认（ACK）。它是发送窗口的左边界。当收到状态报告（STATUS PDU）时，会根据其中的ACK_SN来更新TX_Next_Ack，从而实现窗口滑动。<br>|
+|TX_Next_Status|	Next Status Sequence Number|	功能：这是一个状态报告的有效性验证门限。<br>作用：接收端发来的STATUS PDU只有在包含ACK_SN >= TX_Next_Status时，才会被发送端认为有效并进行处理。处理完有效的状态报告后，TX_Next_Status会被更新为新的TX_Next_Ack值。这用于防止发送端处理过时或重复的状态报告。|
+|POLL_SN|	Poll Sequence Number|	功能：记录最近一次因发送P=1的PDU而启动或重启t-PollRetransmit定时器时，该PDU的SN。<br>作用：用于判断是否需要触发一次新的轮询（例如，当TX_Next_Ack前进到POLL_SN时，意味着上次轮询已被应答）。|
+|PDU_WITHOUT_POLL|	PDUs without a Poll|	功能：一个计数器，记录自上一次发送P=1的PDU之后，已经发送了多少个RLC数据PDU。<br>作用：当该计数器的值达到配置参数pollPDU时，发送端会在下一个PDU中将P比特置1。这是触发轮询的主要条件之一。|
+|BYTE_WITHOUT_POLL|	Bytes without a Poll|	功能：一个计数器，记录自上一次发送P=1的PDU之后，已经发送了多少字节的RLC数据（仅计数据部分，不含头）。<br>作用：当该计数器的值达到配置参数pollByte时，发送端会在下一个PDU中将P比特置1。这是另一个触发轮询的主要条件。|
+|t-PollRetransmit|	Poll Retransmit Timer|	功能：一个定时器。<br>作用：在发送一个P=1的PDU后启动或重启。如果在该定时器超时前未收到有效的状态报告（STATUS PDU），发送端将执行重传轮询操作（例如重传一个P=1的PDU），以防止状态报告丢失。|
+
+### 2.1.2 发送端流程
+
+发送端的核心是维护一个以 **`TX_Next_Ack`** 和 **`TX_Next`** 为边界的发送窗口，并管理轮询以请求状态报告。
+
+1. **变量初始化**
+    
+    - `TX_Next_Ack` = 0
+    - `TX_Next` = 0
+    - `TX_Next_Status` = 0
+    - `POLL_SN` = (未定义)
+    - `pdu_without_poll` = 0
+    - `byte_without_poll` = 0
+
+note:`POLL_SN`在初始化中并未定义或者说没有意义，它的值是在发送端每次决定发送一个Poll比特置位的PDU时，被动态地赋予该PDU的序列号（SN）。
+
+2.  **数据接收与SN分配**
+    
+    - 当从上层（PDCP）接收到一个RLC SDU时，发送端实体为其分配一个序列号（SN）：
+        - `SN = TX_Next`
+
+    - 随后，**`TX_Next`** 递增 1。
+    - 该SDU被放入传输缓冲区，等待被处理。
+
+3. **PDU构建与轮询决策**
+    
+    -   根据MAC层分配的授权大小（Grant Size），RLC实体从传输缓冲区和重传缓冲区中选择数据。
+    -   **分段/串联 (Segmentation/Concatenation)**： 将SDU（或重传的PDU）分割或拼接成适合授权大小的RLC数据PDU。
+    -   **设置轮询比特 (P-bit)**： 在构建PDU时，发送端根据以下规则决定是否将Poll比特置1：
+        -   如果 `(pdu_without_poll >= pollPDU)` **或** `(byte_without_poll >= pollByte)` **或** （重传缓冲区不为空且 `TX_Next_Ack == POLL_SN` (窗口停滞：发现自从上次轮询后，网络就再也没有确认过任何新数据，但依然有重传数据)）等条件满足。
+        -   如果决定轮询，则在该PDU中设置 `P = 1`。
+            
+4. **发送与缓存**
+    
+    - 将构建好的RLC数据PDU发送给下层（MAC）。
+
+    - 如果是新数据（非重传），则将该PDU的副本存入**重传缓冲区 (Retransmission Buffer)**。
+    -   更新计数器：
+        - `pdu_without_poll`++（如果P比特未置位）
+        - `byte_without_poll` += （该PDU的数据字节数）
+
+5. **Polling 处理（轮询处理）**
+    
+    - 如果一个包含 `P = 1` 的PDU被发送：
+        - 记录 **`POLL_SN = TX_Next - 1`** （即该PDU的SN）。
+        - **启动或重启定时器 `t-PollRetransmit`**。
+        - 重置计数器 `pdu_without_poll = 0` 和 `byte_without_poll = 0`。
+
+6. **接收与处理状态报告**
+
+    - 当从对端收到STATUS PDU时，发送端首先检查其有效性：STATUS PDU中的 `ACK_SN` 必须 >= **`TX_Next_Status`**，否则将被丢弃。
+    - **处理肯定确认 (ACK)**： `ACK_SN` 指示所有 `SN < ACK_SN` 的PDU已被正确接收（除非它们在NACK\_SN列表中）。发送端将 **`TX_Next_Ack`** 更新为 `ACK_SN` 的值。**这是发送窗口的滑动**。
+    - 更新 **`TX_Next_Status = TX_Next_Ack`**。
+    - **处理否定确认 (NACK)**： 对于STATUS PDU中列出的每个 `NACK_SN`，发送端从重传缓冲区中找到对应的PDU（或分段）并安排重传。
+    - 从重传缓冲区中删除所有 `SN < TX_Next_Ack` 的PDU。
+7.  **重传超时处理 (Retransmission Timeout Handling)**
+    
+    -   如果定时器 **`t-PollRetransmit`** 超时，发送端执行**重传轮询**操作（例如，重新发送一个P比特置位的PDU以再次请求状态报告）。
 
 
+
+
+## 2.2 数据接收
+
+接收端变量 (Receiving Side Variables)
+这些变量由接收端的RLC实体维护，用于控制数据的接收、重组、丢包检测和状态报告。
+
+|变量名|	全称/含义|	说明|
+|---|---|---|
+|RX_Next|	Next Expected Reception Sequence Number|	功能：这是接收端期望按序接收的下一个RLC数据PDU的SN。<br>作用：所有SN < RX_Next 的PDU都已被按序、完整地接收并交付给上层（PDCP）。它是接收窗口的左边界，同时也是发送状态报告（STATUS PDU） 时其中ACK_SN字段的值。ACK_SN = RX_Next 告知对端：“所有SN小于这个值的PDU我都收到了”。|
+|RX_Next_Highest|	Highest Received Sequence Number|	功能：记录已接收到的RLC数据PDU中的最高SN值加一（即max(SN) + 1）。<br>作用：用于检测数据包的丢失。如果RX_Next_Highest > RX_Next，则表明在RX_Next和RX_Next_Highest - 1之间存在序列号间隙，意味着有PDU丢失。|
+|RX_Next_Status|	Next Status Trigger Sequence Number|	功能：这是一个状态报告的触发门限。<br>作用：用于抑制不必要的状态报告。只有当需要被NACK的SN（即丢失的PDU的SN）小于RX_Next_Status时，接收端才会触发生成并发送一个新的STATUS PDU。在发送状态报告后，会更新RX_Next_Status = RX_Next_Highest。这防止了对同一个丢失的PDU反复发送状态报告。|
+|RX_Timer_Trigger|	Reassembly Timer Trigger|	功能：记录最近一次启动或重启t-Reassembly定时器时对应的RX_Next_Highest值。<br>作用：与t-Reassembly定时器配合使用。当定时器超时时，接收端会检查自定时器启动后RX_Next是否前进了。如果没有，则触发发送状态报告。|
+|t-Reassembly|	Reassembly Timer|	功能：一个定时器。<br>作用：当接收端第一次检测到序列号不连续（即RX_Next_Highest > RX_Next）时启动或重启。该定时器超时表明可能发生了数据包丢失，因为它意味着在预期的时间内，缺失的PDU（RX_Next）仍未到达。超时会触发生成一个STATUS PDU来明确通知对端哪些包丢失了（NACK）。|
+
+
+### **二、接收端 (Receiving Side) 流程**
+
+接收端的核心是维护一个以 **`RX_Next`** 为下界的接收窗口，通过 **`t-Reassembly`** 定时器检测丢包，并触发状态报告。
+
+1.  **变量初始化**
+
+    -   `RX_Next` = 0
+    -   `RX_Next_Highest` = 0
+    -   `RX_Next_Status` = 0
+    -   `RX_Timer_Trigger` = 0
+        
+2.  **接收PDU与有效性检查 (PDU Reception & Validation)**
+
+    -   从MAC层接收RLC数据PDU。
+    -   **检查SN是否在接收窗口内**： 接收端会丢弃任何 `SN < RX_Next` （完全重复）或 `SN >= RX_Next + AM_Window_Size` （超出窗口上界）的PDU。
+
+3.  **更新状态变量与检测丢包 (Update Variables & Detect Loss)**
+
+    -   对于接收到的有效PDU（其SN = `x`）：
+        -   更新 **`RX_Next_Highest = max(RX_Next_Highest, x + 1)`**。
+        -   如果 `x >= RX_Next`，表明存在序列号间隙，可能发生了丢包。
+
+4.  **重组与按序交付 (Reassembly & In-Sequence Delivery)**
+    
+    -   将接收到的PDU（可能是分段）放入**重组缓冲区 (Reassembly Buffer)**。
+    -   检查是否所有属于 `SN = RX_Next` 的SDU的分段都已到达并被完整重组。
+    -   **如果重组完成**，则将完整的RLC SDU按序交付给上层（PDCP），并递增 **`RX_Next`**。
+    -   递交后，继续检查新的 `RX_Next` 对应的SDU是否也已完整，如果是，则继续交付并递增，直到遇到一个缺失的SDU为止。
+
+5.  **重组定时器管理 (Reassembly Timer Management)**
+    
+    -   当接收端第一次检测到 `RX_Next_Highest > RX_Next` （即发生不连续）时，会：
+        -   **启动或重启定时器 `t-Reassembly`**。
+        -   设置 **`RX_Timer_Trigger = RX_Next_Highest`**。
+    -   如果 **`t-Reassembly`** 超时，接收端将**触发生成一个STATUS PDU**。
+
+6.  **生成与发送状态报告 (STATUS PDU Generation & Transmission)**
+    
+    -   状态报告的触发条件包括：
+        -   `t-Reassembly` 超时。
+        -   收到对端发送的 `P=1` 的PDU（轮询请求）。
+        -   检测到自身接收缓冲区即将满等其他实现相关条件。
+    -   **构建STATUS PDU**：
+        -   将 **`ACK_SN`** 字段设置为 **`RX_Next`** 的当前值。这告知对端所有 `SN < ACK_SN` 的PDU已被正确接收。
+        -   在NACK\_SN列表中，列出所有小于 `ACK_SN` 但接收端检测到丢失（未收到或错误接收）的SN。
+    -   在发送STATUS PDU之前，更新 **`RX_Next_Status = RX_Next_Highest`**。这个变量用于防止过早地重复发送相同的状态报告（只有当新的丢失SN `< RX_Next_Status` 时才会再次触发）。
+        
+
+这个过程确保了数据的可靠、按序传输，其核心逻辑通过上述变量及其相互作用得以实现。
+
+
+
+## 2.3小结
+
+- **发送窗口**：由 **`TX_Next_Ack`** （左边界）和 **`TX_Next_Ack + AM_Window_Size`** （右边界）定义。**`TX_Next`** 必须在这个窗口内移动。
+
+- **接收窗口**：由 **`RX_Next`** （左边界）和 **`RX_Next + AM_Window_Size`** （右边界）定义。任何SN超出此范围的PDU都会被丢弃。
+
+- **可靠性机制**：
+    - **发送端**通过 **`pdu/byte_without_poll`** 和 **`t-PollRetransmit`** 来**主动请求**（轮询）状态报告。
+    - **接收端**通过 **`RX_Next_Highest`** 和 **`t-Reassembly`** 来**被动检测**丢包，并触发状态报告作为响应。
+- **状态报告**：是沟通收发双方状态的核心信令。其有效性（发送端）和触发条件（接收端）分别由 **`TX_Next_Status`** 和 **`RX_Next_Status`** 严格控制，确保了机制的效率和鲁棒性。
+    
+
+这些变量共同构成了RLC AM模式的自动重传请求（ARQ）引擎，确保了数据在不可靠的无线信道上的可靠传输。
 
 
 ---

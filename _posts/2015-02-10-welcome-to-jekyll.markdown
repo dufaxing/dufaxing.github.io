@@ -4,7 +4,7 @@ title:  "hello jekyll!"
 date:   2015-02-10 15:14:54
 categories: jekyll
 tags: jekyll
-excerpt: 当年创建 jekyll 时默认的一篇文章，没什么意义，我也一直没删除，留个纪念吧。
+excerpt: jekyll初始化创建博客项目时，自动生成的第一篇博客，用来记录Jekyll的一些功能吧。
 mathjax: true
 ---
 
