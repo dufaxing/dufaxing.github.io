@@ -6,22 +6,22 @@
         <p class="contact">
             Contact me at: 
             {% if site.github_username %}
-            <a href="https://github.com/{{site.github_username}}" title="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a> 
+            <a href="https://github.com/{{site.github_username}}" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a> 
             {% endif %} 
             {% if site.email %}
-            <a href="mailto:{{site.email}}" title="email"><i class="fas fa-envelope" aria-hidden="true"></i></a> 
+            <a href="mailto:{{site.email}}" title="email"><i class="fa fa-envelope" aria-hidden="true"></i></a> 
             {% endif %} 
             {% if site.weibo_username %}
-            <a href="http://weibo.com/{{site.weibo_username}}" title="Weibo"><i class="fab fa-weibo" aria-hidden="true"></i></a> 
+            <a href="http://weibo.com/{{site.weibo_username}}" title="Weibo"><i class="fa fa-weibo" aria-hidden="true"></i></a> 
             {% endif %} 
             {% if site.zhihu_username %}
-            <a href="https://www.zhihu.com/people/{{site.zhihu_username}}" title="Zhihu"><i class="fab fa-zhihu" aria-hidden="true"></i></a> 
+            <a href="https://www.zhihu.com/people/{{site.zhihu_username}}" title="Zhihu"><i class="fa fa-zhihu" aria-hidden="true"></i></a> 
             {% endif %}
         </p>
-        <p>
-            本站总访问量<span id="busuanzi_value_site_pv" style="display:none">0</span><span id="busuanzi_loading">统计中...</span>次，
-            本站访客数<span id="busuanzi_value_site_uv" style="display:none">0</span><span id="busuanzi_loading2">统计中...</span>人次，
-            本文总阅读量<span id="busuanzi_value_page_pv" style="display:none">0</span><span id="busuanzi_loading3">统计中...</span>次
+        <p class="stats">
+            本站总访问量<span id="busuanzi_value_site_pv" class="busuanzi-value"></span><span id="busuanzi_loading_site_pv" class="busuanzi-loading">统计中</span>次，
+            本站访客数<span id="busuanzi_value_site_uv" class="busuanzi-value"></span><span id="busuanzi_loading_site_uv" class="busuanzi-loading">统计中</span>人次，
+            本文总阅读量<span id="busuanzi_value_page_pv" class="busuanzi-value"></span><span id="busuanzi_loading_page_pv" class="busuanzi-loading">统计中</span>次
         </p>
         <p class="power">
             <span>
@@ -34,23 +34,62 @@
     </div>
 </footer>
 
-<!-- 不蒜子源，服务器不稳定时无法获取到访问量 -->
-<script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
+<!-- 不蒜子统计 -->
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 <script>
-// 加载成功后显示数字，隐藏"统计中..."
+// 设置超时时间（毫秒）
+var busuanziTimeout = 5000;
+
+// 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        var elements = document.querySelectorAll('[id^="busuanzi_value_"]');
-        elements.forEach(function(el) {
-            if (el.innerHTML !== '0') {
-                el.style.display = 'inline';
-                var loadingId = el.id.replace('busuanzi_value_', 'busuanzi_loading');
-                var loadingEl = document.getElementById(loadingId);
-                if (loadingEl) loadingEl.style.display = 'none';
-            }
-        });
-    }, 3000); // 3秒后检查
+  // 初始隐藏统计值，显示加载中
+  var statValues = document.querySelectorAll('.busuanzi-value');
+  var loadingElements = document.querySelectorAll('.busuanzi-loading');
+  
+  // 设置超时检测
+  var timeoutId = setTimeout(function() {
+    // 检查统计是否已加载
+    var isLoaded = false;
+    statValues.forEach(function(el) {
+      if (el.innerHTML && el.innerHTML !== '0' && el.innerHTML !== '') {
+        isLoaded = true;
+      }
+    });
+    
+    // 如果超时且统计未加载成功
+    if (!isLoaded) {
+      loadingElements.forEach(function(el) {
+        el.textContent = '统计失败';
+        el.style.color = '#e74c3c';
+      });
+    }
+  }, busuanziTimeout);
+  
+  // 监听不蒜子统计更新
+  if (typeof busuanzi_pure !== 'undefined') {
+    // 保存原始函数
+    var originalCallback = busuanzi_pure.jsonpCallback;
+    
+    // 重写回调函数
+    busuanzi_pure.jsonpCallback = function(stat) {
+      // 调用原始函数
+      if (typeof originalCallback === 'function') {
+        originalCallback(stat);
+      }
+      
+      // 清除超时检测
+      clearTimeout(timeoutId);
+      
+      // 统计加载成功，隐藏所有"统计中..."，显示统计值
+      loadingElements.forEach(function(el) {
+        el.style.display = 'none';
+      });
+      
+      statValues.forEach(function(el) {
+        el.style.display = 'inline';
+      });
+    };
+  }
 });
 </script>
