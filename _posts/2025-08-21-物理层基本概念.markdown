@@ -222,18 +222,42 @@ PDSCH-TimeDomainResourceAllocation ::=   SEQUENCE {
 -   **例如**：如果DCI中的“时域资源分配”字段指示索引为 `2`，UE查表得知 `K0 = 1`。这意味着UE将在当前PDCCH所在时隙的下一个时隙（`n+1`）接收PDSCH。
 
 
-##### K1：
+#####  K1：UE接收PDSCH到发送反馈的时间偏移量
 
-```mermaid
-timeline
-    title 下行数据调度与反馈时序链 (K0 & K1)
-    section 时隙 n
-        UE 解码 DCI<br>获知 K0=1, K1=4
-    section 时隙 n+1 (K0=1)
-        UE 接收 PDSCH 数据
-    section 时隙 n+5 (K1=4)
-        UE 发送 HARQ-ACK 反馈<br>(ACK 或 NACK)
+**定义**
+
+-   **K1** 定义了从 **UE接收PDSCH（下行数据）的时刻** 到 **UE发送对应HARQ反馈（ACK/NACK）的时刻** 之间的时间偏移。
+
+-   **它的核心作用是：告诉UE应该在收到数据之后的哪个时间点，向网络汇报“收到下行数据的结果”。**
+    
+-   **公式表示**：`HARQ-ACK 反馈时隙 = PDSCH 时隙 + K1`
+
+没有K1，网络就无法知道UE是否成功接收了数据，也就无法触发高效的重传。
+K1的配置遵循 “RRC预配置多个选项 + DCI动态指示” 的模式。
+
+ 1 **RRC 高层信令配置（预定义列表）**
+
+网络通过 **RRCReconfiguration** 消息中的 **`PUCCH-Config`** IE 为UE配置一个可用的K1值列表。
+
+-   在38.331协议中：`RRCReconfiguration` -> `radioBearerConfig` -> `spCellConfig` -> `ServingCellConfig` -> `UplinkConfig` -> **`PUCCH-Config`** 内，有一个叫做 **`dl-DataToUL-ACK`** 的字段。这个字段是一个列表，包含了多个可供选择的K1值（单位为时隙）。
+
+```plaintext
+PUCCH-Config ::= {
+  ...
+  dl-DataToUL-ACK                         SEQUENCE (SIZE (1..8)) OF INTEGER (0..15)                             OPTIONAL, -- Need M
+  ...
+}
 ```
+
+2 **DCI 动态指示（指定具体值）**
+
+在调度PDSCH的**下行授权DCI**（无论是DCI format 1\_0 还是 1\_1）中，都有一个专门的字段叫做 **PDSCH-to-HARQ feedback timing indicator**。
+
+-   这个字段的**值**是一个**索引（Index）**。
+    
+-   UE收到DCI后，用这个索引去查询RRC配置的 **`dl-DataToUL-ACK`** 列表，从而确定本次传输具体使用哪个K1值。
+
+
 
 ##### K2：PUSCH时域资源分配偏移量
 
@@ -278,6 +302,120 @@ PUSCH-TimeDomainResourceAllocation ::=  SEQUENCE {
 note: RRC信令中没有配置 pdsch-TimeDomainAllocationList 或 pusch-TimeDomainAllocationList的话，可以使用`38.214`中定义的默认表。
 - k0: `5.1.2.1.1	Determination of the resource allocation table to be used for PDSCH`
 - k2: `6.1.2.1.1	Determination of the resource allocation table to be used for PUSCH`
+
+
+##### 完整的时序链举例
+
+
+UE下行接收数据流程
+
+-   **RRC配置：**
+    
+    -   PDSCH时域资源分配表: `K0` 可选 `{0, 2, 4}`
+        
+    -   HARQ反馈时序列表 (`dl-DataToUL-ACK`): `K1` 可选 `{3, 4, 6}`
+        
+-   **起始时隙：** `时隙 n`
+    
+-   **DCI格式：** DCI format 1\_1 (非回退下行授权)
+    
+
+**流程步骤：**
+
+1.  **时隙 n: 网络下发调度指令 (PDCCH)**
+    
+    -   网络在时隙n的PDCCH信道上发送DCI。
+        
+    -   **DCI内容关键字段：**
+        
+        -   **时域资源分配字段:** 索引指向 `K0=2`。
+            
+        -   **PDSCH-to-HARQ反馈时序字段:** 索引指向 `K1=6`。
+            
+        -   **频域资源分配、MCS** 等字段。
+            
+2.  **时隙 n: UE接收并解析DCI**
+    
+    -   UE成功解码出DCI。
+        
+    -   UE查表得知：**`K0 = 2`**, **`K1 = 6`**。
+        
+    -   UE现在知道：
+        
+        -   数据将在 **时隙 n+2** 发送给我（PDSCH）。
+            
+        -   我必须在收到数据后的 **6个时隙内** 给出反馈。
+            
+3.  **时隙 n+2: UE接收下行数据 (PDSCH)**
+    
+    -   UE在时隙n+2，根据DCI指示的精确频域资源和调制编码方案，接收PDSCH信道上的数据。
+        
+    -   UE对数据进行解码。
+        
+4.  **时隙 n+2+6 = n+8: UE发送反馈 (PUCCH)**
+    
+    -   UE根据解码结果，在时隙n+8上通过PUCCH信道发送HARQ-ACK反馈。
+        
+    -   **如果解码成功 -> 发送 ACK**
+        
+    -   **如果解码失败 -> 发送 NACK**
+
+
+UE上行发送数据流程
+
+**假设条件：**
+
+-   **RRC配置：**
+    
+    -   PUSCH时域资源分配表: `K2` 可选 `{1, 2, 4, 8}`
+        
+-   **起始时隙：** `时隙 m`
+    
+-   **DCI格式：** DCI format 0\_1 (非回退上行授权)
+    
+
+**流程步骤：**
+
+1.  **时隙 m: 网络下发调度许可 (PDCCH)**
+    
+    -   网络在时隙m的PDCCH信道上发送DCI。
+        
+    -   **DCI内容关键字段：**
+        
+        -   **时域资源分配字段:** 索引指向 `K2=4`。
+            
+        -   **频域资源分配、MCS** 等字段。
+            
+2.  **时隙 m: UE接收并解析DCI**
+    
+    -   UE成功解码出DCI。
+        
+    -   UE查表得知：**`K2 = 4`**。
+        
+    -   UE现在知道：
+        
+        -   我被允许在 **时隙 m+4** 发送上行数据（PUSCH）。
+            
+3.  **时隙 m - m+4: UE准备数据**
+    
+    -   UE在等待的这几个时隙内，根据DCI指示的MCS，将待发送的数据进行编码、调制，生成无线信号。
+        
+4.  **时隙 m+4: UE发送上行数据 (PUSCH)**
+    
+    -   UE在时隙m+4，精确地在DCI指示的频域资源和符号上，通过PUSCH信道将数据包发送给网络。
+
+
+**上下行流程核心区别总结**
+
+|特性|	下行接收 (DL)|	上行发送 (UL)|
+|---|---|---|
+|调度指令|	下行授权 (DCI format 1_0/1_1)|	上行授权 (DCI format 0_0/0_1)|
+|核心时序参数|	K0 (PDCCH -> PDSCH)K1 (PDSCH -> 反馈)|	K2 (PDCCH -> PUSCH)|
+|数据信道|	PDSCH (物理下行共享信道)|	PUSCH (物理上行共享信道)|
+|反馈机制|	有，且明确<br>  UE必须通过PUCCH/PUSCH发送ACK/NACK。|	无直接反馈<br> 网络通过是否发送新的上行授权来隐式地指示ACK/NACK（重传则授权NDI不翻转）。|
+|流程主导方|	网络驱动<br>网络主动下发数据和调度指令。|	混合驱动<br>UE需先请求（SR/BSR），网络再分配资源。|
+|UE核心动作|	接收、解码、反馈|	请求、准备、发送|
+|网络核心动作|	调度、发送、接收反馈|	调度、接收、解码|
 
 
 #### 2.2.2 **PUCCH：**
