@@ -230,7 +230,7 @@ RTT 是 **从发送 Echo Request 到接收 Echo Reply 的时间差**，通常由
 
 如果通过代码抓包（如 Python 的 `scapy`），可记录发送和接收时间：
 
-```
+```python
 from scapy.all import *
 import time
 
