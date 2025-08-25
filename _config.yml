@@ -61,6 +61,9 @@ paginate: 6
 
 theme: jekyll-theme-modernist
 
+plugins:
+  - jekyll-paginate
+
 # Giscus评论系统配置
 giscus:
   repo: "dufaxing/dufaxing.github.io"
@@ -75,3 +78,6 @@ giscus:
   theme: "noborder_light"
   lang: "zh-CN"
   loading: "lazy"
+  
+## 代码关键字高亮
+highlighter: rouge
