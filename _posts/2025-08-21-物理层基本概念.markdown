@@ -221,6 +221,20 @@ PDSCH-TimeDomainResourceAllocation ::=   SEQUENCE {
     
 -   **例如**：如果DCI中的“时域资源分配”字段指示索引为 `2`，UE查表得知 `K0 = 1`。这意味着UE将在当前PDCCH所在时隙的下一个时隙（`n+1`）接收PDSCH。
 
+
+##### K1：
+
+```mermaid
+timeline
+    title 下行数据调度与反馈时序链 (K0 & K1)
+    section 时隙 n
+        UE 解码 DCI<br>获知 K0=1, K1=4
+    section 时隙 n+1 (K0=1)
+        UE 接收 PDSCH 数据
+    section 时隙 n+5 (K1=4)
+        UE 发送 HARQ-ACK 反馈<br>(ACK 或 NACK)
+```
+
 ##### K2：PUSCH时域资源分配偏移量
 
 #### **定义**
