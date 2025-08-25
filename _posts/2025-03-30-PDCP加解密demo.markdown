@@ -32,7 +32,7 @@ mathjax: true
 # PDCP加解密python demo
 
 
-```
+```python
 import os
 import binascii
 from Crypto.Cipher import AES
@@ -156,14 +156,14 @@ if __name__ == "__main__":
     # 测试参数 - 使用十六进制格式
     key_hex = "00112233445566778899aabbccddeeff"  # 128位密钥（十六进制字符串）
     count = 0x12345678    # 32位COUNT值
-    bearer = 0x1F         # 5位承载标识 (最大31)
-    direction = 1         # 1位方向标识
+    bearer = 1         # 承载标识 (最大31)，BR_ID - 1（DRB2,bearer则为1）
+    direction = 0         # 数据方向，0为上行，1为下行
     
     # 创建加密器实例
     cipher = PDCPNEA2Cipher(key_hex, count, bearer, direction)
     
     # 示例明文数据（十六进制字符串）
-    plaintext_hex = "48656c6c6f2050444350204e45413220656e6372797074696f6e21"  # "Hello PDCP NEA2 encryption!"
+    plaintext_hex = "48656c6c6f2050444350204e45413220656e6372797074696f6e21"
     
     # 加密（输入和输出都使用十六进制）
     ciphertext_hex = cipher.encrypt(plaintext_hex, hex_input=True, hex_output=True)
