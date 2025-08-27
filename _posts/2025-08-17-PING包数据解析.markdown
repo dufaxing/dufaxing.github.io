@@ -109,7 +109,7 @@ ICMP头部（Echo类型）的格式如下（以IPv4为例）：
 
 **请求帧（Echo Request）**
 
-```
+```plaintext
 Type=08, Code=00, Checksum=ABCD  
 Identifier=00 01  (0x0001)  
 Sequence=00 01    (0x0001)  
@@ -118,7 +118,7 @@ Data=...
 
 **回复帧（Echo Reply）**
 
-```
+```plaintext
 Type=00, Code=00, Checksum=1234  
 Identifier=00 01  (0x0001)  ← 必须与请求一致  
 Sequence=00 01    (0x0001)  ← 必须与请求一致  
@@ -148,7 +148,7 @@ Data=...                    ← 数据内容通常原样返回
 **RRT = 相同标识符与序列号下，回复报文接受时间-请求报文发送时间**
 
 
-## 3 举例
+## 3 IPV4举例
 
 **完整的 Ping 请求（Echo Request）和回复（Echo Reply）的数据链路层（Ethernet + IP + ICMP）数据包示例**，包含 **RTT（Round-Trip Time）时延计算** 的详细解析。假设通信双方如下：
 
@@ -169,7 +169,7 @@ Data=...                    ← 数据内容通常原样返回
 
 #### **完整数据包（Hex 格式）**
 
-```
+```plaintext
 FFFFFFFFFFFF 001122334455 0800 4500005400004000FF01 0000 C0A80164 08080808 0800 F5CA 0001 0001 6162636465666768696A6B6C6D6E6F70
 ```
 
@@ -221,7 +221,7 @@ RTT 是 **从发送 Echo Request 到接收 Echo Reply 的时间差**，通常由
     
 -   **tcpdump** 输出示例：
 
-```
+```plaintext
 12:00:00.000000 IP 192.168.1.100 > 8.8.8.8: ICMP echo request, id 1, seq 1, length 64
 12:00:00.002400 IP 8.8.8.8 > 192.168.1.100: ICMP echo reply, id 1, seq 1, length 64
 ```
@@ -254,3 +254,161 @@ sniff(filter="icmp and host 8.8.8.8", prn=callback, timeout=1)
 ```
 RTT: 2.41 ms
 ```
+
+
+## 4 IPV6举例
+
+### 4.1Ping 请求（Echo Request）
+
+
+#### ping请求包完整数据码流
+
+以下为IPV6 ping包码流
+
+```plaintext
+aabbccddeeff00112233445586dd6000000000203a4020010db8000000000000000000000120010db80000000000000000000000028000f42cabcd00016162636465666768696a6b6c6d6e6f7071727374757677616263646566676869
+```
+
+整个数据包（包括以太网帧头、IPv6报头、ICMPv6报文）的十六进制码流进行分段解释
+
+```plaintext
+// 以太网帧头 (Ethernet Header) - 目标MAC和源MAC
+// 假设目标MAC为 00:11:22:33:44:55, 源MAC为 aa:bb:cc:dd:ee:ff
+aa bb cc dd ee ff 00 11  22 33 44 55
+
+86 dd                  //IVP6
+
+// IPv6 报头 (IPv6 Header)
+6x 00 00 00           // 版本(6), 流量类别(0), 流标签(0)
+00 20                 // 载荷长度 (32 bytes, 即ICMPv6报文长度)
+3a                    // 下一个报头 (58 = 0x3a, 代表ICMPv6)
+40                    // 跳数限制 (64)
+20 01 0d b8 00 00 00 00 00 00 00 00 00 00 00 01 // 源地址: 2001:db8::1
+20 01 0d b8 00 00 00 00 00 00 00 00 00 00 00 02 // 目标地址: 2001:db8::2
+
+// ICMPv6 Echo Request 报文
+80                    // 类型 (128 = Echo Request)
+00                    // 代码 (0)
+f4 2c                 // 校验和 (Checksum), 这是计算后的示例值，实际中会变化
+ab cd                 // 标识符 (Identifier)
+00 01                 // 序列号 (Sequence Number)
+
+// 数据载荷 (Data Payload)
+61 62 63 64 65 66 67 68  69 6a 6b 6c 6d 6e 6f 70  // abcdefghijklmnop
+71 72 73 74 75 76 77 61  62 63 64 65 66 67 68 69  // qrstuvwabcdefghi
+```
+
+
+#### 字段含义详解
+
+我们将数据包分层解析：
+
+A. 以太网帧头 (Ethernet Header)
+
+|字段|	值 (十六进制)|	含义|
+|---|---|---|
+|目标MAC地址|	00 11 22 33 44 55|	数据帧要发送到的设备的物理地址。|
+|源MAC地址|	aa bb cc dd ee ff|	发送数据帧的设备的物理地址。|
+|以太网类型|	86 dd|	指明上层协议是 IPv6。 (IPv4 是 08 00)|
+
+B. IPv6 报头 (IPv6 Header) - 固定40字节
+
+|字段|	值 (十六进制)|	含义|
+|---|---|---|
+|版本 (Version)|	6|	IP协议版本号，6代表IPv6。|
+|流量类别 (Traffic Class)	00|	类似于IPv4的TOS字段，用于QoS。|
+|流标签 (Flow Label)|	00 000|	用于标识同一“流”的数据包。|
+|载荷长度 (Payload Length)|	00 20|	16进制 0x0020 = 十进制32。表示IPv6报头之后的数据长度（即ICMPv6报文长度）。|
+|下一个报头 (Next Header)|	3a|	16进制 0x3a = 十进制58。表示紧接在IPv6报头后的下一个协议是 ICMPv6。|
+|跳数限制 (Hop Limit)|	40	| 16进制 0x40 = 十进制64。类似于IPv4的TTL，每经过一个路由器减1，减到0则丢弃。|
+|源地址 (Source Address)|	2001:0db8...0001|	数据包的起源IPv6地址。 (2001:db8::1)|
+|目标地址 (Destination Address)	|2001:0db8...0002	|数据包的目标IPv6地址。 (2001:db8::2)|
+
+C. ICMPv6 Echo Request 报文
+
+|字段|	值 (十六进制)|	含义|
+|---|---|---|
+|类型 (Type)|	80	|16进制 0x80 = 十进制128。表示这是一个 ICMPv6 Echo Request (回显请求) 报文。|
+|代码 (Code)|	00	|对于Echo请求和回复，此字段始终为0。|
+|校验和 (Checksum)|	f4 2c|	用于检测ICMPv6报文和部分IPv6报头在传输过程中是否有错误。|
+|标识符 (Identifier)|	ab cd|	由发送进程设置，用于匹配请求和回复。例如，ping6 命令的进程ID。|
+|序列号 (Sequence Number)|	00 01|	从0开始，每发送一个新的Echo请求就递增1，用于检测丢失或乱序的包。|
+|数据 (Data)|	61 62 63 ...|	可选的数据载荷。接收方在Echo Reply中必须原样返回此数据。这里是我们填充的32字节的字母序列。|
+
+
+### 4.2 Ping 回复数据包 (Echo Reply)
+
+#### ping回复包完整数据码流
+
+```
+001122334455aabbccddeeff86dd6000000000203a4020010db8000000000000000000000220010db80000000000000000000000018100a1b2abcd00016162636465666768696a6b6c6d6e6f7071727374757677616263646566676869
+```
+
+```
+// 以太网帧头 (Ethernet Header) - MAC地址与请求包方向相反
+// 源MAC (原目标MAC): 00:11:22:33:44:55
+// 目标MAC (原源MAC): aa:bb:cc:dd:ee:ff
+00 11 22 33 44 55 aa bb  cc dd ee ff 86 dd
+
+// IPv6 报头 (IPv6 Header) - 地址与请求包方向相反
+6x 00 00 00           // 版本(6), 流量类别(0), 流标签(0)
+00 20                 // 载荷长度 (32 bytes, ICMPv6报文长度)
+3a                    // 下一个报头 (58 = 0x3a, ICMPv6)
+40                    // 跳数限制 (64)
+20 01 0d b8 00 00 00 00 00 00 00 00 00 00 00 02 // 源地址: 2001:db8::2
+20 01 0d b8 00 00 00 00 00 00 00 00 00 00 00 01 // 目标地址: 2001:db8::1
+
+// ICMPv6 Echo Reply 报文
+81                    // 类型 (129 = Echo Reply) *这是关键变化*
+00                    // 代码 (0)
+[新的校验和]           // 校验和必须重新计算，此处为示例值 `a1 b2`
+ab cd                 // 标识符 (Identifier) *不变*
+00 01                 // 序列号 (Sequence Number) *不变*
+
+// 数据载荷 (Data Payload) *原样返回*
+61 62 63 64 65 66 67 68  69 6a 6b 6c 6d 6e 6f 70  // abcdefghijklmnop
+71 72 73 74 75 76 77 61  62 63 64 65 66 67 68 69  // qrstuvwabcdefghi
+```
+
+#### 字段含义详解
+
+字段含义详解 (重点说明变化部分)
+
+A. 以太网帧头 (Ethernet Header)
+
+|字段 | 值 (十六进制) | 含义 |
+| --- | --- | --- |
+| 目标MAC地址 | aa bb cc dd ee ff | 这是请求包的源MAC。回复包需要发回给最初的发送者。 |
+| 源MAC地址 | 00 11 22 33 44 55 | 这是请求包的目标MAC。回复由这台主机发出。 |
+| 以太网类型 | 86 dd | 上层协议依然是 IPv6。 |
+
+B. IPv6 报头 (IPv6 Header)
+
+| 字段 | 值 (十六进制) | 含义 |
+|--- |--- | --- |
+| 版本/流量类别/流标签 | 60000000 | 与请求相同。 |
+| 载荷长度 | 0020 | 32字节。ICMPv6回复报文长度与请求相同。 |
+| 下一个报头 | 3a | ICMPv6。 |
+| 跳数限制 | 40 | 64。通常操作系统会设置一个默认值（如64或255）。 |
+| 源地址 (Source Address) | 2001:0db8...0002 | 这是请求包的目标地址 (2001:db8::2)。现在作为回复的源。 |
+| 目标地址 (Destination Address) | 2001:0db8...0001 | 这是请求包的源地址 (2001:db8::1)。现在作为回复的目标。 |
+
+C. ICMPv6 Echo Reply 报文
+
+| 字段 | 值 (十六进制) | 含义 |
+|--- | --- |--- |
+| 类型 (Type) | 81 | 16进制 0x81 = 十进制129。这是最核心的变化，表明这是一个 ICMPv6 Echo Reply (回显答复) 报文。 |
+| 代码 (Code) | 00 | 对于Echo回复，此字段始终为0。 |
+| 校验和 (Checksum) | a1 b2 | 必须重新计算。因为ICMPv6类型字段变了（128->129），且IPv6的源/目标地址也对调了，校验和是基于伪首部和整个ICMPv6报文计算的，所以一定会变化。这里的值是示例。 |
+| 标识符 (Identifier) | ab cd | 必须与请求包完全一致。这样请求方才能将回复与特定的Ping进程匹配。 |
+| 序列号 (Sequence Number) | 00 01 | 必须与请求包完全一致。用于标识这是哪个请求序列的回复。 |
+| 数据 (Data) | 61 62 63 ... | 必须与请求包完全一致。原样返回发送的数据载荷，用于验证数据完整性。 |
+
+
+## 参考文献
+
+[ICMP报文通用格式](https://support.huawei.com/enterprise/zh/doc/EDOC1100174722/b9500c21#ZH-CN_CONCEPT_0254009171){:target="_blank"}
+
+[IPv4报文格式](https://support.huawei.com/enterprise/zh/doc/EDOC1100174722/d94f51c){:target="_blank"}
+
+[IPv6报文格式](https://support.huawei.com/enterprise/zh/doc/EDOC1100174722/bba11cdd){:target="_blank"}

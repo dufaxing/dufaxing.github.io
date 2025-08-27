@@ -48,22 +48,6 @@
 @import "reset", "header", "post", "page", "syntax-highlighting", "index", "demo", "footer", "scrollbar", "backToTop";
 
 
-/* 不蒜子统计样式 */
-.busuanzi-value {
-  display: none;
-}
-
-.busuanzi-loading {
-  color: #f1c40f;
-  display: inline;
-}
-
-.busuanzi-loading::after {
-  content: '...';
-  display: inline-block;
-  width: 1em;
-  animation: dots 1.5s steps(4, end) infinite;
-}
 
 @keyframes dots {
   0%, 20% { content: '.'; }
