@@ -202,7 +202,7 @@ K0的值并非固定不变，也不是由DCI直接用一个数字字段指示的
 1.  **RRC高层信令配置（预定义表格）**：
 
     -   网络通过**RRC连接重配置消息**为UE配置一个或多个 **“PDSCH时域资源分配”表**。这个表是一个列表，其中包含了多行可能的时域参数组合，每一行都定义了一个 `K0` 值以及其他参数（如PDSCH的起始符号和持续长度）。
-    - 在38.331协议中`RRCReconfiguration` -> `radioBearerConfig` -> `spCellConfig` -> `ServingCellConfig` -> `PDSCH-ServingCellConfig` -> `PDSCH-Config` -> **`pdsch-TimeDomainAllocationList`** 配置，格式如下：
+    - 在38.331协议中 `PDSCH-Config` -> **`pdsch-TimeDomainAllocationList`** 配置，格式如下：
 
 
 ```plaintext
@@ -239,7 +239,7 @@ K1的配置遵循 “RRC预配置多个选项 + DCI动态指示” 的模式。
 
 网络通过 **RRCReconfiguration** 消息中的 **`PUCCH-Config`** IE 为UE配置一个可用的K1值列表。
 
--   在38.331协议中：`RRCReconfiguration` -> `radioBearerConfig` -> `spCellConfig` -> `ServingCellConfig` -> `UplinkConfig` -> **`PUCCH-Config`** 内，有一个叫做 **`dl-DataToUL-ACK`** 的字段。这个字段是一个列表，包含了多个可供选择的K1值（单位为时隙）。
+-   在38.331协议中：`UplinkConfig` -> **`PUCCH-Config`** 内，有一个叫做 **`dl-DataToUL-ACK`** 的字段。这个字段是一个列表，包含了多个可供选择的K1值（单位为时隙）。
 
 ```plaintext
 PUCCH-Config ::= {
@@ -280,7 +280,7 @@ K2的配置机制与K0完全类似，也采用“RRC配置表 + DCI动态索引�
 1.  **RRC高层信令配置（预定义表格）**：
     
     -   网络通过**RRC信令**为UE配置一个 **“PUSCH时域资源分配”表**。这个表中的每一行同样定义了 `K2`、PUSCH的起始符号和持续长度等参数。
-    - 在38.331协议中`RRCReconfiguration` -> `radioBearerConfig` -> `spCellConfig` -> `ServingCellConfig` -> `UplinkConfig` -> `PUSCH-ServingCellConfig` -> `PUSCH-Config` -> **`pusch-TimeDomainAllocationList`**配置，格式如下：
+    - 在38.331协议中 `UplinkConfig` -> `PUSCH-ServingCellConfig` -> `PUSCH-Config` -> **`pusch-TimeDomainAllocationList`**配置，格式如下：
 
 ```plaintext
 PUSCH-TimeDomainResourceAllocation ::=  SEQUENCE {
@@ -360,6 +360,17 @@ UE下行接收数据流程
         
     -   **如果解码失败 -> 发送 NACK**
 
+```mermaid
+timeline
+    title UE下行接收数据流程
+    section 时隙 n
+        PDCCH : 网络发送DCI 1_1
+        : UE解码得知 K0=2, K1=6
+    section 时隙 n+2
+        PDSCH : UE接收下行数据
+    section 时隙 n+8
+        PUCCH : UE发送HARQ-ACK反馈
+```
 
 UE上行发送数据流程
 
@@ -396,9 +407,9 @@ UE上行发送数据流程
         
         -   我被允许在 **时隙 m+4** 发送上行数据（PUSCH）。
             
-3.  **时隙 m - m+4: UE准备数据**
+3.  **时隙 m ~ m+4: UE准备数据**
     
-    -   UE在等待的这几个时隙内，根据DCI指示的MCS，将待发送的数据进行编码、调制，生成无线信号。
+    -   UE在等待的这几个时隙内，根据DCI指示的MCS，将待发送的数据进行编码、调制，生成无线信号。*数据链路层关键时序要求*。
         
 4.  **时隙 m+4: UE发送上行数据 (PUSCH)**
     
@@ -467,7 +478,17 @@ UE上行发送数据流程
 -   **CQI：** 信道质量指示，是一个综合测量结果后的“建议”值，直接对应到一套MCS。
 
 
-
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    flowchart: {
+      useMaxWidth: true,
+      htmlLabels: true,
+      curve: 'basis'
+    }
+  });
+</script>
 
 
 参考资料
