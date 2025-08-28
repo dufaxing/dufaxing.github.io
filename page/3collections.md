@@ -63,6 +63,8 @@ type: page
 
 > [win10激活工具](https://pan.baidu.com/s/1uvJ_gc4axoagN78qpn-bDA){:target="_blank"}
 
+> [图表工具](https://mermaid.nodejs.cn/){:target="_blank"}
+
 ---
 
 ## 编程语言 & 语法

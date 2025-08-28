@@ -36,9 +36,19 @@
     </div>
 </footer>
 
+<!-- jekyll 博客，重新封装了标签，导致无法识别mermaid。  -->
+<!-- j使用Liquid标签包裹Mermaid代码，避免Jekyll处理。还可以用以下方式 -->
+<!-- {% raw %} -->
+<!--<div class="mermaid"> -->
+<!--graph TD -->
+
+<!--</div> -->
+{<!--% endraw %} -->
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+  // 初始化Mermaid配置
   mermaid.initialize({
-    startOnLoad: true,
+    startOnLoad: false, // 禁用自动初始化
     theme: 'default',
     flowchart: {
       useMaxWidth: true,
@@ -46,5 +56,63 @@
       curve: 'basis'
     }
   });
+  
+  // 函数：提取代码内容
+  function extractMermaidCode(block) {
+    // 尝试多种可能的选择器
+    var codeElement = block.querySelector('code');
+    if (!codeElement) {
+      // 尝试直接获取文本内容
+      return block.textContent || block.innerText;
+    }
+    return codeElement.textContent;
+  }
+  
+  // 处理所有可能的Mermaid代码块
+  var mermaidSelectors = [
+    '.language-mermaid',
+    '.mermaid',
+    'code.language-mermaid',
+    'div.mermaid'
+  ];
+  
+  var processed = false;
+  
+  mermaidSelectors.forEach(function(selector) {
+    var blocks = document.querySelectorAll(selector);
+    if (blocks.length > 0) {
+      blocks.forEach(function(block) {
+        // 跳过已经处理过的块
+        if (block.getAttribute('data-mermaid-processed') === 'true') {
+          return;
+        }
+        
+        var code = extractMermaidCode(block);
+        if (code && code.trim()) {
+          // 创建新的Mermaid div
+          var newDiv = document.createElement('div');
+          newDiv.className = 'mermaid';
+          newDiv.textContent = code;
+          
+          // 标记为已处理
+          newDiv.setAttribute('data-mermaid-processed', 'true');
+          
+          // 替换原有元素
+          block.parentNode.replaceChild(newDiv, block);
+          processed = true;
+        }
+      });
+    }
+  });
+  
+  // 如果有处理过的图表，初始化Mermaid
+  if (processed) {
+    try {
+      mermaid.init(undefined, '.mermaid');
+    } catch (e) {
+      console.error('Mermaid初始化错误:', e);
+    }
+  }
+});
 </script>
 
