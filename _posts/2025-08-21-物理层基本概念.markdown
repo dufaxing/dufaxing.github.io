@@ -372,6 +372,18 @@ timeline
         PUCCH : UE发送HARQ-ACK反馈
 ```
 
+
+{% raw %}
+<div class="mermaid">
+graph TD
+    A[开始] --> B{条件判断}
+    B -- 是 --> C[执行操作]
+    B -- 否 --> D[结束]
+    C --> D
+</div>
+{% endraw %}
+
+
 UE上行发送数据流程
 
 **假设条件：**
