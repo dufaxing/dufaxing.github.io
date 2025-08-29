@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "物理层基本概念"
+title:  "5G NR物理层基础3（上行物理信道与信号）"
 date:   2025-08-23 00:00:00
 categories: NR
 tags: 读书笔记
