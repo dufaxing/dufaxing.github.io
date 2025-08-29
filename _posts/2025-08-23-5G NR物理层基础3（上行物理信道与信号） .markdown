@@ -1,0 +1,51 @@
+---
+layout: post
+title:  "物理层基本概念"
+date:   2025-08-23 00:00:00
+categories: NR
+tags: 读书笔记
+excerpt: 从数据链路层出发，经常接触到的一些物理层基本概念汇总
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# 0. 前言
+
+- RE: Resource Element,资源元素,它是无线资源网格中一个最小的单位，由“1个OFDM符号”时长和“1个子载波”带宽唯一确定，是承载信息（如调制符号、参考信号）的物理实体。<br>
+- RB：Resource Block - 资源块。是网络调度和分配资源的基本单位，通常由频域上12个连续的子载波和时域上1个时隙（例如14个OFDM符号）组成。<br>
+- REG：Resource Element Group - 资源元素组。通常由同一OFDM符号上的几个连续RE组成，主要用于控制信道（如PDCCH）的映射。<br>
+- CCE：Control Channel Element - 控制信道元素。由多个REG组成，是PDCCH传输的资源单位。<br>
+
+
+# PRACH
+
+物理随机接入信道。在随机接入过程中，发送随机接入需要的前导码（preamble）等信息。
+
+# 2 PUCCH
+
+物理上行控制信道。用于携带**UCI**，包括至关重要的**HARQ-ACK/NACK**（反馈数据包是否发送成功）、**CSI**（信道状态信息，用于链路自适应）。
+        
+
+# 3 PUSCH
+
+物理上行共享信道。主要传输上行数据，也可以传输上行控制信息（UCI）。
+
+# 4 SRS
+
+**SRS**： 探测参考信号，用于基站测量上行信道质量。
+        
+
+
+
+---
+
+参考文献：
+
+[1]《5G NR物理层规划与设计》

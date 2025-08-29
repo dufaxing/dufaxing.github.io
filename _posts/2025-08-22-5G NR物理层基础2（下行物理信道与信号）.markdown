@@ -1,0 +1,286 @@
+---
+layout: post
+title:  "5G NR物理层基础2（下行物理信道与信号）"
+date:   2025-08-22 00:00:00
+categories: NR
+tags: 读书笔记
+excerpt: 从数据链路层出发，经常接触到的一些物理层基本概念汇总
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# 0. 前言
+
+
+
+---
+
+# 1.物理信道
+
+## 1.1 PDSCH
+    
+
+**物理下行共享信道** ：这是承载下行用户数据（来自的RLC/MAC）的核心信道。主要处理流程：加扰、调制、层映射、预编码、资源映射等。
+
+
+## 1.2 PDCCH
+
+**物理下行控制信道**：这是网络驱动UE的MAC层的主要的方式。因为它携带**DCI**，告诉UE在何处（时频资源）、以何种格式（MCS）、如何（HARQ信息）接收PDSCH或发送PUSCH。物理层需要持续监听PDCCH。
+
+## 1.3 PBCH
+
+**物理广播信道**：承载UE接入网络所必须的部分关键系统信息。
+
+---
+
+# 2 DCI
+
+DCI：Downlink Control Information，这非常重要，作为数据链路层的开发者，最需要了解的是网络指示UE发送/接收数据时间点。
+
+##   2.1 K0：PDSCH时域资源分配偏移量
+
+**定义**
+
+-   **K0** 指的是从**承载DCI（下行授权）的PDCCH所在时隙**到**该DCI所调度的PDSCH（承载下行数据的共享信道）所在时隙**之间的时间偏移。
+    
+-   **单位是时隙（Slot）**。
+    
+-   **公式表示**：`PDSCH时隙 = PDCCH时隙 + K0`
+    
+
+**具体含义**：  
+当UE在一个时隙（记为时隙 `n`）中成功解码出一个下行授权DCI后，这个DCI告诉UE：“我给你调度的下行数据，不在现在这个时隙，而是在未来的 `K0` 个时隙之后，也就是时隙 `n + K0` 中。”
+
+
+**配置位置**
+
+K0的值并非固定不变，也不是由DCI直接用一个数字字段指示的。它的配置机制更为灵活，涉及以下两层配置：
+
+- 1.  RRC高层信令配置（预定义表格）：
+        -   网络通过**RRC连接重配置消息**为UE配置一个或多个 **“PDSCH时域资源分配”表**。这个表是一个列表，其中包含了多行可能的时域参数组合，每一行都定义了一个 `K0` 值以及其他参数（如PDSCH的起始符号和持续长度）。
+        - 在38.331协议中 `PDSCH-Config` -> **`pdsch-TimeDomainAllocationList`** 配置，格式如下：
+        - ```plaintext
+            PDSCH-TimeDomainResourceAllocation ::=   SEQUENCE {
+                k0                                      INTEGER(0..32)                                                  OPTIONAL,   -- Need S
+                mappingType                             ENUMERATED {typeA, typeB},
+                startSymbolAndLength                    INTEGER (0..127)
+            }
+            ```
+
+- 2. **DCI动态指示（索引）**：
+        - 在具体的某个下行授权DCI（如DCI format 1\_0或1\_1）中，会包含一个名为 **“时域资源分配”** 的字段。这个字段本身**不是一个具体的K0数值**，而是一个**索引（Index）**。
+    
+        - UE收到DCI后，根据这个索引值，去查询网络通过RRC信令为其配置好的那个“PDSCH时域资源分配”表，从而找到对应的那一行，也就知道了本次传输的具体 `K0`、起始符号和持续时间。
+    
+        - 例如：如果DCI中的“时域资源分配”字段指示索引为 `2`，UE查表得知 `K0 = 1`。这意味着UE将在当前PDCCH所在时隙的下一个时隙（`n+1`）接收PDSCH。
+
+
+## 2.2 K1：UE接收PDSCH到发送反馈的时间偏移量
+
+**定义**
+
+-   **K1** 定义了从 **UE接收PDSCH（下行数据）的时刻** 到 **UE发送对应HARQ反馈（ACK/NACK）的时刻** 之间的时间偏移。
+
+-   **它的核心作用是：告诉UE应该在收到数据之后的哪个时间点，向网络汇报“收到下行数据的结果”。**
+    
+-   **公式表示**：`HARQ-ACK 反馈时隙 = PDSCH 时隙 + K1`
+
+没有K1，网络就无法知道UE是否成功接收了数据，也就无法触发高效的重传。
+K1的配置遵循 “RRC预配置多个选项 + DCI动态指示” 的模式。
+
+- 1. RRC 高层信令配置（预定义列表）
+        - 网络可以通过 **RRCReconfiguration** 等RRC消息中的 **`PUCCH-Config`** IE 为UE配置一个可用的K1值列表。
+
+        - 在38.331协议中：`UplinkConfig` -> **`PUCCH-Config`** 内，有一个叫做 **`dl-DataToUL-ACK`** 的字段。这个字段是一个列表，包含了多个可供选择的K1值（单位为时隙）。
+        - ```plaintext
+            PUCCH-Config ::= {
+            ...
+            dl-DataToUL-ACK                         SEQUENCE (SIZE (1..8)) OF INTEGER (0..15)                             OPTIONAL, -- Need M
+            ...
+            }
+            ```
+
+
+- 2. DCI 动态指示（指定具体值）
+        - 在调度PDSCH的**下行授权DCI**（无论是DCI format 1\_0 还是 1\_1）中，都有一个专门的字段叫做 **PDSCH-to-HARQ feedback timing indicator**,这个字段的值是一个索引（Index）**。
+        - UE收到DCI后，用这个索引去查询RRC配置的 **`dl-DataToUL-ACK`** 列表，从而确定本次传输具体使用哪个K1值。
+
+
+## 2.3 K2：PUSCH时域资源分配偏移量
+
+**定义**
+
+-   **K2** 指的是从**承载DCI（上行授权）的PDCCH所在时隙**到**该DCI所调度的PUSCH（承载上行数据的共享信道）所在时隙**之间的时间偏移。
+    
+-   **单位同样是时隙（Slot）**。
+    
+-   **公式表示**：`PUSCH时隙 = PDCCH时隙 + K2`
+    
+
+**具体含义**：  
+当UE在一个时隙（时隙 `n`）中成功解码出一个上行授权DCI后，这个DCI告诉UE：“我允许你发送上行数据的时间，不是现在，而是在未来的 `K2` 个时隙之后，也就是时隙 `n + K2` 中。”
+
+**配置位置**
+
+K2的配置机制与K0完全类似，也采用“RRC配置表 + DCI动态索引”的方式：
+
+- 1. RRC高层信令配置（预定义表格）：
+        -   网络通过**RRC信令**为UE配置一个 **“PUSCH时域资源分配”表**。这个表中的每一行同样定义了 `K2`、PUSCH的起始符号和持续长度等参数。
+        - 在38.331协议中 `UplinkConfig` -> `PUSCH-ServingCellConfig` -> `PUSCH-Config` -> **`pusch-TimeDomainAllocationList`**配置，格式如下：
+        - ```plaintext
+            PUSCH-TimeDomainResourceAllocation ::=  SEQUENCE {
+                k2                                      INTEGER(0..32)                                  OPTIONAL,   -- Need S
+                mappingType                             ENUMERATED {typeA, typeB},
+                startSymbolAndLength                    INTEGER (0..127)
+            }
+            ```
+
+- 2. DCI动态指示（索引）：
+        - 在上行授权DCI（如DCI format 0\_0或0\_1）中，同样有一个 **“时域资源分配”** 字段。这个字段也是一个索引值。
+        - UE根据这个索引，去查询配置好的“PUSCH时域资源分配”表，从而确定本次上行传输的具体 `K2` 值。
+        - 例如：如果DCI指示索引为 `3`，UE查表得知 `K2 = 4`。这意味着UE需要在收到DCI后的第4个时隙（`n+4`）才能发送PUSCH
+
+
+## 2.4 时序链举例
+
+
+### 2.4.1 UE下行接收数据流程
+
+-   **RRC配置：**
+    
+    -   PDSCH时域资源分配表: `K0` 可选 `{0, 2, 4}`
+        
+    -   HARQ反馈时序列表 (`dl-DataToUL-ACK`): `K1` 可选 `{3, 4, 6}`
+        
+-   **起始时隙：** `时隙 n`
+    
+-   **DCI格式：** DCI format 1\_1 (非回退下行授权)
+    
+
+**流程步骤：**
+
+1.  **时隙 n: 网络下发调度指令 (PDCCH)**
+    
+    -   网络在时隙n的PDCCH信道上发送DCI。
+        
+    -   **DCI内容关键字段：**
+        
+        -   **时域资源分配字段:** 索引指向 `K0=2`。
+            
+        -   **PDSCH-to-HARQ反馈时序字段:** 索引指向 `K1=6`。
+            
+        -   **频域资源分配、MCS** 等字段。
+            
+2.  **时隙 n: UE接收并解析DCI**
+    
+    -   UE成功解码出DCI。
+        
+    -   UE查表得知：**`K0 = 2`**, **`K1 = 6`**。
+        
+    -   UE现在知道：
+        
+        -   数据将在 **时隙 n+2** 发送给我（PDSCH）。
+            
+        -   我必须在收到数据后的 **6个时隙内** 给出反馈。
+            
+3.  **时隙 n+2: UE接收下行数据 (PDSCH)**
+    
+    -   UE在时隙n+2，根据DCI指示的精确频域资源和调制编码方案，接收PDSCH信道上的数据。
+        
+    -   UE对数据进行解码。
+        
+4.  **时隙 n+2+6 = n+8: UE发送反馈 (PUCCH)**
+    
+    -   UE根据解码结果，在时隙n+8上通过PUCCH信道发送HARQ-ACK反馈。
+        
+    -   **如果解码成功 -> 发送 ACK**
+        
+    -   **如果解码失败 -> 发送 NACK**
+
+
+```mermaid
+timeline
+    title UE下行接收数据流程
+    section 时隙 n
+        PDCCH : 网络发送DCI 1_1
+        : UE解码得知 K0=2, K1=6
+    section 时隙 n+2
+        PDSCH : UE接收下行数据
+    section 时隙 n+8
+        PUCCH : UE发送HARQ-ACK反馈
+```
+
+### 2.4.2 UE上行发送数据流程
+
+-   **RRC配置：**
+    
+    -   PUSCH时域资源分配表: `K2` 可选 `{1, 2, 4, 8}`
+        
+-   **起始时隙：** `时隙 m`
+    
+-   **DCI格式：** DCI format 0\_1 (非回退上行授权)
+    
+
+**流程步骤：**
+
+1.  **时隙 m: 网络下发调度许可 (PDCCH)**
+    
+    -   网络在时隙m的PDCCH信道上发送DCI。
+        
+    -   **DCI内容关键字段：**
+        
+        -   **时域资源分配字段:** 索引指向 `K2=4`。
+            
+        -   **频域资源分配、MCS** 等字段。
+            
+2.  **时隙 m: UE接收并解析DCI**
+    
+    -   UE成功解码出DCI。
+        
+    -   UE查表得知：**`K2 = 4`**。
+        
+    -   UE现在知道：
+        
+        -   我被允许在 **时隙 m+4** 发送上行数据（PUSCH）。
+            
+3.  **时隙 m ~ m+4: UE准备数据**
+    
+    -   UE在等待的这几个时隙内，根据DCI指示的MCS，将待发送的数据进行编码、调制，生成无线信号。*数据链路层关键时序要求*。
+        
+4.  **时隙 m+4: UE发送上行数据 (PUSCH)**
+    
+    -   UE在时隙m+4，精确地在DCI指示的频域资源和符号上，通过PUSCH信道将数据包发送给网络。
+
+
+```mermaid
+timeline
+    title UE上行发送数据流程
+    section 时隙 m
+        PDCCH : 网络发送DCI 0_1
+        : UE解码得知 K2=4
+    section 时隙 m - m+4
+        : UE准备待发送数据
+    section 时隙 m+4
+        PUSCH : UE发送上行数据
+```
+
+
+---
+
+# CS--RS
+
+---
+
+参考资料
+
+
+[DCI_百度百科](https://baike.baidu.com/item/DCI/5804273)
