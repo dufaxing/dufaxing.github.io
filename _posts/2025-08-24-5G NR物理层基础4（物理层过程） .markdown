@@ -1,0 +1,191 @@
+---
+layout: post
+title:  "5G NR物理层基础4（物理层过程））"
+date:   2025-08-24 00:00:00
+categories: NR
+tags: 读书笔记
+excerpt: 从数据链路层出发，经常接触到的一些物理层基本概念汇总
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# 0. 前言
+
+- RE: Resource Element,资源元素,它是无线资源网格中一个最小的单位，由“1个OFDM符号”时长和“1个子载波”带宽唯一确定，是承载信息（如调制符号、参考信号）的物理实体。<br>
+- RB：Resource Block - 资源块。是网络调度和分配资源的基本单位，通常由频域上12个连续的子载波和时域上1个时隙（例如14个OFDM符号）组成。<br>
+- REG：Resource Element Group - 资源元素组。通常由同一OFDM符号上的几个连续RE组成，主要用于控制信道（如PDCCH）的映射。<br>
+- CCE：Control Channel Element - 控制信道元素。由多个REG组成，是PDCCH传输的资源单位。<br>
+
+
+# 1. 上行数据发送过程
+
+## 上行处理流程与授权获取
+
+```mermaid
+flowchart TD
+A[UE生成上行数据] --> B["UE在PUCCH上发送SR(Scheduling Request)"]
+B --> C["gNodeB收到SR, 但不知数据量"]
+C --> D["gNodeB下发小型UL Grant<br>用于发送BSR"]
+D --> E["UE在PUSCH上用小型授权发送BSR(Buffer Status Report)"]
+E --> F["gNodeB解析BSR, 获知待传数据量(大小&优先级)"]
+F --> G["调度器决策<br>（基于待传数据量、QoS、信道质量、干扰、可用资源等）"]
+G --> H["gNodeB通过PDCCH下发最终的UL Grant<br>（包含RB数量、调制编码方案MCS等）"]
+H --> I["UE接收并解析UL Grant"]
+I --> J["UE在指定的PUSCH资源上传输上行数据"]
+```
+
+#### 第1步：请求发言权 - 调度请求 (Scheduling Request, SR)
+
+-   **目的**：UE告诉gNodeB：“我有上行数据需要传输，请给我分配资源来**报告具体的数据量**。”
+    
+-   **信道**：在**PUCCH** (Physical Uplink Control Channel) 上发送。
+    
+-   **内容**：SR本身非常精简，只有1比特信息， essentially就是一个标志位（flag），表示“请求调度”。它**不包含任何关于数据量大小或业务类型的信息**。
+    
+-   **gNodeB的反应**：gNodeB收到SR后，只知道该UE有数据要发，但不知道需要多少资源。因此，它通常会先分配一个**最小的、固定的资源块**给UE，让其足以在下一步中上报更详细的信息（BSR）。
+    
+
+#### 第2步：报告数据量 - 缓存状态报告 (Buffer Status Report, BSR)
+
+-   **目的**：UE利用gNodeB刚刚分配的小型资源，准确告知gNodeB其缓存中待传输的数据量（以字节为单位）和逻辑信道优先级。
+    
+-   **信道**：在**PUSCH** (Physical Uplink Shared Channel) 上发送。
+    
+-   **内容**：BSR MAC控制元素包含多个信息：
+    
+    -   **逻辑信道组ID**：标识数据的业务类型（如eMBB， URLLC等），隐含了其优先级（QoS）。
+        
+    -   **缓存大小**：指示对应逻辑信道组中等待发送的数据总量（字节数）。gNodeB通过查表的方式将报告值映射为具体的字节范围。
+        
+-   **gNodeB的反应**：此时，gNodeB终于知道了两个关键信息：**1) 哪个UE要发数据；2) 要发多少数据，以及数据的优先级。**
+    
+
+#### 第3步：基站决策与授权下发 - UL Grant
+
+这是最关键的一步，授权大小就在此决定。
+
+1.  **信息输入**：gNodeB的调度器（Scheduler）综合以下信息进行决策：
+    
+    -   **BSR信息**：UE待传输的数据量（**核心依据**）。
+        
+    -   **UE上报的信道状态信息**：包括CQI (Channel Quality Indicator)、SRS (Sounding Reference Signal) 等。这些信息帮助gNodeB了解当前UE的上行信道质量。
+        
+    -   **服务质量要求**：数据的优先级、延迟要求、可靠性要求（如5QI参数）。URLLC业务的调度优先级远高于eMBB业务。
+        
+    -   **小区整体负载和干扰情况**：当前可用的上行RB（Resource Block）资源是否充足，其他UE的调度情况等。
+        
+    -   **UE能力**：UE是否支持更高的调制阶数、更大的带宽等。
+        
+2.  **调度算法决策**：调度器基于上述输入进行计算：
+    
+    -   **确定资源块数量**：根据待传输数据量和信道质量，决定分配多少频域资源（多少个RB）。
+        
+    -   **选择调制编码方案**：根据信道质量（CQI）选择最合适的**MCS**。信道质量好，就选择高阶调制（如256QAM）和高的码率，这样每个RB能承载的数据量就大；信道质量差，就选择低阶调制（如QPSK）和低的码率，每个RB承载的数据量小但更可靠。
+        
+    -   **确定传输块大小**：**TBS** 是由 **RB数量** 和 **MCS** **共同决定**的。gNodeB内部有预定义的TBS查找表，输入RB数和MCS索引，即可输出准确的TBS（Transport Block Size）值。这个TBS就是本次授权允许传输的**最大数据比特数**。
+        
+3.  **下发授权**：gNodeB将决策结果封装成**DCI Format 0\_0 或 0\_1**，通过**PDCCH** (Physical Downlink Control Channel) 下发给UE。UL Grant中包含的关键信息有：
+    
+    -   **频域资源分配**：指示为UE分配了哪些RB资源。
+        
+    -   **时域资源分配**：指示在哪个时隙（Slot）和符号（Symbol）上传输。
+        
+    -   **调制编码方案**：MCS索引值。
+        
+    -   **TPC命令**：用于调整上行发射功率。
+        
+
+#### 第4步：UE传输数据
+
+-   UE接收到DCI，解析出UL Grant。
+    
+-    根据Grant中的RB和MCS信息，查询协议规定的TBS表，得到本次授权允许的传输块大小。
+    
+-   MAC层将对应大小的数据块组装成**TB**。
+    
+-   在UL Grant指定的时间和频率资源（**PUSCH**）上，发送该TB。
+
+
+
+
+## 上行速率
+
+一个简化版的理论瞬时速率计算公式可以清晰地体现这些因素：
+
+$$
+上行速率 = \frac {N_{layers} × N_{PRB} ×  N_{RE/PRB} ×  调制阶数 × 编码率  × (1 - 开销) } {传输时间间隔}
+$$
+
+
+$N_{\text{layers}}$：传输层数（由MIMO决定）
+
+$N_{\text{PRB}}$：分配的资源块数量
+
+$N_{\text{RE/PRB}}$：每个PRB中的可用数据RE数
+
+调制阶数 × 编码率：由MCS决定（频谱效率）
+
+开销：参考信号、控制信息等造成的开销
+
+传输时间间隔：通常是1ms（一个子帧）
+
+
+```mermaid
+flowchart TD
+A[UE有大量数据待发送] --> B{"gNodeB调度器决策"};
+
+B --> C[资源分配PRB数量]
+B --> D[调制编码策略MCS]
+B --> E[MIMO传输层数]
+B --> F[调度频繁程度]
+
+subgraph G[决策依据]
+    G1[UE上报的SRS信道质量]
+    G2[小区整体负载与干扰]
+    G3[UE业务优先级QoS]
+    G4[调度算法策略]
+end
+
+G --> B
+
+C & D & E & F --> H[计算瞬时上行传输速率]
+H --> I["UE在PUSCH上<br>以该速率发送数据"]
+```
+
+
+---
+
+-   **HARQ：**
+    
+    -   这是MAC层和物理层紧密协作的关键。理解**同步/异步、自适应/非自适应** HARQ。
+        
+    -   明确物理层负责HARQ软合并（Chase Combining或IR），而MAC层负责管理HARQ进程和生成ACK/NACK。
+        
+-   **链路自适应：**
+    
+    -   这是一个闭环过程：**UE测量CSI（基于CSI-RS） -> 上报CQI/PMI/RI -> 基站MAC调度器选择MCS -> 通过DCI下发 -> 物理层按此配置收发数据。**
+        
+    -   作为DL开发者，你需要理解CQI表格和MCS表格的映射关系，以及为什么信道质量差时会选择低阶调制和低编码率。
+        
+-   **MIMO：**
+    
+    -   理解**SU-MIMO**和**MU-MIMO**的基本原理。
+        
+    -   理解**预编码**、**传输层**、**码本**等概念。MAC层需要根据RI（秩指示）来决定同时传输的数据流数量。
+
+
+
+
+参考资料
+[sharetechnote-NR帧结构](https://www.sharetechnote.com/html/5G/5G_FrameStructure.html)
+
+[DCI_百度百科](https://baike.baidu.com/item/DCI/5804273)

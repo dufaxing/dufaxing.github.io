@@ -1,0 +1,44 @@
+---
+layout: post
+title:  "5G NR物理层基础5（测量与报告）"
+date:   2025-08-25 00:00:00
+categories: NR
+tags: 读书笔记
+excerpt: 从数据链路层出发，经常接触到的一些物理层基本概念汇总
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+## 0. 前言
+
+- RE: Resource Element,资源元素,它是无线资源网格中一个最小的单位，由“1个OFDM符号”时长和“1个子载波”带宽唯一确定，是承载信息（如调制符号、参考信号）的物理实体。<br>
+- RB：Resource Block - 资源块。是网络调度和分配资源的基本单位，通常由频域上12个连续的子载波和时域上1个时隙（例如14个OFDM符号）组成。<br>
+- REG：Resource Element Group - 资源元素组。通常由同一OFDM符号上的几个连续RE组成，主要用于控制信道（如PDCCH）的映射。<br>
+- CCE：Control Channel Element - 控制信道元素。由多个REG组成，是PDCCH传输的资源单位。<br>
+
+
+
+
+物理层的测量结果是高层层做出决策的“眼睛”。
+
+-   **RSRP/RSRQ：** 主要用于小区选择和重选、切换，与初始接入和移动性管理相关。
+    
+-   **SINR：** 信干噪比，这是衡量信道质量的直接指标，与CQI和BLER（误块率）有直接关系。
+    
+-   **CQI：** 信道质量指示，是一个综合测量结果后的“建议”值，直接对应到一套MCS。
+
+
+
+
+参考资料
+[sharetechnote-NR帧结构](https://www.sharetechnote.com/html/5G/5G_FrameStructure.html)
+[DCI_百度百科](https://baike.baidu.com/item/DCI/5804273)
