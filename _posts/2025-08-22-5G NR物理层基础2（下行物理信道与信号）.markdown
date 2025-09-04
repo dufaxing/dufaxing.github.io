@@ -127,7 +127,7 @@ D4 -.->|专用 RNTI| R8[TPC-PUCCH-RNTI]
         
     -   **场景**：
         
-        -   **初始接入**：在随机接入响应中，由TC-RNTI加扰。
+        -   **初始接入**：在随机接入MSG3发送过程，由TC-RNTI加扰。
             
         -   **常规调度**：由C-RNTI加扰，进行简单的上行数据发送。
             
@@ -416,7 +416,7 @@ timeline
 
 ## 2.6 NDI
 
-**2.6.1 新传 vs. 重传：NDI (New Data Indicator) 字段**
+**新传 vs. 重传：NDI (New Data Indicator) 字段**
 
 -   **字段位置**：在调度下行数据（PDSCH）的DCI（如Format 1\_0, 1\_1）和调度上行数据（PUSCH）的DCI（如Format 0\_0, 0\_1）中，都有一个1比特的NDI字段。
     
