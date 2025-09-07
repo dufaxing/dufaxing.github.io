@@ -1,0 +1,362 @@
+---
+layout: post
+title:  "NR PDCP流程"
+date:   2025-03-01 00:00:00
+categories: 5G协议栈
+tags: NR
+excerpt: NR PDCP
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# 1.PDCP简介
+
+
+PDCP层主要承担以下功能：
+
+1.  **用户面数据传输**：对数据包进行头压缩、加密。
+    
+2.  **控制面数据传输**：对RRC和NAS信令进行加密和完整性保护。
+    
+3.  **重复丢弃**：基于SN检测并丢弃重复接收的数据包。
+    
+4.  **按序递交**：对接收到的数据包进行重排序，然后按序递交给上层。
+    
+5.  **超时丢弃**：对于因HARQ失败等原因一直无法成功接收的数据包，在定时器超时后通知上层并丢弃。
+    
+
+PDCP实体与无线承载（RB）一一对应，分为**SRB（信令无线承载）** 和 **DRB（数据无线承载）**。
+
+
+
+---
+
+# 2 PDCP数据过程
+
+## 2.1 数据发送
+
+发送端主要负责从上层（SDAP或RRC）接收数据包（PDCP SDU），进行处理后交给下层（RLC）。
+
+1.  **接收SDU与分配SN**
+    
+    -   从上层（对于DRB是SDAP，对于SRB是RRC）接收PDCP SDU。
+        
+    -   为每个SDU分配一个**序列号（SN）**。SN的长度由RB类型决定（SRB通常为12bit，DRB可为12bit、18bit等）。
+        
+    -   **关键变量 `TX_NEXT`**： 用于分配SN的计数器。将当前 `TX_NEXT` 的值分配给SDU，然后 `TX_NEXT` 递增。
+        
+2.  **头压缩（仅限用户面DRB）**
+    
+    -   使用ROHC（Robust Header Compression）协议对IP数据包的头进行压缩，以减少无线空口的开销。
+        
+3.  **完整性保护（仅限控制面SRB）**
+    
+    -   使用特定的算法和密钥为数据计算一个**消息认证码（MAC-I）**，并将其附加在PDCP PDU的尾部。
+        
+4.  **加密（用户面和控制面）**
+    
+    -   使用特定的算法和密钥对PDCP PDU的**载荷（Payload）** 部分进行加密。**PDCP头不加密**。
+        
+5.  **添加PDCP头**
+    
+    -   构建PDCP头，其中包含：
+        
+        -   **SN**： 分配的序列号。
+            
+        -   **D/C Bit**： 区分数据PDU和控制PDU。
+            
+        -   ...等其他标志位。
+            
+6.  **缓存与下发**
+    
+    -   将处理完的PDCP PDU（包含SN、加密后的数据等）**下发至下层（RLC层）**。
+        
+    -   同时，将该PDU的**副本存入重传输缓冲区**。这是为了支持**PDCP层的数据恢复机制（重传）**（注：主要在切换等场景下触发，不同于RLC的重传）。
+
+
+**PDCP 发送端流程图**
+
+```mermaid
+graph TD
+    A[接收上层SDU<br>SDAP/RRC] --> B[分配序列号 SN = TX_NEXT];
+    B --> C{TX_NEXT++};
+    C --> D[RB类型?];
+    D -- DRB(用户面) --> E[执行ROHC头压缩];
+    D -- SRB(控制面) --> F[计算并添加完整性保护MAC-I];
+    E --> G[对所有数据执行加密];
+    F --> G;
+    G --> H[添加PDCP头<br>包含SN, D/C比特等];
+    H --> I[缓存PDU副本至重传缓冲区];
+    I --> J[下发PDU至下层RLC];
+    J --> K(结束);
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style J fill:#bbf,stroke:#333,stroke-width:2px
+    style K fill:#ddd,stroke:#333,stroke-width:2px
+```
+
+**发送流程关键点：**
+
+1.  **序列号分配**：每个新到的SDU都会分配一个唯一的SN，由 `TX_NEXT` 决定，分配后 `TX_NEXT` 自增。
+    
+2.  **差异化处理**：用户面数据进行头压缩，控制面数据进行完整性保护。
+    
+3.  **必选加密**：所有数据（用户面和控制面）的载荷部分都会被加密。
+    
+4.  **缓存机制**：发送后的PDU会被缓存，主要用于切换时的数据恢复。
+
+
+
+## 2.2 数据接收
+
+
+接收端主要负责从下层（RLC）接收数据包（PDCP PDU），进行处理后递交给上层。
+
+1.  **接收PDU与重复检测**
+    
+    -   从RLC层接收PDCP PDU。
+        
+    -   **关键变量 `RX_NEXT`**： 期望接收的下一个按序PDU的SN。
+        
+    -   **重复检测**： 如果收到PDU的SN < `RX_NEXT`，则认为是重复包，直接丢弃。
+        
+2.  **解密（用户面和控制面）**
+    
+    -   使用与发送端对应的算法和密钥，对PDU的载荷部分进行解密。
+        
+3.  **完整性验证（仅限控制面SRB）**
+    
+    -   计算接收到的数据的MAC-I，并与PDU尾部附带的MAC-I进行比对。如果验证失败，则丢弃该PDU并上报错误。
+        
+4.  **头解压缩（仅限用户面DRB）**
+    
+    -   对解密后的数据进行ROHC解压缩，恢复出原始的IP包头。
+        
+5.  **重排序与按序交付**
+    
+    -   接收端维护一个**重排序窗口**和**重排序缓冲区**。
+        
+    -   **关键变量 `RX_DELIV`**： 指向下一个需要按序递交给上层的PDU的SN。
+        
+    -   **关键变量 `RX_REORD`**： 用于管理重排序定时器`t-Reordering`。
+        
+    -   如果接收到的PDU的SN等于 `RX_DELIV`，则立即将其解密/验证后递交给上层，并递增 `RX_DELIV`。
+        
+    -   如果接收到的PDU的SN > `RX_DELIV`（即出现乱序），则将其存入重排序缓冲区。
+        
+    -   每当 `RX_DELIV` 被更新后，接收端都会检查重排序缓冲区中是否存在SN = `RX_DELIV` 的PDU。如果存在，则取出递交并再次递增 `RX_DELIV`，直到找不到连续的SN为止。这确保了**按序交付**。
+        
+6.  **重排序定时器**
+    
+    -   **定时器 `t-Reordering`**：
+        
+        -   当接收到一个SN > `RX_DELIV` 的PDU（即乱序），并且该SN超出了当前重排序窗口时，会启动或重启此定时器。
+            
+        -   该定时器**超时**意味着等待缺失PDU的时间已到。此时，接收端会将所有已缓存且SN < `RX_REORD` 的PDU都递交给上层（即使中间还有缺失），然后将 `RX_DELIV` 设置为 `RX_REORD`。这防止了因一个包丢失而一直阻塞后续所有包的上报。
+
+**PDCP 接收端流程图**
+
+```mermaid
+graph TD
+    A[从RLC接收PDU] --> B{SN < RX_NEXT?};
+    B -- 是 --> C[重复包，丢弃];
+    B -- 否 --> D[更新RX_NEXT为最大接收SN+1];
+    D --> E[执行解密];
+    E --> F{RB类型?};
+    F -- SRB(控制面) --> G{完整性验证};
+    G -- 失败 --> H[丢弃PDU并上报失败];
+    G -- 成功 --> I[移除MAC-I];
+    F -- DRB(用户面) --> J[执行ROHC头解压缩];
+    I --> K[PDU送入重排序缓冲区];
+    J --> K;
+
+    subgraph 重排序与按序交付引擎
+        K --> L{SN == RX_DELIV?};
+        L -- 是 --> M[立即递交上层];
+        M --> N[RX_DELIV++];
+        N --> O[检查缓冲区：<br>SN=RX_DELIV的PDU存在?];
+        O -- 存在 --> M;
+        O -- 不存在 --> P[退出];
+        L -- 否<br>SN > RX_DELIV --> Q[PDU存入缓冲区];
+        Q --> R[启动/重启t-Reordering定时器];
+    end
+
+    R --> P;
+    P --> Z(结束);
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style M fill:#bbf,stroke:#333,stroke-width:2px
+    style Z fill:#ddd,stroke:#333,stroke-width:2px
+```
+
+**接收流程关键点：**
+
+1.  **第一道关卡 - 重复检测**：利用 `RX_NEXT` 判断是否为重复包，是则直接丢弃。
+    
+2.  **安全操作**：先解密，再进行完整性验证或解压缩。
+    
+3.  **核心引擎 - 重排序与按序交付**：
+    
+    -   **按序直达**：如果收到的PDU正好是下一个期望的（`SN == RX_DELIV`），则直接递交上层，并尝试连续递交缓冲区中后续的数据。
+        
+    -   **乱序缓存**：如果收到的PDU是未来的数据（`SN > RX_DELIV`），则存入缓冲区，并启动/重启 `t-Reordering` 定时器。
+        
+4.  **定时器驱动 - 超时处理**：
+    
+    -   图中未直接绘制的 `t-Reordering` 定时器超时后，接收端会将所有已缓存且SN < `RX_REORD` 的PDU全部递交给上层，从而跳过丢失的包，防止交付阻塞。
+
+
+
+
+## 2.3 变量维护
+
+
+|变量名|	所属端|	含义与作用|
+|---|---|---|
+|TX_NEXT|	发送端|	Next PDU to transmit。<br>• 含义： 下一个将要分配给新PDCP SDU的序列号（SN）。<br>• 作用： 为每个新到的SDU分配一个唯一的SN，保证数据的可识别性。|
+|RX_NEXT|	接收端|	Next expected PDU。<br>• 含义： 期望按序接收的下一个PDCP PDU的SN。<br>• 作用： 重复检测的基准。任何SN < RX_NEXT 的PDU都会被丢弃。同时也是接收窗口的左边界。|
+|RX_DELIV|	接收端|	Next PDU to be delivered。<br>• 含义： 下一个要递交给上层的PDCP PDU的SN。<br>• 作用： 按序交付的指针。标识了重排序和交付的进度。|
+|RX_REORD|	接收端|	PDU SN to trigger t-Reordering。<br>• 含义： 与重排序定时器相关联的SN。当接收到SN >= RX_REORD 的PDU时，会启动t-Reordering定时器。<br>• 作用： 管理重排序定时器的触发和超时行为，防止交付过程被个别丢失的PDU无限期阻塞。|
+|t-Reordering|	接收端	|Reordering Timer。<br>• 含义： 一个定时器。<br>• 作用： 用于检测PDU丢失和触发乱序交付。超时后，强制将所有已缓存的、序列号低于RX_REORD的PDU递交给上层，从而绕过丢失的PDU，保证业务的连续性。|
+
+
+
+---
+
+# 3 PDCP状态报告
+
+NR PDCP层的状态报告（Status Report）流程是其数据恢复机制的核心，主要用于**切换（Handover）** 场景。
+
+首先需要明确一个核心概念：**PDCP状态报告是一个由接收端发往发送端的、用于指示丢失PDU的控制报文**。它不同于RLC的状态报告，它的主要目的不是用于常规的重传（那是RLC的工作），而是用于在基站切换后，快速恢复在源基站未能成功送达的数据。
+
+
+## 3.1触发时机
+
+PDCP状态报告不是周期性发送的，也不是由轮询触发的。它的触发时机非常特定：
+
+1.  **主要场景：切换过程中**
+    
+    -   当**目标基站**（Target gNB）为UE建立好新的PDCP实体后，会通过RRC信令指示UE的PDCP实体**执行重建（Re-establishment）**。
+        
+    -   **PDCP重建过程（Re-establishment）** 是触发接收端生成并发送状态报告的核心指令。
+        
+2.  **次要场景：连接重建立**
+    
+    -   在RRC连接重建（Reconfiguration with sync）过程中也可能触发PDCP重建和状态报告流程。
+
+
+## 3.2 状态报告流程
+
+```mermaid
+sequenceDiagram
+    participant UE
+    participant SgNB as 源 gNB
+    participant TgNB as 目标 gNB
+
+    Note over SgNB, TgNB: 1. 切换决策与准备
+    SgNB->>TgNB: SN STATUS TRANSFER (HFN, Next DL SN)
+
+    Note over UE, TgNB: 2. 切换执行
+    UE->>TgNB: 同步到目标小区
+    TgNB->>UE: RRC Reconfiguration<br>(指示PDCP重建)
+
+    Note right of UE: 3. UE侧(接收端)处理
+    UE->>UE: a. 暂停向上层递交<br>b. 生成PDCP状态报告
+    UE->>TgNB: 发送状态报告 (FMC, 缺失SN Bitmap)
+
+    Note right of TgNB: 4. 目标gNB侧(发送端)处理
+    TgNB->>TgNB: a. 根据状态报告识别缺失PDU<br>b. 从源gNB获取数据<br>c. 从重传缓冲区重传缺失PDU
+    TgNB->>UE: 重传丢失的PDCP PDU
+
+    Note over UE, TgNB: 5. 恢复与完成
+    UE->>UE: 接收重传，重组并按序递交
+    UE->>TgNB: 发送状态报告确认 (可选)
+    UE->>UE: 恢复正常数据处理
+```
+
+### **3.2.1\. 切换决策与准备（Preparation）**
+
+-   源gNB（Source gNB）做出切换决策，并与目标gNB（Target gNB）进行切换准备。
+    
+-   在`SN STATUS TRANSFER`消息中，源gNB会将下行链路（DL）的HFN（Hyper Frame Number）和下一个要发送的SN（`TX_NEXT`）等信息传递给目标gNB。**这是为了同步计数器状态，避免加解密不同步**。
+    
+
+### **3.2.2\. 切换执行（Execution）**
+
+-   UE断开与源小区的连接，并同步到目标小区。
+    
+-   目标gNB通过`RRC Reconfiguration`消息指示UE进行PDCP实体重建。
+    
+
+### **3.2.3\. UE侧（接收端）处理 - 生成状态报告**
+
+-   UE侧的PDCP实体收到重建指令后：
+    
+    -   **a. 暂停向上层（SDAP或RRC）递交数据**。
+        
+    -   **b. 生成一个PDCP状态报告（PDCP Status Report）**。
+        
+        -   这个报告是一个**控制PDU**（D/C比特设为0）。
+            
+        -   报告内容主要包括：
+            
+            -   **FMC (First Missing Count)**： 指示接收端**第一个丢失的PDCP SDU**的COUNT值（COUNT = HFN << SN长度 + SN）。这告诉了发送端丢失的起点。
+                
+            -   **Bitmap**： 一个比特映射，紧跟在FMC之后。每个比特对应FMC之后的一个SN：
+                
+                -   `0` 表示该SN对应的PDU**已成功接收**。
+                    
+                -   `1` 表示该SN对应的PDU**丢失或未成功接收**。
+                    
+        -   **c. 将状态报告发送给目标gNB**。
+            
+
+### **3.2.4\. 目标gNB侧（发送端）处理 - 解析与重传**
+
+-   目标gNB的PDCP实体（作为新的下行链路发送端）收到UE发来的状态报告后：
+    
+    -   **a. 解析报告**： 根据FMC和Bitmap，精确地计算出UE丢失了哪些PDU（即哪些SN的PDU需要重传）。
+        
+    -   **b. 获取数据**： 目标gNB通过回传链路（从源gNB到目标gNB的Xn接口）获取这些需要重传的PDCP SDU原始数据。
+        
+    -   **c. 重传**： 目标gNB**使用原有的SN和COUNT值（保持加密和完整性保护不变）**，将这些SDU重新构建为PDCP PDU，并通过新的RLC信道发送给UE。
+        
+    -   **注意**： 这些重传数据是作为**新数据**下发到RLC层的，由RLC层保证传输的可靠性。
+        
+
+### **3.2.5\. 恢复与完成（Completion）**
+
+-   UE收到重传的PDCP PDU后，由于SN和COUNT是连续的，可以顺利地解密、重组并按序递交给上层。
+    
+-   当所有缺失的PDU都被成功接收后，UE的PDCP实体恢复正常的数据接收和处理流程。
+    
+-   整个切换过程中的数据丢失得以恢复，保证了用户面业务的无中断或低中断。
+
+
+## 3.3 总结
+
+|特性|	说明|
+|---|---|
+|触发原因|	由PDCP重建过程触发，主要发生在切换期间。|
+|报告方向|	由接收端（UE） 发送给发送端（gNB）。|
+|报告内容|	包含FMC和Bitmap，精确指示丢失的PDU。|
+|主要目的|	数据恢复，确保在切换过程中不丢失数据包，保证业务的连续性。|
+|与RLC区别|	PDCP状态报告用于少次、大批量的数据恢复（切换时）；而RLC状态报告用于频繁、小批量的ARQ重传（日常传输中）。|
+|安全性	|重传的数据包使用原始的SN和COUNT，保持了加密和完整性保护的连续性，避免了安全上下文同步问题。|
+
+
+- 这个机制是NR实现无缝切换（Seamless Handover）和超高可靠性的关键技术之一。
+
+
+
+
+---

@@ -356,7 +356,7 @@ timeline
         : UE解码得知 K0=2, K1=6
     section 时隙 n+2
         PDSCH : UE接收下行数据
-    section 时隙 n+8
+    section 时隙 n+6
         PUCCH : UE发送HARQ-ACK反馈
 ```
 
