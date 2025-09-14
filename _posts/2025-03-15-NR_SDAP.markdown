@@ -1,0 +1,203 @@
+---
+layout: post
+title:  "NR SDAP流程"
+date:   2025-03-15 00:00:00
+categories: 5G协议栈
+tags: NR
+excerpt: NR SDAP
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+# 1.SDAP简介
+
+SDAP是5G中引入的一个全新协议层，位于PDCP层之上。它的核心目的是**处理QoS（服务质量）流与无线承载之间的映射**，并**为下行数据包标记QoS流标识（QFI）**。
+
+
+在4G LTE中，核心网（EPC）的承载与无线接入网（eNB）的无线承载（Data Radio Bearer, DRB）是严格一一对应的（即E-RAB）。这种“硬”连接缺乏灵活性。
+
+5G为了支持更丰富多样的业务（如eMBB， mMTC, URLLC），引入了**QoS流（QoS Flow）** 的概念。一个PDU会话（类似4G的EPS承载）中可以包含多个具有不同QoS需求的QoS流。SDAP层就是为了高效、灵活地管理这些流而生的，其主要功能包括：
+
+1.  **映射功能**：将不同QoS流的IP数据包映射到适当的DRB上进行传输。
+    
+2.  **标记功能**（仅下行）：在下行数据包中添加QFI（QoS Flow ID）标记，帮助终端（UE）识别数据包所属的QoS流。
+    
+3.  **反射QoS功能**：支持UE根据下行数据的QoS特性，自动为相应的上行数据配置相同的QoS映射规则，无需网络显式配置。
+
+
+---
+
+# 2 SDAP数据过程
+
+## 2.1 上行方向（UE -> gNB）
+
+上行方向的处理相对简单，因为UE通常不需要告诉网络QFI信息（网络自己知道）。
+
+**详细步骤说明：**
+
+1.  **数据包生成**：UE的上层应用产生上行数据包。
+    
+2.  **UE侧的SDAP处理**：
+    
+    -   **映射决策**：UE中的SDAP实体根据**映射规则**，决定该数据包属于哪个QoS流，并将其映射到对应的DRB上。这个映射规则来源于：
+        
+        -   **显式配置**：网络通过RRC信令下发的配置。
+            
+        -   **反射QoS**：UE根据之前下行数据包的QFI信息，“反射”地应用到上行数据包上。例如，如果UE收到一个下行视频流属于QFI=5且映射在DRB3上，那么它发送对应的上行确认或控制信息时，也会使用相同的QFI，并映射到DRB3上。
+            
+    -   **通常不添加头部**：在绝大多数情况下，**上行SDAP数据包没有SDAP头**。因为gNB已经知道DRB和QoS流之间的映射关系（正是它配置给UE的），所以不需要显式的QFI标记。只有一种极特殊的反射QoS场景下才可能添加头部。
+        
+3.  **空口传输**：数据包通过PDCP等下层协议处理后，经空口发送给gNB。
+    
+4.  **gNB侧的SDAP处理**：
+    
+    -   gNB根据接收数据包所使用的**DRB**，直接推断出该数据包对应的QoS流（QFI）。因为每个DRB到QoS流的映射关系在gNB中是明确记录的。
+        
+    -   gNB移除任何可能存在的SDAP头（通常没有），然后将数据包通过N3接口的GTP-U隧道转发给核心网UPF。
+        
+
+> **关键点**：上行方向，SDAP头**通常不存在**。映射关系由DRB本身隐含地确定。
+
+
+
+
+## 2.2 下行方向（gNB -> UE）
+
+
+```mermaid
+graph LR
+A[5G核心网<br>UPF] --> B[发送下行数据包<br>携带QFI]
+B -- N3接口<br>GTP-U隧道 --> C[gNB接收]
+C --> D{gNB内部处理}
+D --> E[SDAP层]
+subgraph E[SDAP层处理]
+    F[根据QFI与<br>映射规则] --> G[查找映射到的DRB]
+    H[为数据包添加SDAP头<br>内含QFI] --> I[传递给下层<br>PDCP]
+end
+G --> H
+I -- 通过空口传输 --> J[UE接收]
+J --> K{UE内部处理}
+K --> L[SDAP层]
+subgraph L[UE SDAP层处理]
+    M[读取SDAP头中的QFI] --> N[移除SDAP头]
+    N --> O[将数据包与QFI<br>一并送往高层]
+end
+```
+
+1.  **数据包到达gNB**：5G核心网的用户面功能（UPF）通过N3接口，使用GTP-U隧道将用户数据包发送到gNB。这些数据包在核心网层面已经被标记了QFI。
+    
+2.  **gNB侧的SDAP处理**：
+    
+    -   **映射决策**：gNB中的SDAP实体根据配置的**QoS流到DRB的映射规则**，检查数据包的QFI，并决定将其映射到哪一个DRB上。这个映射规则可以由核心网通过N2接口的QoS策略显式配置，或者由gNB自主决定。
+        
+    -   **添加SDAP头**：SDAP层为数据包添加一个非常简单的头部（通常只有1字节），这个头部包含最重要的信息——**QFI**。
+        
+    -   **传递至下层**：将添加了SDAP头的数据包传递给下层的PDCP协议，进行加密、完整性保护等后续处理。
+        
+3.  **空口传输**：数据包经过PDCP、RLC、MAC和PHY层的处理后，通过无线空口发送给UE。
+    
+4.  **UE侧的SDAP处理**：
+    
+    -   **接收并向上解析**：UE的协议栈从PHY层开始向上解析，经过MAC、RLC、PDCP层后，到达SDAP层。
+        
+    -   **读取QFI并移除头部**：UE的SDAP实体读取SDAP头中的QFI信息，然后**移除SDAP头**。
+        
+    -   **送往高层**：将原始数据包和它对应的QFI信息一并上报给上层应用。这样，UE的高层就知道这个数据包属于哪个QoS流，从而可能根据其优先级进行处理。
+        
+
+> **关键点**：下行方向，SDAP头是**存在的**，用于告知UE每个数据包属于哪个QoS流。
+
+
+
+|关键参数|		作用|
+|---|---|
+|QFI (QoS Flow Identifier)	|	核心标识：告知UE这个数据包属于哪个QoS流。|
+|RDI (Reflective QoS flow to DRB mapping Indication)	|	功能触发：置‘1’时，指示UE应为此QFI创建或更新反射QoS规则。|
+|RQI（Reflective QoS Indication）|设置为1时，需要通知NAS。（NAS一般会释放那条对应的反射映射规则）|
+
+
+## 2.3 小结
+
+|方向|	核心操作|	SDAP头|	关键角色|
+|---|---|---|---|
+|下行 (gNB -> UE)|	映射 + 标记|	有（包含QFI）	告知UE数据包所属的QoS流
+|上行 (UE -> gNB)|	仅映射|	通常无|	gNB根据DRBID自行判断QoS流|
+
+
+SDAP工作流程的核心思想：
+
+解耦与灵活：实现了核心网QoS流与接入网无线承载的解耦。一个DRB可以传输多个QoS流（只要它们的QoS需求相似），一个QoS流也可以在特定条件下切换到另一个DRB，提供了极大的灵活性。
+
+简化UE处理：通过下行的显式标记，UE可以轻松识别业务类型，便于进行业务级的优化和处理。
+
+支持反射QoS：为URLLC等低时延业务提供了快速建立上行同步QoS的能力，无需等待网络的显式配置，降低了信令开销和时延。
+
+---
+
+# 3 End-Marker Control PDU
+
+核心作用：标识QoS流映射关系的结束
+
+**End-Marker Control PDU的主要目的是为了在网络决定改变一个或多个QoS流与DRB（数据无线承载）的映射关系时，确保数据能够按顺序、无丢失地完成传输切换。**
+
+它表示为一个**分隔符**或**切换完成信号**。它标志着**之前**的映射规则下，属于某个QoS流的所有**用户数据**都已经发送完毕。接下来，新的映射规则将正式生效。
+
+
+## 3.1 解决的问题
+
+假设一个场景：
+
+1.  最初，**QoS Flow A** 被映射到 **DRB 1** 上进行传输。
+    
+2.  由于网络条件变化（例如，QoS Flow A的业务需求变化，或网络负载均衡），gNB决定将 **QoS Flow A** 从 **DRB 1** **重映射**到 **DRB 2** 上。
+    
+
+这个切换过程会带来一个挑战：**数据包乱序和丢失**。
+
+-   gNB在发出切换命令（通过RRC重配置）后，可能还有一些属于QoS Flow A的数据包正在**DRB 1**的队列中（在RLC或PDCP层）等待发送或重传。
+    
+-   同时，新的属于QoS Flow A的数据包已经开始通过**DRB 2**发送。
+    
+
+如果没有任何措施，UE会先收到通过**DRB 2**发来的新数据包，然后才收到滞留在**DRB 1**队列中的旧数据包，导致**数据乱序**。对于某些业务（如TCP），乱序会被认为是丢包，从而触发重传，降低吞吐量。
+
+**End-Marker Control PDU就是为了解决这个问题而设计的。**
+
+
+## 3.2 工作流程
+
+```mermaid
+sequenceDiagram
+    participant UE
+    participant gNB
+
+    Note over UE, gNB: 初始状态: QFI=5 通过反射QoS映射到 DRB-X
+
+    gNB->>UE: 1. 发送RRC重配置消息<br/>显式配置新规则: QFI=5 → DRB-Y
+
+    Note over UE, UE: 2. UE准备应用新规则
+    UE->>UE: a. 发现已有旧规则(QFI=5→DRB-X)<br/>b. 且新规则是显式配置的<br/>c. 且配置了default DRB
+
+    UE->>UE: 3. 为旧规则构造End-Marker PDU
+    Note right of UE: SDAP Entity 构造End-Marker PDU<br/>其中包含QFI=5
+
+    UE->>gNB: 4. 在旧DRB上发送End-Marker
+    Note right of UE: 将End-Marker PDU通过<br/>旧的DRB-X发送给gNB
+
+    UE->>UE: 5. 应用新规则
+    Note right of UE: 发送完毕后，UE正式应用新规则：<br/>之后QFI=5的上行数据通过DRB-Y发送
+
+    gNB->>gNB: 6. gNB接收并处理
+    Note left of gNB: 收到DRB-X上的End-Marker后，<br/>gNB知道此后QFI=5的数据<br/>将不再出现在DRB-X上。
+```
+
+---
