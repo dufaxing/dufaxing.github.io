@@ -1,0 +1,57 @@
+---
+layout: post
+title:  "5G通信中fifo的使用"
+date:   2025-10-21 00:00:00
+categories: NR
+tags: 数据内存
+excerpt:    NR数据链路层常见FIFO的使用机制
+mathjax: true
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+# 前言
+
+5G通信对数据链路层的内存申请释放，有更高时序要求。FIFO是数据链路层常见的内存申请释放机制。
+
+
+# 顺序FIFO:
+
+
+
+
+---
+
+
+
+# 乱序FIFO
+
+假如数据链路层需要维护一个20块的内存，那么我们定义一个深度为20的循环FIFO。如图所示（为方便表示，红色第一块为绿色FIFO循环后的起始位）
+
+
+[![pVOQra6.jpg](https://s21.ax1x.com/2025/10/21/pVOQra6.jpg)](https://imgchr.com/i/pVOQra6)
+
+
+- step1：初始化，read_idx初始化为0，write_idx初始化为FIFO的最大深度20，并将FIFO中填入对应的index。
+- step2: 连续申请了两个TB，TB0与TB1。
+- step3：TB1释放，将TB1写入write index对应的FIFO中。
+- step4：TB0释放，将TB0写入write index对应的FIFO中。
+- step5：连续申请18块TB，不进行释放。
+- step6：在继续申请2TB，此时先申请到TB1，在申请到TB0。
+
+此时FIFO中20块TB内存被全部申请，满足`read_idx=write_idx`
+
+---
+
+
+
+
+
+---
