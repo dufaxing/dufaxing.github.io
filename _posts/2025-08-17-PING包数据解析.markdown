@@ -405,6 +405,20 @@ C. ICMPv6 Echo Reply 报文
 | 数据 (Data) | 61 62 63 ... | 必须与请求包完全一致。原样返回发送的数据载荷，用于验证数据完整性。 |
 
 
+## 5 其他说明
+
+使用上位机ping包测试时，CMD显示
+
+```
+Reply from 220.181.38.148: bytes=32 time=25ms TTL=53 seq=0
+Reply from 220.181.38.148: bytes=32 time=26ms TTL=53 seq=1
+Reply from 220.181.38.148: bytes=32 time=25ms TTL=53 seq=2
+```
+
+Windows ping显示的seq是Windows ping程序内部维护的序列号，用于标识请求的顺序，不是ICMP协议中定义的Sequence Number字段。它们在功能上相似，但实现上是独立的，因此可能会出现显示连续但实际ICMP Sequence Number不连续的情况。
+
+
+
 ## 参考文献
 
 [ICMP报文通用格式](https://support.huawei.com/enterprise/zh/doc/EDOC1100174722/b9500c21#ZH-CN_CONCEPT_0254009171){:target="_blank"}
