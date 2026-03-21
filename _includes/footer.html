@@ -19,8 +19,15 @@
             {% endif %}
         </p>
         <p class="stats">
-            <!-- 不蒜子统计 -->
-            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>           
+            <!-- 不蒜子统计 - 延迟加载 -->
+            <script>
+            window.addEventListener('load', function() {
+              var script = document.createElement('script');
+              script.async = true;
+              script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+              document.head.appendChild(script);
+            });
+            </script>
             本站总访问量<span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span>次，
             本站访客数<span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span>人次，
             本文总阅读量<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>次

@@ -8,33 +8,43 @@
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
     <link rel="stylesheet" href="{{ "/css/main.css " | prepend: site.baseurl }}">
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml " | prepend: site.baseurl | prepend: site.url }}">
-    <!-- Font Awesome 6 CDN -->
+
+    <!-- Font Awesome 6 CDN - 统一使用最新版本 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Highlight.js for code highlighting - 延迟加载 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.staticfile.net/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <script>hljs.highlightAll();</script>
+    <script>
+    window.addEventListener('load', function() {
+      var script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js';
+      script.onload = function() {
+        hljs.highlightAll();
+      };
+      document.head.appendChild(script);
+    });
+    </script>
 {% if site.baidu_tongji_id %}
     <script>
-    // 百度统计代码
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?{{site.baidu_tongji_id}}";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+    // 百度统计代码 - 延迟加载
+    window.addEventListener('load', function() {
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?{{site.baidu_tongji_id}}";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    });
     </script>
 {% endif %}
 {% if site.google_analytics_id %}
     <script>
-    // google analytics
+    // Google Analytics - 延迟加载
+    window.addEventListener('load', function() {
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -42,7 +52,7 @@
 
       ga('create', '{{site.google_analytics_id}}', 'auto');
       ga('send', 'pageview');
-
+    });
     </script>
 {% endif %}
 
@@ -60,6 +70,13 @@
 </script>
 {% endif %}
 
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<!-- Mermaid 图表库 - 按需延迟加载 -->
+<script>
+window.addEventListener('load', function() {
+  var script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js';
+  document.head.appendChild(script);
+});
+</script>
 
 </head>
