@@ -75,6 +75,13 @@
 window.addEventListener('load', function() {
   var script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js';
+  script.onload = function() {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose'
+    });
+  };
   document.head.appendChild(script);
 });
 </script>
