@@ -72,14 +72,32 @@
 
 <!-- Mermaid 图表库 - 按需延迟加载 -->
 <script>
-window.addEventListener('load', function() {
+window.addEventListener('DOMContentLoaded', function() {
   var script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js';
   script.onload = function() {
+    // 初始化Mermaid
     mermaid.initialize({
       startOnLoad: true,
       theme: 'default',
       securityLevel: 'loose'
+    });
+
+    // 处理kramdown生成的代码块
+    var mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+    mermaidBlocks.forEach(function(block) {
+      var parent = block.parentElement;
+      var code = block.textContent || block.innerText;
+
+      // 创建新的div元素用于渲染
+      var mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = code;
+
+      // 替换原始代码块
+      if (parent.parentNode) {
+        parent.parentNode.replaceChild(mermaidDiv, parent);
+      }
     });
   };
   document.head.appendChild(script);
