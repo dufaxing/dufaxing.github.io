@@ -17,6 +17,9 @@ mathjax: true
 
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
+# 模型排名
+
+[LLM Stats](https://llm-stats.com/){:target="_blank"}
 
 # AI开放平台
 
@@ -42,6 +45,35 @@ mathjax: true
 [MCP.SO](https://mcp.so/){:target="_blank"}
 
 ---
+
+# hermes
+
+docker配置
+```
+services:
+ hermes:
+  image: nousresearch/hermes-agent:latest
+  container_name: hermes
+  restart: unless-stopped
+  command: gateway run
+  ports:
+   - "8642:8642"                        # 端口映射，用于仪表盘或外部工具访问 [citation:1]
+  environment:
+   - PATH=/opt/hermes/.venv/bin:/usr/local/bin:/usr/bin:/bin # 修正格式，移除短横线后的多余空格
+  stdin_open: true
+  tty: true
+  volumes:
+   - ./.hermes:/opt/data                 # 数据持久化目录
+  deploy:
+   resources:
+    limits:
+     memory: 4G
+     cpus: "2.0"
+```
+
+进入配置，选择LLM，跟聊天通道目前已经支持QQ跟飞书等。
+
+`hermes setup`
 
 # Demo
 
