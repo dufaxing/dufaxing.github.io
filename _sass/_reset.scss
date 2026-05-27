@@ -84,18 +84,21 @@ blockquote {
     }
 }
 table {
-    border-top: 2px solid #777;
-    border-bottom: 2px solid #777;
-    margin: 8px 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    margin: 12px 0;
     border-collapse: collapse;
     thead {
-        border-bottom: 1px solid #777;
-        background-color: #aaa;
+        border-bottom: 2px solid #777;
+        background-color: #666;
         color: #fff;
     }
     th {
-        padding: 2px 10px;
+        padding: 8px 12px;
         text-align: left;
+        &:first-child {
+            width: 30%;
+        }
     }
     tbody {
         tr {
@@ -105,10 +108,14 @@ table {
             &:nth-of-type(2n) {
                 background-color: #e5eaed;
             }
+            &:hover {
+                background-color: #dce8f0;
+            }
         }
     }
     td {
-        padding: 2px 10px;
+        padding: 8px 12px;
+        border-bottom: 1px solid #ddd;
     }
 }
 p {
