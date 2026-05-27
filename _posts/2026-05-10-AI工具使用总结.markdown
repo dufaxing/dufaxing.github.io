@@ -14,39 +14,159 @@ mathjax: true
 ![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
 
 
-
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
-# 模型排名
+# 📊 模型排名
 
-[LLM Stats](https://llm-stats.com/){:target="_blank"}
-
-# AI开放平台
-
-[DeepSeek](https://platform.deepseek.com/usage){:target="_blank"}
-
-[MiniMax](https://platform.minimaxi.com/user-center/basic-information){:target="_blank"}
-
-[智谱](https://open.bigmodel.cn/console/overview){:target="_blank"}
+| 工具 | 简介 |
+|------|------|
+| [LLM Stats](https://llm-stats.com/){:target="_blank"} | LLM性能排行榜，对比各模型的基准测试结果 |
 
 ---
 
-# 工作站
+# 🌐 AI开放平台
 
-[Cherry Studio](https://www.cherry-ai.com/){:target="_blank"}
-
-[CodeX](https://openai.com/zh-Hans-CN/codex/){:target="_blank"}
-
-
----
-
-# MCP
-
-[MCP.SO](https://mcp.so/){:target="_blank"}
+| 平台 | 简介 |
+|------|------|
+| [DeepSeek](https://platform.deepseek.com/usage){:target="_blank"} | 深度求索AI开放平台，提供API调用和模型服务 |
+| [MiniMax](https://platform.minimaxi.com/user-center/basic-information/){:target="_blank"} | MiniMax大模型开放平台，支持多种AI能力调用 |
+| [智谱](https://open.bigmodel.cn/console/overview){:target="_blank"} | 智谱AI开放平台，提供GLM系列大模型API |
 
 ---
 
-# hermes
+# 💻 工作站
+
+| 工具 | 简介 |
+|------|------|
+| [Cherry Studio](https://www.cherry-ai.com/){:target="_blank"} | 开源的AI客户端工具，支持多模型和自定义助手 |
+
+---
+
+# 🧠 Claude
+
+Claude是Anthropic开发的AI助手系列，包含网页版、桌面应用和命令行工具。Claude Code是终端原生的Agentic编程工具，2026年贡献了GitHub 4%的公开提交量，SWE-bench达到80.9%。
+
+> **核心能力：** 200K上下文窗口（Opus 4.6 支持1M beta）、Agent Teams多智能体协作、`/goal` 自主目标追踪、MCP协议集成、Skills渐进式加载、Hooks生命周期自动化、CLAUDE.md分层记忆系统。
+
+## 官方应用
+
+| 应用 | 简介 |
+|------|------|
+| [Claude.ai](https://claude.ai/){:target="_blank"} | 网页版AI助手 |
+| [Claude桌面应用](https://claude.ai/download){:target="_blank"} | Mac/Windows桌面客户端，支持本地文件访问 |
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview){:target="_blank"} | 终端原生的Agentic编程工具，支持自主完成复杂开发任务 |
+
+## 热门Skills
+
+| Skill | 功能 |
+|-------|------|
+| `/review` | 代码审查，分析代码问题 |
+| `/test` | 生成测试用例 |
+| `/explain` | 解释代码逻辑 |
+| `/fix` | 修复代码问题 |
+| `/search` | 搜索代码库 |
+| `/goal` | 定义完成条件，跨轮次自主工作直到目标达成 |
+| `/commit` | 自动生成提交信息并创建commit |
+| `/pr` | 创建Pull Request |
+
+## MCP Servers
+
+| 资源 | 简介 |
+|------|------|
+| [MCP官方文档](https://modelcontextprotocol.io/){:target="_blank"} | 模型上下文协议官网 |
+| [awesome-mcp](https://github.com/punkpeye/awesome-mcp-servers){:target="_blank"} | MCP资源汇总，收录3000+社区和官方MCP服务器 |
+
+## 插件
+
+| 插件 | 简介 |
+|------|------|
+| [claude-hud](https://github.com/jarrodwatts/claude-hud){:target="_blank"} | Claude桌面应用的HUD界面增强插件 |
+| [cc-switch](https://github.com/farion1231/cc-switch/releases){:target="_blank"} | Claude Code模型切换工具，快速切换不同模型 |
+
+---
+
+# ⌨️ CodeX
+
+## 官方应用
+
+| 应用 | 简介 |
+|------|------|
+| [CodeX](https://openai.com/zh-Hans-CN/codex/){:target="_blank"} | OpenAI的AI编程助手，已集成于ChatGPT |
+| [Codex CLI](https://github.com/openai/codex){:target="_blank"} | 开源终端AI编程助手（Rust开发，Apache 2.0），支持自主Agent模式 |
+| [Codex API](https://platform.openai.com/docs/guides/code){:target="_blank"} | OpenAI codex模型API |
+
+## Skills
+
+Codex Skills是模块化指令包，每个技能含 `SKILL.md`（YAML frontmatter + 步骤指导），渐进式加载匹配任务时自动激活。
+
+| Skill | 功能 |
+|-------|------|
+| `$plan` | 执行规划 |
+| `$skill-creator` | 脚手架创建新技能 |
+| `$skill-installer` | 从GitHub/本地路径安装技能 |
+
+| 资源 | 简介 |
+|------|------|
+| [awesome-codex-skills](https://github.com/ComposioHQ/awesome-codex-skills){:target="_blank"} | 40+精选技能合集 |
+| [Everything Claude Code](https://github.com/affaan-m/everything-claude-code){:target="_blank"} | 182个技能包（TDD/安全/代码审查/架构） |
+
+> 技能存放路径：`~/.codex/skills/`（全局）或 `.codex/skills/`（项目级）
+
+## 插件
+
+通过 `.codex-plugin/plugin.json` 将 Skills + MCP + 应用集成打包为可分发插件：
+
+| 命令/工具 | 说明 |
+|-----------|------|
+| `codex plugin marketplace add <源>` | 添加市场 |
+| `codex plugin install <发布者/名称>` | 安装插件 |
+| [skillpp](https://pypi.org/project/skillpp/){:target="_blank"} | 跨平台技能/插件管理器（Codex/Claude/Copilot） |
+| [skillporter](https://github.com/keithmackay/skillporter){:target="_blank"} | 跨平台技能移植工具 |
+
+## 增强工具
+
+| 工具 | 简介 |
+|------|------|
+| [Codex++](https://github.com/BigPizzaV3/CodexPlusPlus){:target="_blank"} | Codex App增强启动器，通过CDP注入实现API Key模式解锁插件、会话删除、Markdown导出、中转配置切换。Python 3.11+，pip安装 |
+
+---
+
+# 🤖 hermes
+
+hermes是NousResearch开源的AI Agent框架（134K+ Stars），独特之处在于**内置学习循环**——每15次工具调用自动生成 `SKILL.md`，Curator模块7天周期自动评估、合并、修剪技能。
+
+> **核心能力：** 20+聊天平台、自学习技能生成、70+内置工具、多Provider支持、MCP集成、插件架构。
+
+## 官方资源
+
+| 资源 | 简介 |
+|------|------|
+| [hermes-agent](https://github.com/NousResearch/hermes-agent){:target="_blank"} | GitHub仓库 |
+| [官方文档](https://hermes-agent.nousresearch.com/){:target="_blank"} | hermes配置和使用指南 |
+| [awesome-hermes-agent](https://github.com/0xNyk/awesome-hermes-agent){:target="_blank"} | 技能、工具、集成资源汇总 |
+
+## Skills
+
+hermes技能通过内置学习循环自动生成并可手动发布到市场：
+
+| 市场/资源 | 简介 |
+|-----------|------|
+| [AgentSkills.io](https://agentskills.io/){:target="_blank"} | 开源标准技能市场，跨工具兼容（Claude/OpenClaw/Codex） |
+| [SkillHub](https://github.com/CodeSigils/hermes-skill-hq){:target="_blank"} | hermes技能知识库与市场导航 |
+| [HermesNest](https://hermesnest.ai/){:target="_blank"} | Agent-only技能市场，密码学验证管道 |
+| Shopify官方技能 | 电商运营（产品管理/订单/库存） |
+| 753+ 网络安全技能 | MITRE ATT&CK映射安全技能集 |
+
+## 插件
+
+| 插件 | 功能 |
+|------|------|
+| **ArkClaw** | 火山引擎消息渠道集成与任务调度 |
+| **OpenClaw Bridge** | 双向消息路由，自动加载 `skill.yaml` |
+| **MCP Protocol v1.3** | 非侵入式能力扩展（API/数据库/IoT） |
+| **AgentSkills.io Plugin** | 一键安装安全审计第三方技能（SHA-256+沙箱） |
+| **rtk-hermes** | Token压缩插件，500K+上下文压缩60-90%，支持11M+超长上下文 |
+| **agent-analytics** | 执行路径可视化、工具调用成功率、本地SQLite |
 
 docker配置
 ```
@@ -57,13 +177,13 @@ services:
   restart: unless-stopped
   command: gateway run
   ports:
-   - "8642:8642"                        # 端口映射，用于仪表盘或外部工具访问 [citation:1]
+   - "8642:8642"
   environment:
-   - PATH=/opt/hermes/.venv/bin:/usr/local/bin:/usr/bin:/bin # 修正格式，移除短横线后的多余空格
+   - PATH=/opt/hermes/.venv/bin:/usr/local/bin:/usr/bin:/bin
   stdin_open: true
   tty: true
   volumes:
-   - ./.hermes:/opt/data                 # 数据持久化目录
+   - ./.hermes:/opt/data
   deploy:
    resources:
     limits:
@@ -71,62 +191,318 @@ services:
      cpus: "2.0"
 ```
 
-进入配置，选择LLM，跟聊天通道目前已经支持QQ跟飞书等。
+进入配置选择LLM，聊天通道目前支持QQ、飞书等。
 
 `hermes setup`
 
-# Demo
+---
 
-## API接入deep seek
+# 🔧 PI Agent
 
-```python
-import os
-from openai import OpenAI
+Pi是Mario Zechner（libGDX/RoboVM作者）打造的极简开源AI编程Agent工具包（TypeScript开发，46K+ Stars）。设计哲学："极度可扩展，不强迫工作流"——故意不加MCP、子Agent、权限弹窗等内置功能，全部通过扩展实现。
 
-# 1. 初始化客户端
-# 建议通过环境变量设置API Key，避免在代码中明文显示，更安全
-# 使用时，请先在你的终端或系统环境变量中设置 DEEPSEEK_API_KEY
-'''
-client = OpenAI(
-    api_key=os.environ.get("DEEPSEEK_API_KEY"), # 从环境变量读取Key
-    base_url="https://api.deepseek.com",        # DeepSeek的API地址
-)
-'''
-# 如果你想直接在代码里测试，可以将上面两行临时替换为：
-client = OpenAI(api_key="api-key", base_url="https://api.deepseek.com")
+> **核心能力：** 四种运行模式（交互式TUI / 管道输出 / RPC进程 / SDK嵌入）、会话树形分支与分叉、25+ LLM Provider统一API、TypeScript扩展系统、Agent Skills标准支持、Pi Packages生态分发。
 
-def call_deepseek(prompt):
-    """
-    向DeepSeek发送提示词并获取回复
-    """
-    try:
-        # 2. 发送请求
-        response = client.chat.completions.create(
-            model="deepseek-v4-pro",    # deekseek模型
-            messages=[
-                {"role": "system", "content": "你是一个乐于助人的助手。"}, # 设定AI角色
-                {"role": "user", "content": prompt},                        # 用户的问题
-            ],
-            stream=False,                # 非流式输出，等待完整回复
-            temperature=0.7,             # 控制创造性，范围0-1，越高越有创意
-        )
+## 官方资源
 
-        # 3. 处理并返回结果
-        reply = response.choices[0].message.content
-        return reply
+| 资源 | 简介 |
+|------|------|
+| [Pi](https://github.com/earendil-works/pi){:target="_blank"} | GitHub仓库，含CLI、Agent运行时、多Provider API、TUI库 |
+| [官方网站](https://pi.dev/){:target="_blank"} | Pi Agent 官网 |
+| [Pi Agent Core](https://www.npmjs.com/package/@earendil-works/pi-agent-core){:target="_blank"} | npm包，Agent运行时核心 |
 
-    except Exception as e:
-        print(f"调用API时出错: {e}")
-        return None
+## Extensions 扩展
 
-# 4. 主程序
-if __name__ == "__main__":
-    user_input = input("请输入你的问题: ")
-    print("正在思考...")
-    result = call_deepseek(user_input)
-    if result:
-        print(f"\nLLM的回答:\n{result}")
+Pi通过TypeScript扩展模块注册自定义工具、命令、热键、UI组件和子Agent：
+
+| 类别 | 代表性扩展 |
+|------|-----------|
+| **安全/沙箱** | `nono`（内核级能力沙箱）、`sandbox`（OS级隔离）、`permission-gate` |
+| **子Agent编排** | Plan mode、并行分发、链式执行、subagent协调 |
+| **搜索/网络** | Brave、Exa、SearXNG、Kagi、Jina fetch、GitHub search |
+| **模型Provider** | OpenRouter（Kimi/Gemini/Grok）、Groq、Together |
+| **集成** | MCP适配器、Discord/Telegram桥接、SSH远程、Bitwarden |
+| **自动化** | `loop`（周期轮询）、`until`（条件迭代） |
+
+> 安装：`pi install npm:@包名` 或 `pi install git:github.com/作者/仓库`
+
+## Skills
+
+Pi支持Agent Skills标准的 `SKILL.md`，通过 `/skill:name` 调用或自动匹配：
+
+| 资源 | 简介 |
+|------|------|
+| [Heart of Gold Toolkit](https://www.npmjs.com/package/@heart-of-gold/toolkit){:target="_blank"} | 最大统一技能包（32技能、5插件），支持Pi/Claude/Codex |
+| [Pi Agent Kit](https://github.com/aldoborrero/pi-agent-kit){:target="_blank"} | 综合工具包（33扩展、5技能、6 Agent、4提示模板） |
+| [awesome-pi-agent](https://github.com/qualisero/awesome-pi-agent){:target="_blank"} | Pi扩展、技能、工具精选列表 |
+
+## Pi Packages 生态
+
+将扩展+技能+提示模板+主题打包为npm/git可分发包，社区通过 `pi install` 一键安装。
+
+---
+
+# 🦞 OpenClaw
+
+OpenClaw是2026年最热门的开源自托管AI Agent网关（34.7万+ Stars，Apache 2.0），定位"把LLM从对话式AI升级为行动式AI"。七层架构：渠道层→网关→Agent运行时→技能系统→记忆→插件→本地执行。
+
+> **核心能力：** 20+聊天平台（WhatsApp/Telegram/Discord/微信/飞书/钉钉/Slack等）、200+ LLM支持、四层记忆（会话→日志→MEMORY.md→向量检索）、7×24自主运行（HEARTBEAT.md + Cron）、Commander-Worker多Agent编排、A2A通信、Docker沙箱安全执行。
+
+## 官方资源
+
+| 资源 | 简介 |
+|------|------|
+| [OpenClaw](https://github.com/openclaw/openclaw){:target="_blank"} | 开源自托管AI助手 |
+| [awesome-openclaw](https://github.com/SamurAIGPT/awesome-openclaw){:target="_blank"} | 资源、技能、教程汇总 |
+| [中文文档](https://github.com/liyupi/openclaw-guide){:target="_blank"} | OpenClaw中文指南，程序员鱼皮维护 |
+
+## ClawHub 技能市场
+
+ClawHub是OpenClaw内置的技能市场（13,729+技能，31个分类），支持SHA-256密码学验证：
+
+```bash
+openclaw skills search <关键词>    # 搜索技能
+openclaw skills install <技能名>   # 安装技能
+openclaw skills update             # 更新技能
 ```
 
+> **跨生态兼容：** 可直接发现和导入来自Claude、Codex、Cursor平台的插件包，自动映射为OpenClaw格式。
+>
+> **安全隐患：** 约7.1%的技能存在API密钥泄露风险（Snyk报告），建议隔离容器运行并审计技能代码。
+
+## 插件
+
+OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
+
+| 插件/特性 | 功能 |
+|-----------|------|
+| **Plugin SDK** | `openclaw/plugin-sdk/*` 子路径，窄接口策略保证版本兼容 |
+| **Exa / Tavily / Firecrawl** | 内置搜索引擎插件，无需额外API配置 |
+| `/btw` | 侧边提问命令，不污染主对话上下文 |
+| **Multi-browser** | 支持Brave、Edge等浏览器自动化 |
+
+## 安全生态
+
+| 项目 | 简介 |
+|------|------|
+| [NanoClaw](https://github.com/nanoclaw/nanoclaw){:target="_blank"} | 安全加固版，约700行TypeScript，强制容器隔离 |
+| [ZeroClaw](https://github.com/zeroclaw/zeroclaw){:target="_blank"} | Rust重写版，3.4MB二进制，<10ms启动，可树莓派Zero运行 |
+
+---
+
+# 🔌 MCP
+
+| 资源 | 简介 |
+|------|------|
+| [MCP.SO](https://mcp.so/){:target="_blank"} | MCP模型上下文协议资源导航，收录各类MCP服务器和工具 |
+
+---
+
+# 🔍 AI搜索
+
+| 工具 | 简介 |
+|------|------|
+| [Perplexity](https://www.perplexity.ai/){:target="_blank"} | AI驱动的搜索引擎，实时获取网络信息并标注来源 |
+| [Phind](https://www.phind.com/){:target="_blank"} | 专为开发者设计的AI搜索工具，支持代码和技术问题 |
+| [博查AI搜索](https://bocha.ai/){:target="_blank"} | 国内AI搜索平台，支持多模型切换 |
+| [Exa](https://exa.ai/){:target="_blank"} | 原名Metaphor，基于语义的AI搜索引擎，通过Transformer模型理解含义而非关键词匹配 |
+
+---
+
+# 💬 AI助手客户端
+
+| 工具 | 简介 |
+|------|------|
+| [ChatBOX](https://chatboxai.app/){:target="_blank"} | 支持多模型的AI对话客户端，支持自定义助手和API配置 |
+| [Lingua](https://www.linguaai.com/){:target="_blank"} | AI翻译客户端，支持100+语言翻译、语音翻译和OCR拍照翻译 |
+| [OneChat](https://onechat.ai/){:target="_blank"} | AI聊天机器人平台，提供自动化客服和多渠道消息支持 |
+| [OssChat](https://osschat.io/){:target="_blank"} | Zilliz推出的开源项目知识库问答工具，基于RAG+向量数据库+ChatGPT构建 |
+
+---
+
+# 📝 提示词工程
+
+| 工具 | 简介 |
+|------|------|
+| [Prompt Engineering Guide](https://www.promptingguide.ai/zh){:target="_blank"} | 提示词工程指南，包含系统化的提示词技巧和最佳实践 |
+| [PromptKnight](https://promptknight.ai/){:target="_blank"} | AI提示词优化工具，帮助提升提示词效果 |
+| [FlowGPT](https://flowgpt.com/){:target="_blank"} | 提示词分享社区，汇集各种场景的优质提示词模板 |
+| [OpenPrompt](https://openprompt.co/){:target="_blank"} | ChatGPT提示词分享平台，被形容为"Prompts的GitHub"，支持创建、发现和复用提示词 |
+
+---
+
+# 🏗️ AI Agent平台
+
+| 平台 | 简介 |
+|------|------|
+| [Dify](https://dify.ai/){:target="_blank"} | 开源的LLM应用开发平台，支持快速构建AI应用和工作流 |
+| [Coze](https://www.coze.cn/){:target="_blank"} | 字节跳动推出的AI Bot开发平台，支持插件和工作流编排 |
+| [FastGPT](https://fastgpt.cn/){:target="_blank"} | 开源的知识库问答系统，基于RAG技术构建 |
+| [n8n](https://n8n.io/){:target="_blank"} | 开源的工作流自动化工具，支持AI节点和多种集成 |
+| [AutoGen](https://microsoft.github.io/autogen/){:target="_blank"} | 微软开源的多Agent协作框架，支持构建复杂AI工作流 |
+
+---
+
+# 🏠 本地部署
+
+| 工具 | 简介 |
+|------|------|
+| [Ollama](https://ollama.com/){:target="_blank"} | 本地运行大模型的工具，支持Llama、Mistral等开源模型 |
+| [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui){:target="_blank"} | 开源的Web界面工具，用于运行各种大语言模型 |
+| [LocalAI](https://localai.io/){:target="_blank"} | 自托管的AI API服务，支持本地部署多种模型 |
+| [llama.cpp](https://github.com/ggerganov/llama.cpp){:target="_blank"} | 高效的C/C++实现的LLM推理工具，支持量化加速 |
+
+---
+
+# 🧭 AI导航
+
+| 工具 | 简介 |
+|------|------|
+| [AIbase](https://www.aibase.com/){:target="_blank"} | AI工具导航和发现平台，收录海量AI应用 |
+| [AI工具集](https://ai-tool.com/){:target="_blank"} | 国内AI工具导航网站，分类清晰 |
+| [ToolsIO](https://www.toolsio.com/){:target="_blank"} | 开源的Web工具集合，支持自部署 |
+| [There's An AI For That](https://theresanaiforthat.com/){:target="_blank"} | AI工具搜索引擎，可按需求查找对应AI工具 |
+| [Future Tools](https://www.futuretools.io/){:target="_blank"} | AI工具目录，收集整理各类AI应用和资源 |
+
+---
+
+# 🎨 AI图片生成
+
+| 工具 | 简介 |
+|------|------|
+| [Midjourney](https://www.midjourney.com/){:target="_blank"} | 专注于艺术风格的AI图像生成工具，生成质量极高 |
+| [Stable Diffusion](https://stability.ai/){:target="_blank"} | 开源的AI图像生成模型，支持本地部署和社区模型 |
+| [DALL-E](https://openai.com/index/dall-e-3/){:target="_blank"} | OpenAI开发的AI图像生成模型，支持自然语言理解和图像编辑 |
+| [Flux](https://blackforestlabs.ai/){:target="_blank"} | Black Forest Labs开发，由Stable Diffusion原团队打造，支持pro/dev/schnell系列 |
+| [Leonardo.ai](https://leonardo.ai/){:target="_blank"} | 游戏资产和概念艺术AI生成平台，支持实时预览和编辑 |
+
+---
+
+# 🎬 AI视频生成
+
+| 工具 | 简介 |
+|------|------|
+| [Sora](https://openai.com/sora){:target="_blank"} | OpenAI开发的AI视频生成模型，支持从文本生成视频 |
+| [Kling](https://klingai.com/){:target="_blank"} | 快手推出的AI视频生成工具，支持高质量视频创作 |
+| [Runway](https://runwayml.com/){:target="_blank"} | 创意AI视频平台，提供视频生成、编辑和特效功能 |
+| [Pika](https://pika.art/){:target="_blank"} | AI视频生成工具，支持多种风格和编辑功能 |
+| [Hailuo AI](https://hailuoai.video/){:target="_blank"} | MiniMax推出的AI视频生成工具，支持多种视频风格 |
+
+---
+
+# 🎵 AI音乐生成
+
+| 工具 | 简介 |
+|------|------|
+| [Suno](https://suno.com/){:target="_blank"} | AI音乐生成工具，可根据文本描述生成完整歌曲，名称源自印地语"聆听" |
+| [Udio](https://www.udio.com/){:target="_blank"} | AI音乐创作平台，支持多种音乐风格和自定义歌词 |
+| [Audiobox](https://audiobox.metademolab.com/){:target="_blank"} | Meta推出的AI音频生成工具，支持音效和音乐生成 |
+
+---
+
+# 🎙️ AI语音/TTS
+
+| 工具 | 简介 |
+|------|------|
+| [ElevenLabs](https://elevenlabs.io/){:target="_blank"} | 行业领先的AI语音合成与克隆平台，英语质量最佳，70+语言，支持语音转语音 |
+| [Fish Audio](https://fish.audio/){:target="_blank"} | 2026年盲测排名第一的TTS工具，情感标签控制、10秒语音克隆、80+语言，API价格仅为ElevenLabs十分之一 |
+| [讯飞星火](https://xinghuo.xfyun.cn/){:target="_blank"} | 科大讯飞AI开放平台，中文语音合成与识别能力领先 |
+| [Cartesia](https://cartesia.ai/){:target="_blank"} | 最低延迟TTS（40ms），采用状态空间模型架构 |
+
+---
+
+# 🌍 AI网站构建
+
+| 工具 | 简介 |
+|------|------|
+| [bolt.new](https://bolt.new/){:target="_blank"} | StackBlitz推出，自然语言描述即可生成全栈Web应用，支持在线预览和部署 |
+| [Lovable](https://lovable.dev/){:target="_blank"} | "Vibe coding"理念的AI应用构建器，从英文描述生成完整React应用，支持Supabase后端 |
+| [v0](https://v0.dev/){:target="_blank"} | Vercel推出的AI UI生成工具，专注React/Tailwind组件，生成的代码可直接用于生产 |
+| [Replit Agent](https://replit.com/ai){:target="_blank"} | Replit推出的AI开发Agent，从描述到部署全流程自动化 |
+
+---
+
+# 📊 AI演示文稿
+
+| 工具 | 简介 |
+|------|------|
+| [Gamma](https://gamma.app/){:target="_blank"} | AI演示文稿生成工具，一句话生成完整PPT，支持文档/网页/演示三种输出格式 |
+| [Beautiful.ai](https://www.beautiful.ai/){:target="_blank"} | AI幻灯片设计工具，智能排版和自适应布局 |
+| [iSlide AI](https://www.islide.cc/){:target="_blank"} | 国内AI PPT插件，深度集成于PowerPoint，支持一键生成 |
+
+---
+
+# ⚡ ComfyUI 工作流
+
+| 工具 | 简介 |
+|------|------|
+| [ComfyUI](https://github.com/comfyanonymous/ComfyUI){:target="_blank"} | 节点式AI图像/视频/3D生成工作流工具，82K+ Stars，目前最活跃的生成式AI开源项目之一 |
+| [ComfyUI Desktop](https://comfy.org/){:target="_blank"} | ComfyUI官方桌面应用，安装和管理更便捷 |
+| [Efficiency Nodes](https://github.com/jags111/efficiency-nodes-comfyui){:target="_blank"} | 热门节点插件，将工作流节点数减少70%+，支持平铺超分生成4K+图像 |
+| [WAS Node Suite](https://github.com/WASasquatch/was-node-suite-comfyui){:target="_blank"} | 210+节点扩展包，覆盖图像处理、文本处理、SAM分割、深度估计等 |
+
+---
+
+# 🧊 AI 3D生成
+
+| 工具 | 简介 |
+|------|------|
+| [Tripo 3.1](https://www.tripo3d.ai/){:target="_blank"} | 图片/文字转3D模型，生产级质量，已集成入ComfyUI |
+| [Meshy](https://www.meshy.ai/){:target="_blank"} | AI 3D资产生成，支持文字转3D、图片转3D、纹理生成 |
+| [Luma AI](https://lumalabs.ai/){:target="_blank"} | AI 3D扫描与生成，支持手机拍摄转3D模型（NeRF/高斯泼溅技术） |
+
+---
+
+# 📈 AI数据分析
+
+| 工具 | 简介 |
+|------|------|
+| [Julius AI](https://julius.ai/){:target="_blank"} | AI数据分析师，上传CSV/Excel即可自动分析并生成可视化图表 |
+| [ChatGPT Code Interpreter](https://chatgpt.com/){:target="_blank"} | ChatGPT内置的数据分析工具，支持Python代码执行和文件上传 |
+| [Documind](https://documind.chat/){:target="_blank"} | PDF/文档AI分析工具，支持批量处理和结构化提取 |
+
+---
+
+# 🦾 开源大模型
+
+| 模型 | 简介 |
+|------|------|
+| [DeepSeek](https://github.com/deepseek-ai){:target="_blank"} | 深度求索开源模型系列，DeepSeek-V3/R1等，性能比肩GPT-4 |
+| [Qwen](https://github.com/QwenLM/Qwen){:target="_blank"} | 阿里通义千问开源模型系列，Qwen3/Max，多尺寸覆盖 |
+| [Llama](https://github.com/meta-llama){:target="_blank"} | Meta开源大模型系列，Llama 4支持多模态 |
+| [Mistral](https://mistral.ai/){:target="_blank"} | 法国AI公司，开源Mistral Large等高性能模型 |
+| [盘古](https://github.com/huawei-noah){:target="_blank"} | 华为盘古大模型系列，覆盖NLP/CV/多模态/科学计算 |
+
+---
+
+# 📚 AI知识库/RAG
+
+| 工具 | 简介 |
+|------|------|
+| [AnythingLLM](https://anythingllm.com/){:target="_blank"} | 开源的本地文档问答工具，支持多文档格式和多种LLM后端 |
+| [MaxKB](https://maxkb.cn/){:target="_blank"} | 基于RAG的开源知识库问答系统，支持快速部署 |
+| [Quivr](https://quivr.com/){:target="_blank"} | 开源的AI知识库工具，支持文件上传和智能问答 |
+| [Docling](https://docling.io/){:target="_blank"} | 文档解析工具，支持PDF/Word等格式的结构化提取 |
+
+---
+
+# 🔒 AI安全
+
+| 工具 | 简介 |
+|------|------|
+| [WIZ](https://www.wiz.io/){:target="_blank"} | 云安全平台，提供CSPM、ASPM、CWP等安全解决方案 |
+| [阿里云安全](https://security.aliyun.com/){:target="_blank"} | 阿里云安全中心，提供云环境安全防护和合规检测 |
+
+---
+
+# 👨‍💻 AI编程
+
+| 工具 | 简介 |
+|------|------|
+| [Cursor](https://cursor.com/){:target="_blank"} | AI代码编辑器，基于VS Code打造，支持代码补全和智能问答 |
+| [Windsurf](https://windsurf.com/){:target="_blank"} | Codeium推出的AI代码编辑器，支持多文件分析和智能重构 |
+| [Codeium](https://codeium.com/){:target="_blank"} | 免费AI代码补全工具，支持多种主流编程语言 |
+| [Copilot](https://github.com/features/copilot){:target="_blank"} | GitHub推出的AI编程助手，深度集成于VS Code |
+| [Devin](https://devin.ai/){:target="_blank"} | Cognition推出的AI软件工程师，可独立完成复杂编程任务 |
 
 ---
