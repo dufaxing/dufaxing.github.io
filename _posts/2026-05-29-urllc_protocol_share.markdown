@@ -17,18 +17,13 @@ mathjax: true
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
 
+
 # URLLC 技术深度解析
+
 ## 基于 3GPP Rel-17 协议栈的系统性技术分享
 
 > 本文档综合 3GPP-KB 知识库检索与公开资料调研，覆盖物理层、MAC 层、RLC/PDCP 层、RRC/NAS 层及多连接架构的完整 URLLC 增强机制。
-> ⚠️ RRC 示例为简化示意，实际部署请参照 TS 38.331 | 规范版本：Rel-17 | 生成时间：2026-05-29 | 修订时间：2026-05-30
->
-> **文档修订说明（2026-05-30）**
-> - 修正：`UE-EUTRA-Capability` → `UE-NR-Capability`
-> - 修正：`allowedPHY-PriorityIndex` 取值范围 `0..3` → `0..1`（lowPriority/highPriority）
-> - 修正：`Type B K0/K2 以 symbols 为单位` → K0/K2 始终以 slots 为单位，Type B 灵活性来自 SLIV
-> - 修复：目录缺失第十三章、代码块嵌套错误
-> - 标注：Slot Aggregation 增益为理论最大值
+
 
 ---
 
@@ -55,8 +50,8 @@ mathjax: true
   - [3.8 BSR Enhancements](#38-bsr-enhancements)
 - [四、RLC 层增强](#四rlc-层增强)
   - [4.1 RLC UM Mode 替代 AM](#41-rlc-um-mode-替代-am)
-  - [4.2 t-Reordering 配置](#42-t-reordering-配置)
-  - [4.3 Polling 与 Status Report](#43-polling-与-status-report)
+  - [4.2 t-Reassembly 配置（DL）](#42-t-reassembly-配置dl)
+  - [4.3 RLC UM 配置要点与延迟优化](#43-rlc-um-配置要点与延迟优化)
 - [五、PDCP 层增强](#五pdp层增强)
   - [5.1 Packet Duplication（数据包复制）](#51-packet-duplication数据包复制)
   - [5.2 PDCP t-Reordering](#52-pdcp-t-reordering)
@@ -89,7 +84,7 @@ mathjax: true
   - [13.1 DCI 0_2：紧凑型 UL 调度](#131-dci-02紧凑型-ul-调度)
   - [13.2 Enhanced Reliability（增强可靠性）](#132-enhanced-reliability增强可靠性)
   - [13.3 Multiple TCI States for URLLC](#133-multiple-tci-states-for-urllc)
-  - [13.4 repKARQ-Procedure](#134-repkarq-procedure)
+  - [13.4 PUSCH Repetition for URLLC（Configured Grant Repetition）](#134-pusch-repetition-for-urllcconfigured-grant-repetition)
   - [13.5 CG Type1/Type2 共存关系](#135-cg-type1type2-共存关系)
   - [13.6 allowedPHY-PriorityIndex 使用场景](#136-allowedphy-priorityindex-使用场景)
   - [13.7 dmrs-Bundling 配置场景](#137-dmrs-bundling-配置场景)
@@ -554,7 +549,7 @@ URLLC 和 eMBB 可以配置不同的 BWP（Bandwidth Part），每个 BWP 可以
 
 ```RRC
 BWP-Downlink ::= SEQUENCE {
-  bandwidthPartId              INTEGER (0..4),
+  bwp-Id                        INTEGER (0..maxNrofBWPs),  -- 通常 maxNrofBWPs=4
   locationAndBandwidth         INTEGER (1..65536),
   subcarrierSpacing            ENUMERATED {15kHz, 30kHz, 60kHz, 120kHz, 240kHz},
   cyclicPrefix                 ENUMERATED {normal, extended}   OPTIONAL,
@@ -723,24 +718,41 @@ gNB 根据 CQI 选择 MCS：低 CQI → 低 MCS → 高可靠性
 
 ```RRC
 ConfiguredGrantConfig ::= SEQUENCE {
-  cs-RNTI                      INTEGER (0..65535),
-  timeDomainOffset             INTEGER (0..5119),    -- 相对 SFN 的偏移
-  periodicity                  ENUMERATED {
-    n1, n2, n4, n5, n8, n10, n16, n20,
-    n32, n40, n64, n80, n128, n160, n320, n640,
-    n1280, n2560, ... },                          -- 周期
-  frequencyDomainAlloc         BIT STRING (SIZE(18)),  -- 频域资源
-  mcs-Table                    ENUMERATED {qam64, qam256, qam64LowSE},
-  mcs-TableTransformPrecoder   ENUMERATED {...}      OPTIONAL,
-  transformPrecoder           ENUMERATED {enabled, disabled}   OPTIONAL,
-  frequencyHopping            ENUMERATED {intraSlot, interSlot}  OPTIONAL,
-  cg-RetransmissionTimer      INTEGER (1..64)        OPTIONAL,
-  configuredGrantType1Allowed  SEQUENCE {
-    allowed, notAllowed
-  }                                                  OPTIONAL,
+  frequencyHopping               ENUMERATED {intraSlot, interSlot}   OPTIONAL,  -- Need S
+  cg-DMRS-Configuration          DMRS-UplinkConfig,
+  mcs-Table                      ENUMERATED {qam256, qam64LowSE}     OPTIONAL,  -- Need S
+  mcs-TableTransformPrecoder     ENUMERATED {qam256, qam64LowSE}     OPTIONAL,  -- Need S
+  uci-OnPUSCH                    SetupRelease { CG-UCI-OnPUSCH }     OPTIONAL,  -- Need M
+  resourceAllocation             ENUMERATED {resourceAllocationType0, resourceAllocationType1, dynamicSwitch},
+  p0-PUSCH-Alpha                 P0-PUSCH-AlphaSetId,
+  transformPrecoder              ENUMERATED {enabled, disabled}       OPTIONAL,  -- Need S
+  nrofHARQ-Processes             INTEGER (1..16),                     -- URLLC 通常配 1（无 HARQ 重传）
+  repK                           ENUMERATED {n1, n2, n4, n8}         OPTIONAL,
+  periodicity                    ENUMERATED {
+    sym2, sym7, sym1x14, sym2x14, sym4x14, sym5x14, sym8x14, sym10x14, sym16x14, sym20x14,
+    sym32x14, sym40x14, sym64x14, sym80x14, sym128x14, sym160x14, sym256x14, sym320x14, sym512x14, sym640x14,
+    sym1024x14, sym1280x14, sym2560x14, sym5120x14,
+    sym6, sym1x12, sym2x12, sym4x12, sym5x12, sym8x12, sym10x12, sym16x12, sym20x12, sym32x12,
+    sym40x12, sym64x12, sym80x12, sym128x12, sym160x12, sym256x12, sym320x12, sym512x12, sym640x12,
+    sym1280x12, sym2560x12
+  },
+  configuredGrantTimer          INTEGER (1..64)                      OPTIONAL,  -- Need R
+  rrc-ConfiguredUplinkGrant      SEQUENCE {
+    timeDomainOffset             INTEGER (0..5119),
+    timeDomainAllocation         INTEGER (0..15),
+    frequencyDomainAllocation    BIT STRING (SIZE(18)),
+    antennaPort                  INTEGER (0..31),
+    dmrs-SeqInitialization       INTEGER (0..1)                       OPTIONAL,
+    precodingAndNumberOfLayers   INTEGER (0..63),
+    srs-ResourceIndicator       INTEGER (0..15)                       OPTIONAL,
+    mcsAndTBS                    INTEGER (0..31),
+    ...  -- CG Type 1 的实际资源在此
+  }  OPTIONAL,
   ...
 }
 ```
+
+> ⚠️ **periodicity 枚举值说明**：规范中以 `sym*` 格式表示 slots 数量（`sym1x14` = 1×14 symbols = 1 slot）。文档旧版本错误写成 `n1, n2, n4...`（那是 RA-SearchSpace 等场景的格式，不是 CG periodicity）。
 
 #### HARQ Process ID 计算公式
 
@@ -1075,17 +1087,32 @@ UE MAC 按照以下优先级顺序处理上行数据（从高到低）：
 
 ```RRC
 LogicalChannelConfig ::= SEQUENCE {
-  priority                       INTEGER (1..16),
-  priorityLevelLCH               INTEGER (1..16),  -- 1 = highest
-  allowedSCS-List                SEQUENCE OF SCS {
-    scs-60kHz, scs-120kHz       -- 仅允许高 SCS
-  }  OPTIONAL,
-  maxPUSCH-Duration              ENUMERATED {
-    to1, to2, to3, to4, to5, to6, to7, to8  -- symbols
-  }  OPTIONAL,
-  configuredGrantType1Allowed    ENUMERATED {true, false},
-  allowedCG-List                 SEQUENCE OF INTEGER (0..7),
-  allowedPHY-PriorityIndex        SEQUENCE OF INTEGER (1..16),
+  ul-SpecificParameters        SEQUENCE {
+    priority                   INTEGER (1..16),
+    prioritisedBitRate        ENUMERATED {
+      kBps0, kBps8, kBps16, kBps32, kBps64, kBps128, kBps256, kBps512,
+      kBps1024, kBps2048, kBps4096, kBps8192, kBps16384, kBps32768, kBps65536, infinity
+    },
+    bucketSizeDuration         ENUMERATED {
+      ms5, ms10, ms20, ms50, ms100, ms150, ms300, ms500, ms1000,
+      spare7, spare6, spare5, spare4, spare3, spare2, spare1
+    },
+    allowedSCS-List            SEQUENCE (SIZE (1..maxSCSs)) OF SubcarrierSpacing  OPTIONAL,
+    maxPUSCH-Duration          ENUMERATED {
+      ms0p02, ms0p04, ms0p0625, ms0p125, ms0p25, ms0p5, ms0p01-v1700, spare1
+    }  OPTIONAL,
+    configuredGrantType1Allowed ENUMERATED {true}  OPTIONAL,  -- true = allowed
+    logicalChannelGroup         INTEGER (0..maxLCG-ID)  OPTIONAL,
+    schedulingRequestID         SchedulingRequestId  OPTIONAL,
+    logicalChannelSR-Mask       BOOLEAN,
+    logicalChannelSR-DelayTimerApplied BOOLEAN,
+    ...
+    -- Rel-16 新增字段
+    allowedCG-List-r16          SEQUENCE (SIZE (0..maxNrofConfiguredGrantConfigMAC-1-r16))
+                                  OF ConfiguredGrantConfigIndexMAC-r16  OPTIONAL,
+    allowedPHY-PriorityIndex-r16 ENUMERATED {p0, p1}  OPTIONAL,  -- p0=lowPriority, p1=highPriority
+    ...
+  }  OPTIONAL,  -- Cond UL
   ...
 }
 ```
@@ -1335,37 +1362,38 @@ URLLC 配置示例：
 
 ---
 
-### 4.2 t-Reordering 配置
+### 4.2 t-Reassembly 配置（DL）
 
 #### 技术原理
 
-**t-Reordering** 是 RLC UM 接收端的定时器，用于处理 PDUs 的乱序到达和重组。
+**t-Reassembly** 是 RLC UM（DL）接收端的定时器（来自 `DL-UM-RLC` IE），用于处理 PDU segment 的乱序到达和重组。与 PDCP 的 `t-Reordering` 是不同层的不同定时器。
 
-> 📖 **规范来源**：TS 38.322 Clause 5.3（t-Reordering timer specification）
+> 📖 **规范来源**：TS 38.322 Clause 5.3（RLC UM reassembly specification）；TS 38.331 Clause 6.3.2（`DL-UM-RLC` / `T-Reassembly`）
 
-#### t-Reordering 行为
+#### t-Reassembly 行为
 
 ```
-接收端 RLC UM 实体行为：
+接收端 RLC UM（DL）实体行为：
 1. 维护 RX_NEXT、RX_DELIV、RX_REORDER 等状态变量
-2. 当 PDUs 乱序到达时，启动 t-Reordering
+2. 当 segment 乱序到达时，启动 t-Reassembly
 3. 如果缺失的 SN 在 Timer 超时前到达：
-   → 交付完整序列到上层
+   → 组装完整 SDU，交付到 PDCP
 4. 如果 Timer 超时仍未到达：
-   → 交付当前可用的 PDUs 到上层
-   → 缺失的 PDUs 被丢弃
+   → 交付当前已组装的 PDUs 到 PDCP
+   → 缺失的 segment 被丢弃
 ```
 
-#### t-Reordering 值与延迟
+#### t-Reassembly 值与延迟
 
-| t-Reordering 值 | 典型用途 | 附加延迟 |
-|-----------------|----------|----------|
+| t-Reassembly 值 | 典型用途 | 附加延迟 |
+|----------------|----------|----------|
 | **ms0** | 严格 URLLC | 0 ms |
-| **ms1** | 极低延迟 URLLC | 1 ms |
-| **ms2** | 低延迟 URLLC | 2 ms |
-| **ms5** | URLLC（激进） | 5 ms |
-| **ms10~ms20** | eMBB/Default | 10~20 ms |
-| **ms35~ms100** | VoNR/Legacy | 35~100 ms |
+| **ms5** | 低延迟 URLLC | 5 ms |
+| **ms10** | URLLC（常规） | 10 ms |
+| **ms20~ms50** | eMBB/Default | 20~50 ms |
+| **ms100~ms200** | VoNR/Legacy | 100~200 ms |
+
+> 注：T-Reassembly 枚举值来自 TS 38.331 §6.3.2，为 {ms0, ms5, ms10, ms15, ..., ms200, spare1}，最小粒度 5ms，无 ms1/ms2/ms3 等值。
 
 #### SN 长度选择
 
@@ -1376,46 +1404,140 @@ URLLC 配置示例：
 
 ```
 SN wrap-around 处理：
-RLC UM SN 到达上限后回绕。t-Reordering 用于处理乱序和回绕情况。
+RLC UM SN 到达上限后回绕。t-Reassembly 用于处理乱序和回绕情况。
 ```
 
 ---
 
-### 4.3 Polling 与 Status Report
+### 4.3 RLC UM 配置要点与延迟优化
 
 #### 技术原理
 
-RLC AM 使用 POLL 机制请求对端发送 Status Report，但 RLC UM 不支持 polling。
+RLC UM 模式下没有 ARQ 重传和 Status Report，因此配置重点转向 **SN 字段长度** 和 **t-Reassembly 定时器**，这两个参数直接影响 URLLC 的延迟和可靠性表现。
 
-> 📖 **规范来源**：TS 38.322 Clause 5.4（Status reporting）
+> 📖 **规范来源**：TS 38.322 Clause 5.1（RLC UM functional description）；TS 38.331 Clause 6.3.2（`DL-UM-RLC`/`UL-UM-RLC` IE）
 
-#### RLC AM Polling（与 URLLC 间接相关）
+#### SN 字段长度选择
 
-```
-AM Polling 触发条件：
-- 发送 polling bit = 1 的 PDU 后，轮询定时器运行
-- 定时器超时或满足条件时，对端发送 Status Report
-
-Status Report 包含：
-- ACK_SN: 确认的最高 SN
-- NACK_SN: 未确认的 SN 范围
-- RWL_SN: AMD PDUs 窗口左边界
-```
-
-#### 与 PDCP 的交互
-
-RLC 通过 PDCP 进行状态报告交互：
+|| SN 长度 | 范围 | 重组窗口 | 适用场景 | URLLC 评估 ||
+|------|--------|------|----------|----------|-----------|
+|| 6 bits | 0~63 | 64 PDUs | 短会话、极低延迟 | ✅ ms0~ms2 配置下延迟最优 |
+|| 12 bits | 0~4095 | 4096 PDUs | 长会话、更高可靠性 | ✅ 多路径 + duplication 场景 |
 
 ```
-RLC UM 接收端：
-- 不发送 Status Report 给发送端
-- 但会通知 PDCP：
-  - PDCP status report requested (via PDCP Control PDU)
-  - PDCP t-Reordering 触发交付
+SN 长度对 URLLC 的影响：
+- SN 越短 → 头部开销越小 → 传输效率更高
+- SN 越长 → 支持更长的乱序窗口 → 多径场景更鲁棒
+- 6-bit SN 配合 ms0 = 最严格 URLLC 场景推荐配置
+- 12-bit SN 配合 Packet Duplication = 多连接 URLLC 场景推荐配置
+```
 
-RLC AM 接收端：
-- 发送 Status Report（RX → TX）
-- TX 根据 Status Report 触发重传
+#### RLC UM 定时器：t-Reassembly（DL）/ UL 无定时器
+
+RLC UM 与 RLC AM/PDCP 的一个关键区别：**RLC UM 没有 discardTimer**（那是 PDCP 层的定时器），但 RLC UM（DL）有 `t-Reassembly`，用于处理 segment 重组。
+
+```
+RLC UM 的数据处理机制：
+- 发送端（UL）：收到 PDCP SDU → 组装 RLC PDU → 发送 → 无定时器控制丢弃
+- 接收端（DL）：segment 乱序到达 → 启动 t-Reassembly
+- t-Reassembly 超时 → 组装并交付连续 PDUs 到 PDCP，丢弃间隙中的 PDUs
+- PDCP discardTimer（独立配置）→ 控制 PDCP 发送侧 SDU 生命周期
+```
+
+#### 与 PDCP 定时器的层次区分
+
+| RLC UM | DL | `t-Reassembly` | Segment 重组 | TS 38.331 DL-UM-RLC |
+| RLC UM | UL | 无定时器 | — | — |
+| PDCP | 发送侧 | `discardTimer` | PDCP SDU 生命周期 | TS 38.323 Clause 5.3 |
+| PDCP | 接收侧 | `t-Reordering` | 多 RLC 路径乱序 | TS 38.323 Clause 5.1.2.1 |
+
+```
+URLLC 完整定时器配置（示例）：
+  PDCP discardTimer     = ms50   （PDCP 发送侧，SDU 最长保留 50ms）
+  DL-UM-RLC t-Reassembly = ms5    （DL 接收侧，5ms 组装窗口）
+  PDCP t-Reordering      = ms5    （DL 接收侧，等待 Duplication 多路径）
+
+  Total 最坏延迟 ≈ 50 + 5 + 5 = 60 ms → 结合可靠性机制满足 URLLC 目标
+```
+
+#### RLC UM 配置（正确的 RRC IE）
+
+从 TS 38.331 §6.3.2 的 ASN.1 定义，RLC UM 的配置结构为：
+
+```RRC
+-- UL 方向：仅 SN 字段长度，无定时器
+UL-UM-RLC ::= SEQUENCE {
+  sn-FieldLength        SN-FieldLengthUM    OPTIONAL,  -- Cond Reestab
+}
+
+-- DL 方向：SN 字段长度 + t-Reassembly 定时器
+DL-UM-RLC ::= SEQUENCE {
+  sn-FieldLength        SN-FieldLengthUM    OPTIONAL,  -- Cond Reestab
+  t-Reassembly          T-Reassembly
+}
+
+-- UL/DL 公用
+SN-FieldLengthUM ::= ENUMERATED {size6, size12}
+
+T-Reassembly ::= ENUMERATED {
+  ms0,   ms5,   ms10,  ms15,  ms20,  ms25,  ms30,  ms35,
+  ms40,  ms45,  ms50,  ms55,  ms60,  ms65,  ms70,  ms75,
+  ms80,  ms85,  ms90,  ms95,  ms100, ms110, ms120, ms130,
+  ms140, ms150, ms160, ms170, ms180, ms190, ms200, spare1
+}
+```
+
+**与 PDCP 定时器的区分：**
+
+|| 层级 | 方向 | 定时器 | 作用 | 规范来源 ||
+|------|------|------|--------|------|-----------|
+|| RLC UM | DL | `t-Reassembly` | 重组窗外（segment 重组） | TS 38.331 DL-UM-RLC |
+|| RLC UM | UL | 无定时器 | — | TS 38.331 UL-UM-RLC |
+|| PDCP | 发送侧 | `discardTimer` | PDCP SDU 生命周期 | TS 38.323 Clause 5.3 |
+|| PDCP | 接收侧 | `t-Reordering` | 多 RLC 路径乱序 | TS 38.323 Clause 5.1.2.1 |
+
+```
+URLLC 定时器配置示例：
+  DL-UM-RLC t-Reassembly = ms2   （DL 接收侧，2ms 重组）
+  PDCP discardTimer      = ms50  （发送侧，SDU 最长等 50ms）
+  PDCP t-Reordering      = ms5   （DL 接收侧，等 Duplication 多路径）
+
+  Total 最坏延迟 ≈ 50 + 2 + 5 = 57 ms
+```
+
+#### 与 PDCP t-Reordering 的配合
+
+RLC UM（DL）的 `t-Reassembly` 与 PDCP `t-Reordering` 需要联合配置，避免双重延迟累积：
+
+```
+接收端处理时序（UM 模式）：
+
+RLC 接收窗口（t-Reassembly）：
+  - PDU segment 乱序到达 → 启动 t-Reassembly
+  - Timer 超时 → 组装并交付连续 PDUs 到 PDCP，丢弃间隙 PDUs
+  - ms0 = 立即交付，无等待
+
+PDCP 接收窗口（t-Reordering）：
+  - 等待来自不同 RLC 实体的 PDCP PDUs（Duplication 场景）
+  - Timer 超时 → 交付已收到的 PDUs
+  - PDCP timer 应 > RLC t-Reassembly，避免先于 RLC 交付
+
+推荐配置（双连接 Packet Duplication）：
+  DL-UM-RLC t-Reassembly = ms2   (2 ms RLC 组装窗口)
+  PDCP t-Reordering       = ms5   (5 ms PDCP 等待多路径)
+  Total 重组延迟          = 7 ms  → 满足 URLLC < 1 ms 用户面延迟目标
+```
+
+#### 与第四章其他机制的呼应
+
+```
+4.1 选择 RLC UM（无 ARQ）
+    ↓
+4.2 t-Reassembly 配置（DL，ms0~ms2）
+    ↓
+4.3 本节：SN 长度 + t-Reassembly 优化
+    ↓
+配合第五章 Packet Duplication + PDCP t-Reordering → 完整 URLLC 可靠性保障链
 ```
 
 ---
@@ -1471,12 +1593,36 @@ Octet: [R(1)][LCID(5)][T(1)][R(1)]
 ```RRC
 PDCP-Config ::= SEQUENCE {
   drb                             SEQUENCE {
-    pdcp-SN-Size                  ENUMERATED {size12, size18},
-    discardTimer                  ENUMERATED {ms10, ms20, ms30, ...},
-    pdcp-Duplication               BOOLEAN,  -- TRUE 启用 duplication
-    t-Reordering                  ENUMERATED {ms0, ms1, ms2, ...},
-    ...
+    discardTimer                  ENUMERATED {
+      ms10, ms20, ms30, ms40, ms50, ms60, ms75, ms100, ms150, ms200,
+      ms250, ms300, ms500, ms750, ms1500, infinity
+    }  OPTIONAL,  -- Cond Setup
+    pdcp-SN-SizeUL                ENUMERATED {len12bits, len18bits}  OPTIONAL,  -- Cond Setup1
+    pdcp-SN-SizeDL                ENUMERATED {len12bits, len18bits}  OPTIONAL,  -- Cond Setup2
+    headerCompression             CHOICE { ... }  OPTIONAL,
+    integrityProtection           ENUMERATED { enabled }  OPTIONAL,  -- Cond ConnectedTo5GC1
+    statusReportRequired          ENUMERATED { true }  OPTIONAL,  -- Cond Rlc-AM-UM
+    outOfOrderDelivery            ENUMERATED { true }  OPTIONAL,  -- Need R
+    ...  -- Cond DRB
   }  OPTIONAL,
+  moreThanOneRLC                  SEQUENCE {
+    primaryPath                   SEQUENCE {
+      cellGroup                   CellGroupId  OPTIONAL,  -- Need R
+      logicalChannel              LogicalChannelIdentity  OPTIONAL  -- Need R
+    },
+    ul-DataSplitThreshold         UL-DataSplitThreshold  OPTIONAL,
+    pdcp-Duplication              BOOLEAN  OPTIONAL  -- Need R
+  }  OPTIONAL,  -- Cond MoreThanOneRLC
+  t-Reordering                   ENUMERATED {
+    ms0, ms1, ms2, ms4, ms5, ms8, ms10, ms15, ms20, ms30, ms40,
+    ms50, ms60, ms80, ms100, ms120, ms140, ms160, ms180, ms200, ms220,
+    ms240, ms260, ms280, ms300, ms500, ms750, ms1000, ms1250,
+    ms1500, ms1750, ms2000, ms2250, ms2500, ms2750, ms3000,
+    spare28, spare27, spare26, spare25, spare24, spare23, spare22, spare21,
+    spare20, spare19, spare18, spare17, spare16, spare15, spare14,
+    spare13, spare12, spare11, spare10, spare09, spare08, spare07,
+    spare06, spare05, spare04, spare03, spare02, spare01
+  }  OPTIONAL,  -- Need S
   ...
 }
 ```
@@ -1614,24 +1760,14 @@ HARQ-ACK 在 PUCCH 上传输：
 
 ```RRC
 SCellConfig ::= SEQUENCE {
-  sCellIndex                  INTEGER (1..31),
-  ...
-  sCellConfigToAddMod         SEQUENCE {
-    semiStaticConfig          SEQUENCE {
-      -- 半静态时域 pattern
-      subframePattern         BIT STRING,
-      ...
-    }  OPTIONAL,
-    dynamicIndication         SEQUENCE {
-      -- 动态切换指示
-      dci-Format              ENUMERATED {format0_1, format1_1},
-      ...
-    }  OPTIONAL,
-    ...
-  }  OPTIONAL,
+  sCellIndex                    SCellIndex,  -- INTEGER (0..31)，0 用于 SpCell
+  sCellConfigToAddMod           ServingCellConfig  OPTIONAL,  -- Cond SCellAddMod
   ...
 }
 ```
+
+> 📖 **规范来源**：TS 38.331 Clause 6.3.2 — `SCellConfig` / `SCellIndex`  
+> **PUCCH Cell Switching**：Rel-16 引入 `sCellState = activated` 表示切换状态，UE 可在切换状态的小区上传输 PUCCH，无需等待 PCell 上行子帧（TS 38.331 `sCellState-r16`）
 
 #### 切换控制方式
 
@@ -1681,10 +1817,14 @@ UCI 复用优先级（从高到低）：
 ```RRC
 PDSCH-Config ::= SEQUENCE {
   ...
-  codeBlockGroupTransmission    SEQUENCE {
-    maxCodeBlockGroupsPerTB     INTEGER (2..8),
-    ...
-  }  OPTIONAL,
+  codeBlockGroupTransmission    PDSCH-CodeBlockGroupTransmission  OPTIONAL,
+  ...
+}
+```
+
+PDSCH-CodeBlockGroupTransmission ::= SEQUENCE {
+  maxCodeBlockGroupsPerTransportBlock ENUMERATED {n2, n4, n6, n8},
+  codeBlockGroupFlushIndicator       BOOLEAN,  -- TRUE = 刷新 CBG 窗口
   ...
 }
 ```
@@ -1736,27 +1876,31 @@ BWP-Downlink ::= SEQUENCE {
 
 ```RRC
 SchedulingRequestConfig ::= SEQUENCE {
-  schedulingRequestToAddModList  SEQUENCE OF SchedulingRequest {
-    sr-ResourceId               INTEGER (0..7),
-    sr-ConfigId                 INTEGER (0..7),
-    reportConfigId              INTEGER (0..7),  -- 关联 reportConfig
-    ...
-  },
+  schedulingRequestToAddModList  SEQUENCE (SIZE (1..maxNrofSR-ConfigPerCellGroup)) OF SchedulingRequestToAddMod
+                                                    OPTIONAL,
+  schedulingRequestToReleaseList SEQUENCE (SIZE (1..maxNrofSR-ConfigPerCellGroup)) OF SchedulingRequestId
+                                                    OPTIONAL,
   ...
 }
 
-SchedulingRequest ::= SEQUENCE {
-  sr-ResourceId               INTEGER (0..7),
-  sr-ProhibitTimer            INTEGER (1..64)  OPTIONAL,  -- ms
-  sr-TransMax                 INTEGER (1..16)  OPTIONAL,
+SchedulingRequestToAddMod ::= SEQUENCE {
+  schedulingRequestId              SchedulingRequestId,  -- SR 索引 ID
+  sr-ProhibitTimer                 ENUMERATED {
+    ms1, ms2, ms4, ms8, ms16, ms32, ms64, ms128
+  }  OPTIONAL,  -- 单位：ms
+  sr-TransMax                      ENUMERATED {
+    n4, n8, n16, n32, n64, spare3, spare2, spare1
+  }  OPTIONAL,  -- 最大 SR 尝试次数
   ...
 }
+
+SchedulingRequestId ::= INTEGER (0..maxNrofSR-ConfigPerCellGroup-1)
 ```
 
-```
 URLLC SR 配置（与标准配置对比）：
-  sr-ProhibitTimer = 0 (无禁止期，最大频率)
-  sr-TransMax = 4 (快速失败判定)
+```
+  sr-ProhibitTimer = ms1 (无禁止期，最大频率)
+  sr-TransMax = n4 (快速失败判定)
 
 优势：
   - 更快的 SR 响应
@@ -1765,30 +1909,41 @@ URLLC SR 配置（与标准配置对比）：
 
 ### 7.3 Logical Channel SR 配置
 
-#### 逻辑信道与 SR 绑定
+#### 逻辑信道与 SR 绑定（Rel-17）
+
+Rel-17 支持为每个逻辑信道配置独立的 SR 参数，通过 `LogicalChannelSR-Config` 与 `SchedulingRequestConfig` 联合实现：
 
 ```RRC
+-- 在 SchedulingRequestConfig 中定义 SR 配置模板
+SchedulingRequestConfig ::= SEQUENCE {
+  schedulingRequestToAddModList  SEQUENCE (SIZE (1..maxNrofSR-ConfigPerCellGroup))
+                                       OF SchedulingRequestToAddMod  OPTIONAL,
+  ...
+}
+
+-- 每个 SR 配置模板（供逻辑信道引用）
+SchedulingRequestToAddMod ::= SEQUENCE {
+  schedulingRequestId     SchedulingRequestId,
+  sr-ProhibitTimer        ENUMERATED {ms1,ms2,ms4,ms8,ms16,ms32,ms64,ms128}  OPTIONAL,
+  sr-TransMax             ENUMERATED {n4,n8,n16,n32,n64,spare3,spare2,spare1}  OPTIONAL,
+  ...
+}
+
+-- 在 LogicalChannelConfig 中引用 SR 配置
 LogicalChannelConfig ::= SEQUENCE {
-  logicalChannelGroup          INTEGER (0..7)   OPTIONAL,
-  logicalChannelSR-Config      SEQUENCE {
-    sr-ProhibitTimer           INTEGER (1..64)  OPTIONAL,
-    sr-TransMax                INTEGER (1..16)  OPTIONAL,
+  ul-SpecificParameters   SEQUENCE {
+    priority              INTEGER (1..16),
+    ...
+    logicalChannelSR-Config  SEQUENCE {
+      sr-ConfigId         SchedulingRequestId  -- 引用 SchedulingRequestConfig 中的 SR ID
+    }  OPTIONAL,
     ...
   }  OPTIONAL,
   ...
 }
 ```
 
-```
-配置 URLLC 逻辑信道 SR：
-  logicalChannelSR-Config:
-    sr-ProhibitTimer = 0
-    sr-TransMax = 4
-
-每个逻辑信道可以有不同的 SR 配置：
-  - URLLC: 最短禁止期、最高优先级
-  - eMBB: 标准配置
-```
+> 📖 **规范来源**：TS 38.331 Clause 6.3.2 — `SchedulingRequestConfig` / `SchedulingRequestToAddMod` / `LogicalChannelConfig`
 
 ### 7.4 UE Capability 报告
 
@@ -2290,45 +2445,47 @@ BG2 上行扩展条件（同时满足）：
   - TBS <= 256 bits（或由网络配置）
   - MCS <= 4（QPSK ~ 16QAM）
   - UE 支持 urllc-UL-Enhanced-Reliability
-  - 网络配置 enabledULBGr2 = true
+  - 网络配置 mcs-TableTransformPrecoder = qam64LowSE（触发 BG2 编码）
+
+启用机制：通过 PUSCH-Config 的 mcs-Table / mcs-TableTransformPrecoder 选择含 BG2 的 MCS 表格，
+         不存在独立的 'enhancedReliability' IE
 ```
 
-配置 IE（TS 38.331）：
-```RRC
-ConfiguredGrantConfig ::= SEQUENCE {
-  ...
-  enhancedReliability          ENUMERATED {enabled}  OPTIONAL,   -- Rel-17，启用 UL BG2
-  ...
-}
-```
+> 📖 **规范来源**：TS 38.214 Clause 6.1.3（UL transport block size selection）和 Clause 5.2.2（LDPC base graph selection）  
+> ⚠️ **旧版配置错误**：文档旧版称 `ConfiguredGrantConfig` 中有 `enhancedReliability = ENUMERATED {enabled}` 字段——该字段**不存在于 TS 38.331**，已删除
 
 #### 13.2.3 Inter-slot DMRS Bundling
 
 Rel-15/16 DMRS Bundling 只支持 intra-slot（同一 slot 内的多个符号）。Rel-17 将 bundling 扩展到 inter-slot（跨多个 slots）：
 
+```RRC
+-- PUSCH DMRS Bundling（Rel-17）
+DMRS-BundlingPUSCH-Config-r17 ::= SEQUENCE {
+  pusch-DMRS-Bundling-r17          ENUMERATED {enabled}                    OPTIONAL,  -- Need R
+  pusch-TimeDomainWindowLength-r17 INTEGER (2..32)                         OPTIONAL,  -- Need S，跨 slots 数
+  pusch-WindowRestart-r17           ENUMERATED {enabled}                    OPTIONAL,  -- Need R，bundling 窗口重启
+  pusch-FrequencyHoppingInterval-r17 ENUMERATED {
+    s2, s4, s5, s6, s8, s10, s12, s14, s16, s20
+  }  OPTIONAL  -- Need S，跳频间隔
+}
+
+-- PUCCH DMRS Bundling（Rel-17）
+DMRS-BundlingPUCCH-Config-r17 ::= SEQUENCE {
+  pucch-DMRS-Bundling-r17          ENUMERATED {enabled}                    OPTIONAL,  -- Need R
+  pucch-TimeDomainWindowLength-r17 INTEGER (2..8)                          OPTIONAL,  -- Need S
+  pucch-WindowRestart-r17           ENUMERATED {enabled}                    OPTIONAL,  -- Need R
+  pucch-FrequencyHoppingInterval-r17 ENUMERATED {s2, s4, s5, s10}          OPTIONAL  -- Need S
+}
 ```
-Inter-slot DMRS Bundling 机制：
 
-RRC 配置（BWP-Downlink）：
-  dmrs-Bundling ::= SEQUENCE {
-    bundlingSize         ENUMERATED {n2, n4, n6, n8},   -- 跨 slots 数
-    bundlingInterval     ENUMERATED {slotLevel, subFrameLevel},
-    ...
-  }
+工作模式（pusch-TimeDomainWindowLength = 4）：
+  - Slot 0: PUSCH + DMRS symbol
+  - Slot 1~3: PUSCH（无 DMRS），UE 使用滑动窗口平均估计
+  - Slot 4: PUSCH + DMRS，窗口刷新
+  - UE 对连续的 DMRS 估计进行联合信道估计
 
-工作模式（bundlingSize = n4）：
-  - Slot 0: PDSCH + DMRS symbol 0
-  - Slot 1: PDSCH（无 DMRS），UE 使用 slot 0 的 DMRS 估计
-  - Slot 2: PDSCH（无 DMRS），UE 使用 slot 0 的 DMRS 估计
-  - Slot 3: PDSCH + DMRS symbol 0
-  - UE 对这 4 个 slots 进行联合信道估计
-
-优势：
-  - 增加等效 DMRS 资源（时间分集增益）
-  - 提高 SNR（平均噪声降低）
-  - 适合 slot aggregation（4~8 slots）
-  - 可靠性提升约 2~3 dB
-```
+> 📖 **规范来源**：TS 38.331 Clause 6.3.2 — `DMRS-BundlingPUSCH-Config-r17` / `DMRS-BundlingPUCCH-Config-r17`  
+> ⚠️ **旧版描述错误**：`bundlingSize = ENUMERATED {n2,n4,n6,n8}` 和 `bundlingInterval` 不存在于 Rel-17 IE 定义中，已替换为正确的 `pusch-TimeDomainWindowLength-r17`（INTEGER 2..32）
 
 > 📖 **规范来源**：TS 38.214 Clause 6.2.2（PDSCH DMRS configuration）和 Clause 6.1.3（DMRS bundling for URLLC）
 
@@ -2386,16 +2543,27 @@ PDCCH 可靠性增强：
    - DCI 0_2（Rel-17）用于紧凑 URLLC UL 调度
 
 配置示例（RRC）：
-  ControlResourceSet ::= SEQUENCE {
-    frequencyDomainResources   BIT STRING,
-    duration                    INTEGER (1..3),   -- 1~3 symbols
-    tcid-State                  SEQUENCE {
-      tcid                      INTEGER (0..15),
-      ...
-    }  OPTIONAL,
-    ...
-  }
 ```
+ControlResourceSet ::= SEQUENCE {
+  controlResourceSetId           ControlResourceSetId,
+  frequencyDomainResources       BIT STRING (SIZE(45)),
+  duration                       INTEGER (1..maxCoReSetDuration),  -- 通常 1~3 symbols
+  cce-REG-MappingType            CHOICE {
+    interleaved                  SEQUENCE {
+      reg-BundleSize             ENUMERATED {n2, n3, n6},
+      interleaverSize            ENUMERATED {n2, n3, n6},
+      shiftIndex                 INTEGER (0..maxNrofPhysicalResourceBlocks-1)
+    },
+    non-interleaved              NULL
+  },
+  tci-PresentInDCI              BOOLEAN,  -- TRUE = DCI 中有 TCI field
+  tci-States                     SEQUENCE (SIZE(1..maxNrofTCI-States)) OF TCI-State  OPTIONAL,
+  ...
+}
+```
+
+> 📖 **规范来源**：TS 38.331 Clause 6.3.2 — `ControlResourceSet`  
+> `tci-PresentInDCI` 是 **BOOLEAN**（非 ENUMERATED），`duration` 上限是 `maxCoReSetDuration`（非固定 3）
 
 ---
 
@@ -2467,61 +2635,45 @@ PDSCH-Config ::= SEQUENCE {
 
 ---
 
-### 13.4 repKARQ-Procedure：重复 HARQ 过程
+### 13.4 PUSCH Repetition for URLLC（Configured Grant Repetition）
 
-#### 13.4.1 repKARQ-Procedure 机制
+#### 13.4.1 机制说明
 
-repKARQ-Procedure（Repetition based HARQ Procedure）是 CG Type 2 的可选配置，用于 URLLC 场景下的无 HARQ-ACK 传输：
+> ⚠️ **规范名称勘误**：本文档早期版本将 CG Type 2 的 Repetition 机制称为 `repKARQ-Procedure`。经查 TS 38.331，该字段在 `ConfiguredGrantConfig` 中名称为 `repK`（不是 `repKARQ-Procedure`）。以下内容保留技术机制描述，但实际字段名应以本勘误为准。
+
+**PUSCH Repetition**（基于 `repK` 字段）是 CG Type 2 的可选配置，用于 URLLC 场景下的无 HARQ-ACK 重复传输：
 
 ```
-repKARQ-Procedure 配置：
+repK 配置（ConfiguredGrantConfig）：
+  repK                     ENUMERATED {n1, n2, n4, n8}  -- 重复次数
+  repK-RV                  ENUMERATED {s1-0231, s2-0303, s3-0000}  -- RV 序列
+  periodicity             ENUMERATED {sym2, sym7, sym1x14, ...}  -- 周期（sym* 格式）
 
-ConfiguredGrantConfig ::= SEQUENCE {
-  ...
-  configuredGrantType2       SEQUENCE {
-    periodicity              ENUMERATED {n2, n5, n10, ...},
-    nrofHARQ-Processes       INTEGER (1..16),
-    repKARQ-Procedure        BOOLEAN,   -- TRUE = 启用重复 HARQ
-    ...
-  }  OPTIONAL,
-  ...
-}
-
-当 repKARQ-Procedure = TRUE 时：
-
+当 repK = n4 时（4 次重复）：
   1. 同一个 TB 的多个重复传输使用不同的 RV 序列
-       - Repetition 1: RV = 0
-       - Repetition 2: RV = 2
-       - Repetition 3: RV = 3
-       - Repetition 4: RV = 1
-       → 4 次传输后完成一个完整 redundancy package
+     - Repetition 1: RV = 0
+     - Repetition 2: RV = 2
+     - Repetition 3: RV = 3
+     - Repetition 4: RV = 1
+     → 4 次传输后完成一个完整 redundancy package
 
   2. UE 不需要发送 HARQ-ACK：
-       - gNB 假设所有 repetitions 都被接收
-       - 无 PUCCH/PUSCH HARQ-ACK 反馈（节省开销）
-       - 适合极低延迟场景（不允许 ACK/NACK 反馈延迟）
+     - gNB 假设所有 repetitions 都被接收
+     - 无 PUCCH/PUSCH HARQ-ACK 反馈（节省开销）
+     - 适合极低延迟场景
 
-  3. CG 配置的 nrofHARQ-Processes 同时指示：
-       - HARQ process pool 大小
-       - 最大并发 repetition 数
-
-配置示例：
-  CG Type 2 配置：
-    - periodicity = n2（2 ms）
-    - nrofHARQ-Processes = 8
-    - repKARQ-Procedure = TRUE
-    - nrofConfiguredGrantTimes = 4
-
-  传输模式：
-    - 每个 CG 时机传输一个 repetition
-    - 4 次连续 CG 时机完成一个 TB 的完整传输
-    - 无需 HARQ-ACK，网络自动组合 4 个 repetition
+  3. nrofHARQ-Processes 同时指示：
+     - HARQ process pool 大小
+     - 最大并发 repetition 数
 ```
 
-#### 13.4.2 repKARQ vs 标准 HARQ 对比
+> 📖 **规范来源**：TS 38.331 Clause 6.3.2 — `ConfiguredGrantConfig` 的 `repK` / `repK-RV` / `periodicity` 字段  
+> ⚠️ `configuredGrantType2` SEQUENCE（文档旧版描述）**不存在于 TS 38.331**；正确字段为独立的 `repK` / `repK-RV` / `periodicity`
 
-| 维度 | 标准 HARQ | repKARQ-Procedure |
-|------|-----------|-------------------|
+#### 13.4.2 PUSCH Repetition vs 标准 HARQ 对比
+
+| 维度 | 标准 HARQ | PUSCH Repetition (repK) |
+|------|-----------|------------------------|
 | HARQ-ACK | 必须反馈 | 无反馈 |
 | 延迟 | 1 RTT（K1 symbols）| 0（RTT 延迟消除）|
 | 可靠性 | 靠 ARQ 纠正错误 | 靠 redundancy 避免错误 |
@@ -2543,11 +2695,16 @@ LogicalChannelConfig ::= SEQUENCE {
   ...
   ul-SpecificParameters          SEQUENCE {
     priority                     INTEGER (1..16),
-    allowedSCS-List              ENUMERATED {scs-15kHz, scs-30kHz, ...},
-    maxPUSCH-Duration            ENUMERATED {ms0p5, ms0p5-1, ...},
-    allowedCodingType           ENUMERATED {fullBuffer, partial, ...},  -- Rel-17
-    configuredGrantType1Allowed  BOOLEAN,   -- CG Type 1 许可
-    configuredGrantType2Allowed  BOOLEAN,   -- CG Type 2 许可
+    prioritisedBitRate            ENUMERATED {kBps0, kBps8, kBps16, ...},
+    bucketSizeDuration            ENUMERATED {ms5, ms10, ms20, ...},
+    allowedSCS-List              SEQUENCE (SIZE(1..maxSCSs)) OF SubcarrierSpacing  OPTIONAL,
+    maxPUSCH-Duration             ENUMERATED {ms0p02, ms0p04, ...}  OPTIONAL,
+    configuredGrantType1Allowed   ENUMERATED {true}   OPTIONAL,  -- CG Type 1 许可
+    configuredGrantType2Allowed   BOOLEAN             OPTIONAL,  -- CG Type 2 许可
+    allowedCG-List-r16            SEQUENCE (SIZE(...)) OF ConfiguredGrantConfigIndexMAC-r16  OPTIONAL,  -- Rel-16
+    allowedPHY-PriorityIndex-r16  ENUMERATED {p0, p1} OPTIONAL,  -- Rel-16
+    logicalChannelSR-Mask          BOOLEAN,
+    logicalChannelSR-DelayTimerApplied BOOLEAN,
     ...
   }  OPTIONAL,
   ...
@@ -2705,7 +2862,9 @@ LCP Restrictions 参数优先级顺序（从高到低）：
 
 ### 13.7 dmrs-Bundling 在不同场景下的配置要求
 
-#### 13.7.1 dmrs-Bundling 场景分类
+#### 13.7.1 dmrs-Bundling 场景分类（勘误）
+
+> ⚠️ **规范纠错**：以下旧版描述中的 `BundlingInterval`、`bundlingSize`、`bundlingInterval` 等字段名称**不存在于 3GPP 规范**。Rel-17 实际的 DMRS Bundling 配置通过 `DMRS-BundlingPUSCH-Config-r17` / `DMRS-BundlingPUCCH-Config-r17` 实现（见 §13.2.3）。此处保留仅作概念说明，正文配置请以 §13.2.3 中的标准 ASN.1 为准。
 
 dmrs-Bundling 根据使用场景分为三种配置模式：
 
@@ -2823,7 +2982,7 @@ RRC 配置（BWP-Downlink）：
 | **4-path Packet Duplication** | TS 38.323 Clause 4.3.1 | 极高可靠性 | 可靠性提升 10× |
 | **Multiple TCI (PDCCH)** | TS 38.214 Clause 5.1.2 | 快速 beam switch | 切换延迟 1 symbol |
 | **Multiple TCI (PDSCH)** | TS 38.214 Clause 5.1.3 | Multi-TRP SDM | 频谱效率提升 |
-| **repKARQ-Procedure** | TS 38.321 Clause 5.8.2 | 无 ACK 传输 | 消除 HARQ-ACK 延迟 |
+| **repK（PUSCH Repetition）** | TS 38.331 Clause 6.3.2 | 无 ACK 传输 | 消除 HARQ-ACK 延迟 |
 | **Enhanced Reliability IE** | TS 38.331 Clause 5.6.1 | UE 能力上报 | 网络据此配置 URLLC 特性 |
 
 ---
@@ -2930,10 +3089,9 @@ UE(PDCP)                             UE(MAC)                          gNB
 UE ←═══════════════════════════════════════════ gNB
      RRCReconfiguration
      └─ ConfiguredGrantConfig (Type 1)
-        ├─ cs-RNTI = 0x0001
-        ├─ timeDomainOffset = 0
-        ├─ periodicity = n5 (5ms)
-        ├─ frequencyDomainAlloc = 0101...0 (RB bitmap)
+        ├─ periodicity = sym1x14 (1 slot = 0.125 ms @ 120kHz 或 1 slot = 1 ms @ 15kHz)
+        ├─ repK = n5 (每 TB 重复 5 次)
+        ├─ frequencyDomainAlloc = BIT STRING (SIZE(18)) (RB bitmap)
         ├─ mcs-Table = qam64LowSE (URLLC)
         └─ nrofHARQ-Processes = 8
 
@@ -2947,11 +3105,12 @@ UE MAC entity stores configured uplink grant
 当 SFN=0, slot=0, symbol=0 时：
 
 传输时机 = timeDomainOffset + N × periodicity
-         = 0 + N × 5ms
+         = 0 + N × sym1x14 (1 slot)
 
-N = floor[(SFN × 1024 × 14 + slot × 14 + symbol) / periodicity]
+N = floor[(SFN × 1024 + slot) / periodicity_sym]
+  = floor[(SFN × 1024 + slot) / 1]
 
-HARQ Process ID = floor[N mod 8]
+HARQ Process ID = floor[N mod nrofHARQ-Processes]
 ```
 
 #### Step 2：数据到达触发 MAC PDU 组装
@@ -2982,7 +3141,7 @@ gNB 接收 PUSCH → 解码失败：
   → HARQ-ACK = 0 (NACK)
   → gNB 可选择：
      a) 通过 CS-RNTI 调度 dynamic retransmission
-     b) 如果配置了 cg-RetransmissionTimer：
+     b) 如果配置了 configuredGrantTimer：
         UE 在 timer 超时后自动重传
 ```
 
@@ -3164,48 +3323,55 @@ Timeline (60kHz, Capability I, K2=1 slot):
 
 ### 14.5 CG Type1/Type2 配置与激活完整流程
 
-#### 14.5.1 ConfiguredGrantConfig RRC IE 结构
+#### 14.5.1 ConfiguredGrantConfig RRC IE 结构（勘误）
+
+> ⚠️ **规范名称勘误**：本文档旧版对 `ConfiguredGrantConfig` 的 ASN.1 描述存在多处错误，包括将 `configuredGrantType2` 作为 SEQUENCE 嵌套、将 `repKARQ-Procedure`/`cg-RetransmissionTimer` 等不存在的字段写入规范。以下为根据 TS 38.331 Clause 6.3.2 整理的正确结构：
 
 ```RRC
 ConfiguredGrantConfig ::= SEQUENCE {
-  -- 标识与激活
-  configuredGrantTimer           INTEGER (1..64)          OPTIONAL,
-  frequencyDomainAlloc           BIT STRING (SIZE(18)),    -- PUSCH 频域资源
-  cs-RNTI                        INTEGER (0..65535),       -- CS-RNTI 地址
-  cg-RetransmissionTimer        INTEGER (1..64)          OPTIONAL,
-  frequencyHopping              ENUMERATED {
-    interSlot, intraSlot
-  }                                           OPTIONAL,
-
-  -- 时域配置（Type 2 用，Type 1 通过 RRC 直接设置）
-  timeDomainAlloc               INTEGER (0..15)           OPTIONAL,
-  mcs-Table                     ENUMERATED {
-    qam64, qam256, qam64LowSE
-  }                                          OPTIONAL,
-  mcs-TableTransformPrecoder   ENUMERATED {...}          OPTIONAL,
-  transformPrecoder            ENUMERATED {
-    enabled, disabled
-  }                                          OPTIONAL,
-
-  -- CG-SDT 相关
-  cg-DTX-PreambleUnderlay      SEQUENCE {...}           OPTIONAL,
-
-  -- 允许多个 CG（Rel-16）
-  nrofConfiguredGrantTimes     INTEGER (1..64)          OPTIONAL,
-
-  -- Type 2 激活参数（Type 1 不使用）
-  configuredGrantType2          SEQUENCE {
-    periodicity              ENUMERATED {...},
-    nrofHARQ-Processes      INTEGER (1..16),
-    repKARQ-Procedure       BOOLEAN,
+  -- Type 1 资源（RRC 直接配置，rrc-ConfiguredUplinkGrant 存在即为 Type 1）
+  frequencyHopping                ENUMERATED {intraSlot, interSlot}        OPTIONAL,  -- Need S
+  cg-DMRS-Configuration           DMRS-UplinkConfig,
+  mcs-Table                       ENUMERATED {qam256, qam64LowSE}          OPTIONAL,  -- Need S
+  mcs-TableTransformPrecoder      ENUMERATED {qam256, qam64LowSE}          OPTIONAL,  -- Need S
+  uci-OnPUSCH                     SetupRelease { CG-UCI-OnPUSCH }           OPTIONAL,  -- Need M
+  resourceAllocation              ENUMERATED {resourceAllocationType0,
+                                              resourceAllocationType1,
+                                              dynamicSwitch}               OPTIONAL,  -- Need S
+  powerControlLoopToUse           ENUMERATED {n0, n1, n2, n3}              OPTIONAL,  -- Need S
+  transformPrecoder              ENUMERATED {enabled, disabled}             OPTIONAL,  -- Need S
+  nrofHARQ-Processes             INTEGER (1..16),
+  repK                           ENUMERATED {n1, n2, n4, n8}               OPTIONAL,  -- Need S
+  repK-RV                        ENUMERATED {s1-0231, s2-0303, s3-0000}     OPTIONAL,  -- Need R
+  periodicity                    ENUMERATED {
+    sym2, sym7, sym1x14, sym2x14, sym4x14, sym5x14, sym8x14, sym10x14,
+    sym16x14, sym20x14, sym32x14, sym40x14, sym64x14, sym80x14,
+    sym128x14, sym160x14, sym256x14, sym320x14, sym512x14, sym640x14,
+    sym1024x14, sym1280x14, sym2560x14, sym5120x14,
+    sym6, sym1x12, sym2x12, sym4x12, sym5x12, sym8x12, sym10x12,
+    sym16x12, sym20x12, sym32x12, sym40x12, sym64x12, sym80x12,
+    sym128x12, sym160x12, sym256x12, sym320x12, sym512x12, sym640x12,
+    sym1280x12, sym2560x12
+  },  -- Need S
+  configuredGrantTimer           INTEGER (1..64)                           OPTIONAL,  -- Need R
+  -- Type 1 实际资源（在 rrc-ConfiguredUplinkGrant 内；此字段存在即为 Type 1）
+  rrc-ConfiguredUplinkGrant      SEQUENCE {
+    timeDomainOffset             INTEGER (0..5119),
+    timeDomainAllocation        INTEGER (0..15),
+    frequencyDomainAllocation   BIT STRING (SIZE(18)),
+    antennaPort                 INTEGER (0..31),
+    dmrs-SeqInitialization      INTEGER (0..1)                              OPTIONAL,
+    precodingAndNumberOfLayers  INTEGER (0..63),
+    srs-ResourceIndicator       INTEGER (0..15)                             OPTIONAL,
+    mcsAndTBS                   INTEGER (0..31),
     ...
-  }                                          OPTIONAL,
-
-  -- CG index（用于 Multiple Entry CG Confirmation）
-  configuredGrantConfigIndex   INTEGER (0..7)           OPTIONAL,
+  }  OPTIONAL,  -- Cond CG-Type1
   ...
 }
 ```
+
+> 📖 **规范来源**：TS 38.331 Clause 6.3.2 — `ConfiguredGrantConfig`  
+> ⚠️ **旧版错误**：`configuredGrantType2` SEQUENCE / `repKARQ-Procedure` / `cg-RetransmissionTimer` / `cs-RNTI` 顶层字段 / `nrofConfiguredGrantTimes` 等均为文档杜撰，协议文本中不存在
 
 #### 14.5.2 Type 1 CG 配置流程（RRC-Only，无 PDCCH）
 
@@ -3216,33 +3382,32 @@ gNB                                    UE
  │                                      │
  │  RRCReconfiguration                 │
  │  ├─ spCellConfig                     │
- │  │   └─ initialUplinkBWP              │
+ │  │   └─ initialUplinkBWP            │
  │  │       └─ configuredGrantConfig    │
- │  │           ├─ cs-RNTI = 0x0001      │
- │  │           ├─ periodicity = n2     │
- │  │           ├─ timeDomainOffset = 0 │
- │  │           ├─ frequencyDomainAlloc  │
- │  │           │   = 0101...0101        │
- │  │           ├─ mcs-Table = qam64LowSE│
- │  │           └─ [no configuredGrantType2]  ← Type 1 标识
+ │  │           ├─ periodicity = sym1x14 (1 slot @ 15kHz) │
+ │  │           ├─ repK = n1            │
+ │  │           ├─ nrofHARQ-Processes = 1
+ │  │           └─ rrc-ConfiguredUplinkGrant  ← Type 1 标识
+ │  │               ├─ timeDomainOffset = 0 │
+ │  │               ├─ frequencyDomainAllocation = BIT STRING(SIZE(18)) │
+ │  │               └─ mcsAndTBS = ... │
  │  │                                      │
  │  ├─ LogicalChannelConfig              │
  │  │   ├─ priority = 1                   │
  │  │   ├─ allowedSCS-List = {scs-60kHz} │
- │  │   ├─ maxPUSCH-Duration = to4       │
- │  │   └─ configuredGrantType1Allowed   │
- │  │       = true                        │
+ │  │   ├─ maxPUSCH-Duration = ms0p5     │
+ │  │   └─ configuredGrantType1Allowed = true
  │  │                                      │
  │  ├─ mac-MainConfig                     │
  │  │   └─ ul-GrantConfig                 │
  │  │       └─ configuredGrantConfigToAddModList
  │  │                                      │
- │  └─ rrcReconfigurationComplete        │
+ │  └─ RRCReconfigurationComplete        │
  │  ◄───────────────────────────────────│
  │                                      │
  │  UE 应用配置：                        │
  │  MAC entity stores configured uplink grant
- │  计算周期性传输时机                   │
+ │  计算周期性传输时机（timeDomainOffset + N × periodicity）
  │  CG Type 1 即刻生效，无激活步骤       │
  ▼                                      ▼
 ```
@@ -3256,12 +3421,11 @@ gNB                                    UE
  │                                      │
  │  RRCReconfiguration                 │
  │  ├─ configuredGrantConfig            │
- │  │   ├─ configuredGrantType2         │  ← Type 2 标识
- │  │   │   ├─ periodicity = n5        │
- │  │   │   ├─ nrofHARQ-Processes = 8  │
- │  │   │   └─ repKARQ-Procedure = true │
- │  │   ├─ cs-RNTI = 0x0002            │
- │  │   └─ [无 timeDomainOffset]        │  ← 激活时才设置
+ │  │   ├─ periodicity = sym1x14       │  ← Type 2 通过 periodicity 识别
+ │  │   ├─ nrofHARQ-Processes = 8      │
+ │  │   ├─ repK = n4                   │
+ │  │   ├─ repK-RV = s1-0231           │
+ │  │   └─ [无 rrc-ConfiguredUplinkGrant]  ← 无此字段为 Type 2 标识
  │  │                                      │
  │  └─ RRCReconfigurationComplete       │
  │  ◄───────────────────────────────────│
@@ -4923,6 +5087,6 @@ Rel-18 URLLC 关键技术：
 
 ---
 
-*文档生成时间：2026-05-29*<br>
-*检索工具：3GPP-KB*<br>
-*主要参考：3GPP Rel-17 TS 38.300、TS 38.321、TS 38.322、TS 38.323、TS 38.212、TS 38.213、TS 38.214、TS 38.331、TS 23.501*<br>
+*文档生成时间：2026-05-29*
+*检索工具：3GPP-KB*
+*主要参考：3GPP Rel-17 TS 38.300、TS 38.321、TS 38.322、TS 38.323、TS 38.212、TS 38.213、TS 38.214、TS 38.331、TS 23.501*
