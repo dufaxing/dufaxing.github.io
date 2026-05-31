@@ -49,32 +49,209 @@ mathjax: false
 
 ---
 
-# 🧠 Claude
+# 🧠 Claude Code
 
-Claude是Anthropic开发的AI助手系列，包含网页版、桌面应用和命令行工具。Claude Code是终端原生的Agentic编程工具，据Anthropic报告贡献了GitHub约4%的公开提交量，SWE-bench Verified达到80.9%。
+Claude Code是Anthropic开发的终端原生Agentic编程工具，据Anthropic报告贡献了GitHub约4%的公开提交量，SWE-bench Verified达到80.9%。支持200K上下文窗口（Opus 4.6 支持1M beta）、Agent Teams多智能体协作、MCP协议集成、Hooks生命周期自动化和CLAUDE.md分层记忆系统。
 
-> **核心能力：** 200K上下文窗口（Opus 4.6 支持1M beta）、Agent Teams多智能体协作、`/goal` 自主目标追踪、MCP协议集成、Skills渐进式加载、Hooks生命周期自动化、CLAUDE.md分层记忆系统。
+---
 
-## 官方应用
+## 启动与CLI参数
 
-| 应用 | 简介 |
+### 常用启动参数
+
+| 参数 | 说明 |
 |------|------|
-| [Claude.ai](https://claude.ai/){:target="_blank"} | 网页版AI助手 |
-| [Claude桌面应用](https://claude.ai/download){:target="_blank"} | Mac/Windows桌面客户端，支持本地文件访问 |
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview){:target="_blank"} | 终端原生的Agentic编程工具，支持自主完成复杂开发任务 |
+| `claude` | 启动交互式会话（默认） |
+| `claude -p <prompt>` | 非交互模式，打印输出后退出（适合管道） |
+| `claude -c` | 继续当前目录最近的对话 |
+| `claude -r [session-id]` | 恢复指定会话，无参数则打开选择器 |
+| `claude --model <model>` | 指定模型（如 `sonnet`、`opus`） |
+| `claude --print --model <model> -p <prompt>` | 指定模型非交互查询 |
+| `claude --max-budget-usd <amount>` | 设置API调用最大花费（仅-p模式） |
+| `claude --output-format <format>` | 输出格式：`text`（默认）/ `json` / `stream-json` |
+| `claude --tool <tools>` | 指定可用工具集，`""`禁用全部，`"default"`启用全部 |
+| `claude --permission-mode <mode>` | 权限模式：`auto` / `acceptEdits` / `dontAsk` / `bypassPermissions` / `plan` |
+| `claude --mcp-config <file>` | 加载MCP服务器配置 |
+| `claude --settings <file>` | 加载设置JSON文件 |
+| `claude --add-dir <path>` | 追加允许工具访问的目录 |
+| `claude --agent <name>` | 指定会话使用的Agent |
+| `claude --verbose` | 启用详细输出 |
+| `claude -d [filter]` | 调试模式，可选分类过滤 |
+| `claude -w [name]` | 为会话创建新的git worktree |
+| `claude --tmux` | 使用tmux创建会话（需配合-w） |
+| `claude --resume --fork-session` | 恢复时创建新会话ID |
+| `claude --from-pr [number]` | 关联到PR启动会话 |
 
-## 热门Skills
+### 完整CLI选项参考
 
-| Skill | 功能 |
-|-------|------|
-| `/review` | 代码审查，分析代码问题 |
-| `/init` | 初始化项目配置，生成CLAUDE.md |
-| `/verify` | 验证代码变更是否达到预期效果 |
-| `/loop` | 定时循环执行任务，适用于轮询和周期性检查 |
-| `/run` | 启动并驱动应用，验证变更是否生效 |
-| `/goal` | 定义完成条件，跨轮次自主工作直到目标达成 |
-| `/commit` | 自动生成提交信息并创建commit |
+| 类别 | 选项 |
+|------|------|
+| **认证** | `--dangerously-skip-permissions` / `--allow-dangerously-skip-permissions` |
+| **模型** | `--model` / `--fallback-model` / `--effort` |
+| **工具控制** | `--allowedTools` / `--disallowedTools` / `--tools` / `--add-dir` |
+| **上下文** | `--append-system-prompt` / `--system-prompt` / `--exclude-dynamic-system-prompt-sections` |
+| **会话** | `--session-id` / `--no-session-persistence` / `--fork-session` |
+| **输出** | `--output-format` / `--json-schema` / `--include-partial-messages` / `--input-format` |
+| **插件** | `--plugin-dir` / `--plugin-url` / `--strict-mcp-config` |
+| **Beta** | `--betas` |
+| **Other** | `--bare` / `--verbose` / `-h` / `-v` / `--version` |
+
+---
+
+## 内置命令（REPL斜杠命令）
+
+在Claude Code会话中直接输入以下命令：
+
+### 会话与上下文管理
+
+| 命令 | 说明 |
+|------|------|
+| `/exit` 或 `/quit` | 退出当前会话 |
+| `/clear` | 清屏，清除当前对话历史 |
+| `/compact` | 压缩上下文，丢弃早期对话保留重要文件上下文 |
+| `/plan` | 显示当前的执行计划和工作方向 |
+| `/status` | 显示会话状态（模型、Token使用量、会话ID等） |
+| `/cost` | 显示当前会话的API消费累计 |
+| `/memory` | 查看和管理会话记忆（MEMORY.md内容） |
+| `/resume [session-id]` | 恢复指定或最近的会话 |
+| `/fork-session` | 复制当前会话为新会话 |
+
+### 代码任务
+
+| 命令 | 说明 |
+|------|------|
+| `/review [files]` | 对代码进行审查，分析问题 |
+| `/test [files]` | 生成测试用例 |
+| `/explain [files]` | 解释代码逻辑 |
+| `/fix [files]` | 修复代码问题 |
+| `/search <pattern>` | 搜索代码库 |
+| `/bug <description>` | 分析并报告Bug |
+
+### Git与版本控制
+
+| 命令 | 说明 |
+|------|------|
+| `/commit` | 自动生成符合规范的提交信息并创建commit |
 | `/pr` | 创建Pull Request |
+| `/commit --amend` | 修改上一次commit |
+
+### 项目初始化
+
+| 命令 | 说明 |
+|------|------|
+| `/init` | 在当前目录初始化项目配置，生成CLAUDE.md |
+
+### 目标追踪
+
+| 命令 | 说明 |
+|------|------|
+| `/goal <description>` | 定义完成条件，跨轮次自主工作直到目标达成 |
+
+### 验证与执行
+
+| 命令 | 说明 |
+|------|------|
+| `/verify` | 验证代码变更是否达到预期效果 |
+| `/run` | 启动并驱动应用，验证变更是否生效 |
+| `/loop <interval>` | 定时循环执行任务（轮询/周期性检查） |
+
+### 设置与配置
+
+| 命令 | 说明 |
+|------|------|
+| `/model <model>` | 切换模型 |
+| `/config` | 打开配置文件编辑器 |
+| `/permissions` | 管理权限设置（允许/拒绝特定操作） |
+| `/login` / `/logout` | 登录/登出账户 |
+| `/doctor` | 运行健康检查，诊断配置问题 |
+| `/help` | 显示帮助信息 |
+
+---
+
+## CLI子命令
+
+除直接启动外，`claude`还提供以下子命令：
+
+### `claude mcp` — MCP服务器管理
+
+| 命令 | 说明 |
+|------|------|
+| `claude mcp add <name> <command>` | 添加MCP服务器（支持HTTP/stdio） |
+| `claude mcp add --transport http <name> <url>` | 添加HTTP传输MCP服务器 |
+| `claude mcp add-from-claude-desktop` | 从Claude Desktop导入MCP服务器（Mac/WSL） |
+| `claude mcp add-json <name> <json>` | 用JSON字符串添加服务器 |
+| `claude mcp list` | 列出已配置的MCP服务器 |
+| `claude mcp get <name>` | 查看服务器详情 |
+| `claude mcp remove <name>` | 移除MCP服务器 |
+| `claude mcp reset-project-choices` | 重置项目级服务器授权 |
+| `claude mcp serve` | 启动Claude Code MCP服务器 |
+
+### `claude plugin` — 插件管理
+
+| 命令 | 说明 |
+|------|------|
+| `claude plugin list` | 列出已安装插件 |
+| `claude plugin install <plugin>` | 从市场安装插件 |
+| `claude plugin install <name>@<marketplace>` | 从指定市场安装 |
+| `claude plugin uninstall <plugin>` | 卸载插件 |
+| `claude plugin update [plugin]` | 更新插件到最新版本 |
+| `claude plugin enable / disable <plugin>` | 启用/禁用插件 |
+| `claude plugin marketplace` | 管理插件市场 |
+| `claude plugin details <name>` | 查看插件组件清单和预估Token费用 |
+| `claude plugin validate <path>` | 验证插件或市场清单 |
+| `claude plugin tag <path>` | 为插件发布创建git tag |
+| `claude plugin prune` | 清理不再需要的自动安装依赖 |
+
+### `claude agents` — 多Agent管理
+
+| 命令 | 说明 |
+|------|------|
+| `claude agents` | 启动Agent视图，管理后台Agent会话 |
+| `claude agents --json` | 以JSON格式输出活跃会话（脚本用） |
+| `claude agents --cwd <path>` | 仅显示指定路径下启动的会话 |
+| `claude agents --add-dir <dir>` | 为dispatched会话追加允许目录 |
+| `claude agents --dangerously-skip-permissions` | 允许bypass-permissions模式 |
+
+### `claude project` — 项目状态管理
+
+| 命令 | 说明 |
+|------|------|
+| `claude project purge [path]` | 删除项目所有Claude Code状态（记录/任务/文件历史/配置） |
+
+### `claude auth` — 认证管理
+
+| 命令 | 说明 |
+|------|------|
+| `claude auth login` | 登录Anthropic账户 |
+| `claude auth logout` | 登出账户 |
+| `claude auth status` | 查看认证状态 |
+
+### 其他子命令
+
+| 命令 | 说明 |
+|------|------|
+| `claude setup-token` | 设置长期认证Token（需订阅） |
+| `claude doctor` | 检查Claude Code自动更新器健康状态 |
+| `claude install [target]` | 安装Claude Code，target可选 `stable` / `latest` / 指定版本 |
+| `claude update` / `claude upgrade` | 检查并安装更新 |
+| `claude ultrareview [target]` | 云端多Agent代码审查当前分支或PR |
+| `claude auto-mode` | 检查auto mode分类器配置 |
+| `claude --version` / `-v` | 显示版本号 |
+
+---
+
+## 快捷键
+
+| 快捷键 | 功能 |
+|--------|------|
+| `Esc` | 中断当前Agent操作 |
+| `Tab` | 自动补全提示 |
+| `↑ / ↓` | 浏览历史消息 |
+| `Ctrl+C` | 中断输入/取消操作 |
+| `Ctrl+D` | 退出会话（等同于`/exit`） |
+| `Ctrl+L` | 清屏（等同于`/clear`） |
+
+---
 
 ## MCP Servers
 
@@ -85,6 +262,8 @@ Claude是Anthropic开发的AI助手系列，包含网页版、桌面应用和命
 | [MCP.SO](https://mcp.so/){:target="_blank"} | MCP服务器导航与发现平台 |
 | [Smithery](https://smithery.ai/){:target="_blank"} | MCP服务器注册中心，支持一键安装配置 |
 
+---
+
 ## 插件
 
 | 插件 | 简介 |
@@ -92,16 +271,18 @@ Claude是Anthropic开发的AI助手系列，包含网页版、桌面应用和命
 | [claude-hud](https://github.com/jarrodwatts/claude-hud){:target="_blank"} | Claude Code插件，实时显示上下文使用量、活跃工具、运行中Agent和Todo进度 |
 | [cc-switch](https://github.com/farion1231/cc-switch/releases){:target="_blank"} | 跨平台桌面All-in-One助手，支持Claude Code/Codex/OpenCode/OpenClaw/Gemini CLI/Hermes Agent |
 
+---
+
 ## Hooks
 
 Claude Code支持在工具调用前后自动执行Shell命令，实现生命周期自动化：
 
-| Hook事件 | 用途 |
-|----------|------|
-| `PreToolUse` | 工具调用前拦截或校验（如禁止危险命令） |
-| `PostToolUse` | 工具调用后触发动作（如自动格式化） |
-| `Notification` | 任务完成时发送通知（如桌面提醒、消息推送） |
-| `Stop` | Agent停止时执行清理或汇总 |
+| Hook事件 | 触发时机 | 典型用途 |
+|----------|----------|----------|
+| `PreToolUse` | 工具调用前 | 拦截或校验（如禁止危险命令） |
+| `PostToolUse` | 工具调用后 | 触发动作（如自动格式化） |
+| `Notification` | 任务完成时 | 发送通知（桌面提醒、消息推送） |
+| `Stop` | Agent停止时 | 执行清理或汇总报告 |
 
 ---
 
