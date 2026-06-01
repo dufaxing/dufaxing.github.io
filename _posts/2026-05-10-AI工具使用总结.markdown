@@ -21,8 +21,8 @@ mathjax: false
 | 工具 | 简介 |
 |------|------|
 | [LLM Stats](https://llm-stats.com/){:target="_blank"} | LLM性能排行榜，对比各模型的基准测试结果 |
-| [LMSYS Chatbot Arena](https://chat.lmsys.org/){:target="_blank"} | 基于人类偏好投票的LLM排行榜，社区驱动评测 |
-| [Open LLM Leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard){:target="_blank"} | Hugging Face开源模型排行榜，覆盖多维度基准测试 |
+| [Artificial Analysis](https://artificialanalysis.ai/leaderboards/models){:target="_blank"} | LLM综合评测排行榜，对比价格、速度、质量和API可用性 |
+| [Vellum LLM Leaderboard](https://www.vellum.ai/llm-leaderboard){:target="_blank"} | LLM模型能力排行榜，覆盖推理、编码、多模态等维度 |
 
 ---
 
