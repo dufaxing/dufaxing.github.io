@@ -1,0 +1,779 @@
+---
+layout: post
+title:  "Git 使用手册"
+date:   2026-08-05 00:00:00
+categories: 工具
+tags: Git
+excerpt: Git 基本原理、常用指令与 Gerrit 工作流提交规范
+mathjax: false
+---
+* content
+{:toc}
+---
+
+![KYHHbj.png](https://s2.ax1x.com/2019/10/23/KYHHbj.png)
+
+
+> [博客地址](https://dufaxing.com){:target="_blank"}
+
+
+
+# 一、Git 基本原理
+
+Git 是一个**分布式版本控制系统**（DVCS），由 Linus Torvalds 于 2005 年创建。与 SVN 等集中式版本控制系统不同，Git 中每个开发者本地都持有完整仓库副本，包括全部历史记录，因此绝大多数操作都是本地操作，速度极快且支持离线工作。
+
+---
+
+## 1.1 快照差异，而非文件差异
+
+其他 VCS（如 CVS、SVN）存储的是**基于文件的变更集**——每次提交记录"哪些文件改了哪些行"。
+
+Git 存储的是**项目在每次提交时的完整快照**。对于未变更的文件，Git 不会重复存储，而是保留一个指向之前存储版本的**指针**。这意味着：
+
+- 切换版本极快：直接指向对应快照即可
+- 完整性高：每个提交都是项目某一时刻的完整状态
+
+---
+
+## 1.2 三种状态与三个工作区
+
+Git 文件有三种状态，对应三个工作区：
+
+| 状态 | 工作区 | 含义 |
+|------|--------|------|
+| **Modified（已修改）** | **工作区**（Working Directory） | 文件被改动但尚未保存到数据库 |
+| **Staged（已暂存）** | **暂存区**（Staging Area / Index） | 修改已加入下一次提交快照 |
+| **Committed（已提交）** | **版本库**（.git Directory） | 数据已安全保存在本地数据库 |
+
+三区流转关系：
+
+```
+工作区 ──git add──▶ 暂存区 ──git commit──▶ 版本库
+   ▲                                            │
+   └─────────git checkout──────────────────────┘
+```
+
+---
+
+## 1.3 Git 内部对象模型
+
+Git 的核心是一个**基于内容寻址的键值存储**，所有数据都以 40 位 SHA-1 哈希作为 key 存储在 `.git/objects` 下。Git 有四类基本对象：
+
+| 对象 | 作用 |
+|------|------|
+| **blob** | 存储文件内容（不含文件名） |
+| **tree** | 存储目录结构，包含文件名 + blob/tree 的哈希 |
+| **commit** | 存储一次提交元信息（tree 哈希、父 commit、作者、提交信息） |
+| **tag** | 存储带注释的标签，指向某个 commit |
+
+举例：一次 commit 实际上指向一个 tree，该 tree 递归引用若干子 tree 和 blob。通过哈希链，整个历史构成一个**有向无环图（DAG）**。
+
+---
+
+## 1.4 分支的本质
+
+Git 的分支**仅仅是一个指向某次 commit 的可变指针**。创建分支只是新建了一个 41 字节的文件（分支名 → commit 哈希），几乎零开销。
+
+- `HEAD`：特殊指针，指向当前所在分支
+- 默认分支名：`master`（新版本 Git 默认为 `main`）
+- 切换分支 = 修改 `HEAD` 指向 + 更新工作区文件
+
+```
+            ┌── feature ──┐
+            ▼              ▼
+A ──▶ B ──▶ C ──▶ D ──▶ E
+                    ▲
+                    │
+                  master
+                    ▲
+                  HEAD
+```
+
+---
+
+## 1.5 分布式协作模型
+
+| 概念 | 说明 |
+|------|------|
+| **本地仓库**（Local Repository） | 开发者机器上的完整 Git 仓库 |
+| **远程仓库**（Remote Repository） | 团队共享的中央仓库（GitHub / GitLab / Gerrit 等） |
+| **克隆**（clone） | 把远程仓库完整复制到本地，含全部历史 |
+| **拉取**（pull） = fetch + merge | 获取远程更新并合并到当前分支 |
+| **推送**（push） | 把本地提交上传到远程仓库 |
+
+---
+
+# 二、Git 常用指令
+
+## 2.1 配置类
+
+```bash
+# 全局配置用户名和邮箱（提交身份标识）
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+# 查看所有配置
+git config --list
+
+# 设置默认编辑器
+git config --global core.editor vim
+
+# 配置别名，简化常用命令
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.lg "log --oneline --graph --all"
+```
+
+---
+
+## 2.2 仓库初始化与克隆
+
+```bash
+# 在当前目录初始化一个新仓库
+git init
+
+# 克隆远程仓库
+git clone <url>
+
+# 克隆到指定目录
+git clone <url> <dir>
+
+# 克隆指定分支
+git clone -b <branch> <url>
+
+# 仅克隆最近一次提交（节省时间空间，适合大仓库）
+git clone --depth 1 <url>
+```
+
+---
+
+## 2.3 暂存与提交
+
+```bash
+# 查看当前状态
+git status
+
+# 查看未暂存的修改
+git diff
+
+# 查看已暂存但未提交的修改
+git diff --cached
+
+# 暂存单个文件
+git add <file>
+
+# 暂存所有修改（含新增、修改、删除）
+git add -A
+git add .
+
+# 交互式选择暂存内容（按 hunk 暂存）
+git add -p
+
+# 提交
+git commit -m "commit message"
+
+# 提交时同时附加详细说明
+git commit -m "title" -m "body..."
+
+# 修改上一次提交（追加文件或修改信息，前提是未 push）
+git commit --amend
+git commit --amend --no-edit    # 保持原信息
+```
+
+> **提交信息规范**：第一行简短摘要（≤50字符），空行后写详细说明，每行 ≤72 字符。
+
+---
+
+## 2.4 分支操作
+
+```bash
+# 列出本地分支
+git branch
+
+# 列出所有分支（含远程）
+git branch -a
+
+# 创建新分支（不切换）
+git branch <name>
+
+# 创建并切换到新分支
+git checkout -b <name>
+# 新版本写法
+git switch -c <name>
+
+# 切换分支
+git checkout <name>
+git switch <name>
+
+# 删除本地分支（安全删除，未合并会拒绝）
+git branch -d <name>
+
+# 强制删除分支
+git branch -D <name>
+
+# 删除远程分支
+git push origin --delete <name>
+
+# 重命名分支
+git branch -m <old> <new>
+```
+
+---
+
+## 2.5 合并与变基
+
+```bash
+# 合并指定分支到当前分支（生成 merge commit）
+git merge <branch>
+
+# 变基：把当前分支的提交"搬到"目标分支顶端，保持线性历史
+git rebase <branch>
+
+# 交互式变基，常用场景：
+#   - 压缩多个提交（squash）
+#   - 修改历史提交信息
+#   - 调整提交顺序
+git rebase -i HEAD~3
+
+# 变基冲突解决流程
+# 1. 手动编辑冲突文件，移除 <<<<<<< ======= >>>>>>> 标记
+# 2. git add <冲突文件>
+# 3. git rebase --continue
+# 或放弃变基：git rebase --abort
+
+# 终止本次合并
+git merge --abort
+```
+
+**merge vs rebase 对比：**
+
+| 维度 | merge | rebase |
+|------|-------|--------|
+| 历史 | 保留分支轨迹，生成 merge commit | 线性历史，无 merge commit |
+| 安全性 | 不改写历史，绝对安全 | 改写历史，**禁止对已推送的公共分支使用** |
+| 使用场景 | 集成分支、保留特性分支轨迹 | 个人分支同步主干最新代码 |
+
+---
+
+## 2.6 远程操作
+
+```bash
+# 查看远程仓库
+git remote -v
+
+# 添加远程仓库
+git remote add <name> <url>          # 例如 git remote add upstream ...
+
+# 修改远程仓库地址
+git remote set-url <name> <url>
+
+# 移除远程仓库
+git remote remove <name>
+
+# 拉取远程更新但不合并（推荐，比 pull 更安全）
+git fetch <remote>
+
+# 拉取并合并到当前分支 = fetch + merge
+git pull <remote> <branch>
+git pull --rebase                   # 拉取后变基而非合并
+
+# 推送本地提交到远程
+git push <remote> <branch>
+
+# 推送并建立追踪关系（首次推送）
+git push -u origin <branch>
+
+# 强制推送（危险！会覆盖远程历史）
+git push --force-with-lease         # 比 --force 安全，远程有他人提交时会拒绝
+```
+
+> **黄金法则：永远不要对公共分支（如 master/main）执行 `push --force`。** 推荐使用 `--force-with-lease`。
+
+---
+
+## 2.7 查看历史
+
+```bash
+# 查看提交历史
+git log
+
+# 单行紧凑模式
+git log --oneline
+
+# 图形化展示分支
+git log --oneline --graph --all --decorate
+
+# 显示每次提交的 diff
+git log -p
+
+# 显示每次提交的文件变更统计
+git log --stat
+
+# 查看某个文件的修改历史
+git log -- <file>
+
+# 搜索提交信息
+git log --grep="keyword"
+
+# 查看某次提交的详细内容
+git show <commit-id>
+```
+
+---
+
+## 2.8 撤销操作
+
+```bash
+# 撤销工作区某文件的修改（危险！未保存的修改会丢失）
+git checkout -- <file>
+git restore <file>                   # 新写法
+
+# 撤销暂存（保留工作区修改）
+git reset HEAD <file>
+git restore --staged <file>          # 新写法
+
+# 撤销已提交但未推送的 commit（保留修改在工作区）
+git reset --soft HEAD~1              # 撤销 commit，保留暂存
+git reset HEAD~1                     # 默认 mixed，撤销 commit 和暂存
+git reset --hard HEAD~1              # 彻底丢弃（危险）
+
+# 通过新 commit 撤销历史 commit（公共分支安全）
+git revert <commit-id>
+```
+
+| reset 模式 | 版本库 | 暂存区 | 工作区 |
+|-----------|:------:|:------:|:------:|
+| `--soft` | 回退 | 保留 | 保留 |
+| `--mixed`（默认） | 回退 | 回退 | 保留 |
+| `--hard` | 回退 | 回退 | 回退 |
+
+---
+
+## 2.9 储藏（Stash）
+
+```bash
+# 临时保存工作区与暂存区修改（不提交）
+git stash
+
+# 含未跟踪文件
+git stash -u
+
+# 给 stash 加说明
+git stash save "message"
+
+# 查看 stash 列表
+git stash list
+
+# 恢复最近一次 stash（保留在 stash 列表）
+git stash apply
+
+# 恢复并删除最近一次 stash
+git stash pop
+
+# 恢复指定 stash
+git stash apply stash@{2}
+
+# 删除 stash
+git stash drop stash@{0}
+
+# 清空所有 stash
+git stash clear
+```
+
+---
+
+## 2.10 标签（Tag）
+
+```bash
+# 列出标签
+git tag
+
+# 创建轻量标签
+git tag v1.0.0
+
+# 创建带注释的标签（推荐，含作者、时间、说明）
+git tag -a v1.0.0 -m "Release v1.0.0"
+
+# 推送单个标签到远程
+git push origin v1.0.0
+
+# 推送所有标签
+git push origin --tags
+
+# 删除本地标签
+git tag -d v1.0.0
+
+# 删除远程标签
+git push origin --delete v1.0.0
+```
+
+---
+
+## 2.11 高级工具
+
+```bash
+# 二分查找定位引入 bug 的 commit
+git bisect start
+git bisect bad                    # 当前版本有问题
+git bisect good <commit-id>       # 标记一个已知正常的版本
+# Git 会自动 checkout 中间版本，测试后：
+git bisect good   # 或 git bisect bad
+git bisect reset                  # 结束 bisect
+
+# 挑选某次 commit 应用到当前分支
+git cherry-pick <commit-id>
+
+# 使用 reflog 找回"丢失"的 commit（reset/rebase 后）
+git reflog
+
+# 把某次提交从历史中彻底移除（敏感信息泄露场景）
+git filter-branch --tree-filter 'rm -f <file>' HEAD
+# 或使用更快的工具：git filter-repo
+```
+
+---
+
+# 三、Gerrit 工作流下的 Git 提交规范
+
+Gerrit 是基于 Git 的**网页式代码评审工具**，广泛用于 Android、AOSP、嵌入式系统、运营商级项目等对代码质量要求极高的场景。它通过拦截 `git push`，把每次提交转化为一个评审单（Change），评审通过后才合入中央仓库。
+
+---
+
+## 3.1 Gerrit 与 GitHub/GitLab 工作流对比
+
+| 维度 | GitHub Flow | Gerrit Flow |
+|------|-------------|-------------|
+| 评审单元 | Pull Request（一个分支） | Change（一个 commit） |
+| 推送方式 | `git push origin feature-branch`，再发 PR | `git push origin HEAD:refs/for/<branch>` |
+| 评审粒度 | 一个 PR 可含多个 commit | 一个 Change = 一个 commit |
+| 修订机制 | 追加新 commit 到同一分支 | `git commit --amend` 保持 Change-Id 不变 |
+| 合并方式 | Maintain 合并 PR | Gerrit 在 +2 + Submit 后自动合并 |
+
+---
+
+## 3.2 Gerrit 的核心概念
+
+| 概念 | 说明 |
+|------|------|
+| **Change** | 一次代码评审，对应一个 commit，有唯一的 Change-Id |
+| **Change-Id** | commit message 末尾的 `Change-Id: Ixxxxxxx`，唯一标识一个 Change 的所有 Patch Set |
+| **Patch Set** | 同一个 Change 的不同修订版本（每次 amend 推送生成新版本） |
+| **Reference（refs）** | Gerrit 维护的特殊引用，如 `refs/for/<branch>`、`refs/changes/<nn>/<id>/` |
+| **Code Review (+1/+2)** | 评审者打分，+2 表示 LGTM（Looks Good To Me） |
+| **Verify (+1/-1)** | CI 自动构建测试结果 |
+| **Submit** | +2 且 Verify +1 后，触发实际合并到目标分支 |
+
+---
+
+## 3.3 配置 Gerrit 环境
+
+### 3.3.1 安装 commit-msg Hook（自动生成 Change-Id）
+
+Gerrit 要求每次 commit 携带 Change-Id。这一步由 commit-msg hook 自动完成：
+
+```bash
+# 从 Gerrit 服务器下载 hook 到本地 .git/hooks 目录
+cd <repo>
+scp -p -P 29418 <user>@<gerrit-server>:hooks/commit-msg .git/hooks/
+
+# 给 hook 可执行权限（Linux/Mac）
+chmod +x .git/hooks/commit-msg
+```
+
+此后每次 `git commit`，hook 会自动在 commit message 末尾追加：
+
+```
+Change-Id: I<40位十六进制哈希>
+```
+
+> **Windows 用户**可以直接在 Gerrit 网页 `Settings → HTTP Password` / `SSH Keys` 完成认证后，从 `Projects → List → <项目> → Commands → clone` 处获取带 hook 的克隆命令。
+
+### 3.3.2 配置认证
+
+| 方式 | 说明 |
+|------|------|
+| **SSH（推荐）** | 上传本机公钥到 Gerrit `Settings → SSH Keys`，clone 使用 `ssh://<user>@<host>:29418/<project>` |
+| **HTTP** | 在 `Settings → HTTP Password` 生成密码，clone 使用 `https://<user>@<host>/<project>` |
+
+---
+
+## 3.4 推送一个 Change
+
+### 3.4.1 标准推送流程
+
+```bash
+# 1. 切到目标分支并同步最新
+git checkout master
+git pull --rebase
+
+# 2. 基于最新代码创建工作分支（可选，但推荐）
+git checkout -b feature/add-login
+
+# 3. 修改代码
+vim src/login.c
+
+# 4. 暂存并提交（commit-msg hook 会自动追加 Change-Id）
+git add src/login.c
+git commit -s -m "feature: add login function
+
+Implement the login flow with token-based auth.
+
+Signed-off-by: Your Name <you@example.com>"
+
+# 5. 推送到 Gerrit 评审
+git push origin HEAD:refs/for/master
+```
+
+### 3.4.2 推送语法解析
+
+```
+git push origin HEAD:refs/for/<target-branch>
+                │         │
+                │         └── Gerrit 特殊引用，表示"创建/更新评审单"
+                │
+                └── 当前 HEAD 指向的 commit
+```
+
+可选的推送目标：
+
+| 引用 | 用途 |
+|------|------|
+| `refs/for/<branch>` | 推到默认评审分支 |
+| `refs/for/<branch>%topic=xxx` | 推送并设置 topic（关联多个 Change） |
+| `refs/for/<branch>%wip` | 标记为 Work In Progress（不通知评审者） |
+| `refs/for/<branch>%private` | 私有 Change（仅自己可见） |
+| `refs/drafts/<branch>` | 草稿模式（旧版） |
+
+例：
+
+```bash
+git push origin HEAD:refs/for/master%topic=login-feature
+```
+
+---
+
+## 3.5 评审反馈与修订
+
+### 3.5.1 根据评审意见修改并产生新 Patch Set
+
+**关键：必须用 `git commit --amend` 保留 Change-Id**，否则会被识别为新 Change。
+
+```bash
+# 1. 根据评审意见修改代码
+vim src/login.c
+
+# 2. 暂存修改
+git add src/login.c
+
+# 3. amend 到上一次 commit（Change-Id 会被保留）
+git commit --amend --no-edit
+# 或同时修改 commit message：
+git commit --amend
+
+# 4. 再次推送（Gerrit 会自动识别为同一 Change 的新版本）
+git push origin HEAD:refs/for/master
+```
+
+推送后，Gerrit 网页上原 Change 会新增一个 Patch Set，评审者可以看到两次版本的 diff。
+
+### 3.5.2 Change-Id 丢失的修复
+
+如果 commit message 中没有 Change-Id（hook 未生效），可以手动补回：
+
+```bash
+# 1. 从 Gerrit 网页找到该 Change 的 Change-Id（如 I1234567890abcdef...）
+# 2. amend commit message
+git commit --amend
+# 3. 在 commit message 末尾添加一行：
+#    Change-Id: I1234567890abcdef...
+# 4. 重新推送
+```
+
+或使用工具自动补丁：
+
+```bash
+java -jar .git/hooks/commit-msg  # 重新生成
+```
+
+---
+
+## 3.6 一个分支多个 commit 的处理
+
+Gerrit 评审粒度是 commit，一个分支推 N 个 commit 会产生 N 个 Change。如果这些 Change 有依赖关系，Gerrit 会自动识别（基于父 commit）形成依赖链。
+
+```bash
+# 假设分支上有三个 commit
+git log --oneline
+# c3 third commit
+# c2 second commit
+# c1 first commit
+
+git push origin HEAD:refs/for/master
+# → 产生三个 Change: c1, c2, c3
+# → c2 depends-on c1, c3 depends-on c2
+# → 评审顺序：c1 先 +2 合入，c2 才可合入，c3 同理
+```
+
+**推荐做法**：
+
+- 把相关变更压缩成一个 commit（`git rebase -i` squash），便于评审
+- 如果必须分多个 commit，确保每个 commit 都能独立编译通过
+- 用 `%topic=xxx` 关联同一特性的多个 Change
+
+---
+
+## 3.7 评审状态流转
+
+```
+       ┌──────────────────────────────────┐
+       │  Push to refs/for/<branch>       │
+       └──────────────┬───────────────────┘
+                      ▼
+              ┌───────────────┐
+              │  NEW (待评审)  │
+              └───────┬───────┘
+                      ▼
+       ┌──────────────────────────────┐
+       │  Code Review:                │
+       │   -1 / 0 / +1 / +2           │
+       └──────┬───────────────────────┘
+              ▼
+       ┌──────────────────────────────┐
+       │  Verified (CI 自动构建):      │
+       │   -1 / 0 / +1                │
+       └──────┬───────────────────────┘
+              ▼
+       ┌──────────────────────────────┐
+       │  CR +2 && V +1 → READY       │
+       └──────┬───────────────────────┘
+              ▼
+       ┌──────────────────────────────┐
+       │  Submit (合入中央仓库)         │
+       └──────┬───────────────────────┘
+              ▼
+       ┌──────────────────────────────┐
+       │  MERGED                       │
+       └──────────────────────────────┘
+```
+
+---
+
+## 3.8 推荐的 Commit Message 规范
+
+Gerrit 项目通常遵循如下格式（参考 Conventional Commits + Linux Kernel 风格）：
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+| 字段 | 说明 |
+|------|------|
+| **type** | feat / fix / refactor / docs / test / chore / perf / style / build / ci |
+| **scope** | 影响的模块（可选），如 `auth`, `mac`, `rlc` |
+| **subject** | 简短描述，祈使句，≤50 字符，结尾不加句号 |
+| **body** | 详细说明动机、实现方式、副作用，每行 ≤72 字符 |
+| **footer** | `Signed-off-by:`、`Change-Id:`、`Resolves:`、`See-Also:` 等 |
+
+**示例**：
+
+```
+feat(mac): add slice configuration for URLLC
+
+Add the slice-specific bearer mapping for URLLC traffic.
+The previous implementation used a single bearer for all
+URLLC QoS flows, which caused latency spikes under high load.
+
+- New API: mac_set_slice_config()
+- Backward compatible, default slice = 0
+- Tested with 100ms periodicity
+
+Signed-off-by: Your Name <you@example.com>
+Change-Id: I3c5e2b8a9f1d4e7c6b0a2d3f5e8c7b1a4d6f9e2c
+```
+
+> **`Signed-off-by` 的法律意义**：开发者声明对该代码拥有著作权并允许以项目许可证发布（Linux 内核的 DCO 协议要求）。Gerrit 推送命令加 `-s` 自动添加。
+
+---
+
+## 3.9 Gerrit 常见问题排查
+
+| 现象 | 可能原因 | 解决方案 |
+|------|----------|----------|
+| 推送被拒：`missing Change-Id` | commit-msg hook 未安装或未生效 | 重新安装 hook，`git commit --amend` 补 Change-Id |
+| 推送被拒：`not a valid change id` | Change-Id 格式错误 | 检查格式 `I` + 40 位十六进制 |
+| 推送被拒：`no new changes` | 已存在相同 patch set | `--amend` 产生新内容后再推 |
+| 推送被拒：`branch not found` | `refs/for/<branch>` 分支名拼错 | 核对目标分支名 |
+| 推送被拒：`you are not authorized` | 权限不足 | 联系项目管理员开通 push 权限 |
+| 评审单无法 Submit | 缺少 +2 或 Verified +1 | 提醒评审者打分，CI 失败则修复 |
+| Conflict | 评审期间主干已更新 | `git fetch origin && git rebase origin/master` 解决后重推 |
+
+---
+
+## 3.10 Gerrit 完整工作流速查
+
+```bash
+# 0. 首次配置（每台机器一次）
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+# 1. 克隆仓库（自动含 hook）
+git clone -o origin ssh://<user>@<gerrit>:29418/<project>
+cd <project>
+
+# 2. 同步主干
+git checkout master
+git pull --rebase
+
+# 3. 开发
+git checkout -b feature/xxx
+# ... 修改代码 ...
+git add -p
+git commit -s -m "feat: xxx"
+# hook 自动追加 Change-Id
+
+# 4. 推评审
+git push origin HEAD:refs/for/master
+
+# 5. 评审反馈，amend 修订
+git add -p
+git commit --amend --no-edit
+git push origin HEAD:refs/for/master
+
+# 6. 评审通过 + Submit 自动合入
+# 7. 同步主干，继续下一个任务
+git checkout master
+git pull --rebase
+```
+
+---
+
+# 四、附录：常用指令速查表
+
+| 场景 | 指令 |
+|------|------|
+| 配置身份 | `git config --global user.name/email` |
+| 初始化 | `git init` / `git clone <url>` |
+| 看状态 | `git status` / `git diff` |
+| 暂存 | `git add -A` / `git add -p` |
+| 提交 | `git commit -m` / `git commit --amend` |
+| 看历史 | `git log --oneline --graph --all` |
+| 切分支 | `git checkout -b <name>` / `git switch <name>` |
+| 合并 | `git merge <branch>` / `git rebase <branch>` |
+| 拉取 | `git fetch` / `git pull --rebase` |
+| 推送 | `git push` / `git push --force-with-lease` |
+| 撤销 | `git reset --hard HEAD~1` / `git revert <id>` |
+| 储藏 | `git stash` / `git stash pop` |
+| Gerrit 推送 | `git push origin HEAD:refs/for/<branch>` |
+| Gerrit 修订 | `git add ... && git commit --amend --no-edit && git push ...` |
+| 找回误删 | `git reflog` |
+| 二分查 bug | `git bisect start / good / bad / reset` |
+
+---
+
+> **总结：** Git 是分布式快照存储，理解"三区四对象"模型后大部分命令都能自然推导。Gerrit 在 Git 之上增加了"每个 commit 都要评审"的约束，核心变化是推送到特殊引用 `refs/for/<branch>`，并通过 Change-Id 跨修订追踪同一逻辑变更。熟练掌握后，Git + Gerrit 工作流能极大提升团队代码质量与可追溯性。

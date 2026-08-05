@@ -16,42 +16,121 @@ mathjax: false
 
 > [博客地址](https://dufaxing.com){:target="_blank"}
 
+# 前言
+
+本文是个人在使用 AI 工具过程中持续维护的速查手册，按使用场景分类整理，便于快速定位。所有工具均附官方链接，** Stars/价格等数据随时间变化，请以官网为准**。
+
+---
+
 # 📊 模型排名
 
-| 工具 | 简介 |
-|------|------|
-| [LLM Stats](https://llm-stats.com/){:target="_blank"} | LLM性能排行榜，对比各模型的基准测试结果 |
-| [Artificial Analysis](https://artificialanalysis.ai/leaderboards/models){:target="_blank"} | LLM综合评测排行榜，对比价格、速度、质量和API可用性 |
-| [Vellum LLM Leaderboard](https://www.vellum.ai/llm-leaderboard){:target="_blank"} | LLM模型能力排行榜，覆盖推理、编码、多模态等维度 |
+业界主流厂商发布会/论文常引用的权威排行榜：
+
+| 排行榜 | 简介 |
+|--------|------|
+|[Artificial Analysis](https://artificialanalysis.ai/models){:target="_blank"} |一个独立的基准测试平台。特点是多维度、系统性，对模型进行全面的基准测试和性能评估。|
+|[LLM Stats](https://llm-stats.com){:target="_blank"} |整合了多个专项榜单（如数学、长上下文等），可以一站式查看模型在不同能力维度的排名|
+|[Arena](https://arena.ai/leaderboard/agent){:target="_blank"} |一个提供周榜更新的AI大模型竞技场|
 
 ---
 
 # 🌐 AI开放平台
 
+## 国内大模型平台
+
 | 平台 | 简介 |
 |------|------|
-| [DeepSeek](https://platform.deepseek.com/usage){:target="_blank"} | 深度求索AI开放平台，提供API调用和模型服务 |
-| [MiniMax](https://platform.minimaxi.com/user-center/basic-information/){:target="_blank"} | MiniMax大模型开放平台，支持多种AI能力调用 |
-| [智谱](https://open.bigmodel.cn/console/overview){:target="_blank"} | 智谱AI开放平台，提供GLM系列大模型API |
-| [硅基流动](https://siliconflow.cn/){:target="_blank"} | 国内AI推理平台，提供主流开源模型API，价格实惠 |
-| [OpenRouter](https://openrouter.ai/){:target="_blank"} | 统一API接入200+模型，支持自动路由和价格比较 |
+| [DeepSeek 开放平台](https://platform.deepseek.com/usage){:target="_blank"} | 深度求索官方平台，DeepSeek-V3/R1 等，性价比极高 |
+| [智谱开放平台](https://open.bigmodel.cn/console/overview){:target="_blank"} | GLM-4/4-Plus/4V 全系，含 CogViewX 文生图、CodeGeeX |
+| [MiniMax 开放平台](https://platform.minimaxi.com/user-center/basic-information/){:target="_blank"} | MiniMax 大模型，含语音合成（含 emotion 控制）、视频生成 |
+| [月之暗面 Kimi](https://platform.moonshot.cn/){:target="_blank"} | Kimi K2 长上下文（128K+），文档解析与 Agent 能力突出 |
+| [阿里云百炼](https://bailian.console.aliyun.com/){:target="_blank"} | 阿里通义千问系列，Qwen-Max/Plus/Turbo/Flash 全覆盖，支持微调 |
+| [百度千帆](https://qianfan.cloud.baidu.com/){:target="_blank"} | 文心一言/ERNIE 系列，企业级，含模型精调、Prompt 编排 |
+| [腾讯混元](https://cloud.tencent.com/product/hunyuan){:target="_blank"} | 腾讯混元大模型，深度集成微信生态，多模态能力 |
+| [火山方舟（豆包）](https://www.volcengine.com/product/doubao){:target="_blank"} | 字节跳动豆包大模型，价格激进，含 SeedEdit 图像编辑等 |
+
+
+## 海外大模型平台
+
+| 平台 | 简介 |
+|------|------|
+| [Anthropic API](https://www.anthropic.com/api){:target="_blank"} | Claude Opus/Sonnet/Haiku 全系官方 API |
+| [OpenAI Platform](https://platform.openai.com/){:target="_blank"} | GPT/o 系列模型 API，含 Playground、Tokenizer、Evals |
+| [Google AI Studio](https://aistudio.google.com/){:target="_blank"} | Gemini 模型官方开发平台，免费额度较多 |
+| [Mistral La Plateforme](https://console.mistral.ai/){:target="_blank"} | Mistral 官方平台，含 Large/Small/Ministral 系列 |
+| [Cohere Platform](https://dashboard.cohere.com/){:target="_blank"} | Command R/R+ 模型，企业检索与 RAG 优化 |
+| [xAI Console](https://console.x.ai/){:target="_blank"} | Grok 模型 API，X 平台实时数据接入 |
+| [Perplexity API](https://www.perplexity.ai/hub/blog/introducing-pplx-api){:target="_blank"} | 在线 LLM API，集成实时网络搜索 |
+| [Hugging Face](https://huggingface.co/){:target="_blank"} | 模型仓库 + Inference Endpoints，开源模型一站式服务 |
+
+## 模型聚合 / 推理加速平台
+
+| 平台 | 简介 |
+|------|------|
+| [OpenRouter](https://openrouter.ai/){:target="_blank"} | 统一 API 接入 200+ 模型，支持自动路由和价格比较 |
+| [硅基流动 SiliconFlow](https://siliconflow.cn/){:target="_blank"} | 国内推理聚合，提供主流开源模型 API，价格实惠 |
+| [Together AI](https://www.together.ai/){:target="_blank"} | 海外开源模型推理平台，支持 fine-tuning 与 Serverless |
+| [GroqCloud](https://console.groq.com/){:target="_blank"} | 基于 LPU 的极速推理（数百 token/s），Llama/Mixtral 等 |
+| [Replicate](https://replicate.com/){:target="_blank"} | 按调用计费的模型托管，覆盖语言、图像、视频、音频 |
+| [Fal.ai](https://fal.ai/){:target="_blank"} | 极低延迟的生成式模型（图像/视频/音频）推理平台 |
+| [Fireworks AI](https://fireworks.ai/){:target="_blank"} | 开源模型 Serverless 推理，支持 vLLM 后端、fine-tuning |
+| [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/){:target="_blank"} | 边缘推理，与 Cloudflare 生态无缝集成 |
+
+## 企业级云厂商 AI 平台
+
+| 平台 | 简介 |
+|------|------|
+| [Azure AI Foundry](https://ai.azure.com/){:target="_blank"} | 微软 Azure 旗下，提供 GPT/Llama/Phi 等模型的企业级部署 |
+| [AWS Bedrock](https://aws.amazon.com/bedrock/){:target="_blank"} | 亚马逊托管 Claude/Llama/Titan 等，含 Knowledge Base、Guardrails |
+| [Vertex AI](https://cloud.google.com/vertex-ai){:target="_blank"} | Google Cloud 的 MLOps 平台，Gemini + 开源模型一站式 |
+| [阿里云 PAI](https://www.aliyun.com/product/bigdata/learnai/pai){:target="_blank"} | 机器学习平台，含模型训练、部署、精调全流程 |
+| [华为云 ModelArts](https://www.huaweicloud.com/product/modelarts.html){:target="_blank"} | 华为云 AI 开发平台，深度支持盘古系列模型 |
+
+## 主流大模型 API 控制台直达
+
+| 平台 | 简介 |
+|------|------|
+| [Anthropic Console](https://console.anthropic.com/){:target="_blank"} | Claude 模型官方 API 控制台，支持 prompt caching、batch、files 等 |
+| [OpenAI Platform](https://platform.openai.com/){:target="_blank"} | GPT/o 系列模型 API，含 Playground、Tokenizer、Evals |
+| [Google AI Studio](https://aistudio.google.com/){:target="_blank"} | Gemini 模型官方开发平台，免费额度较多 |
+| [Azure AI Foundry](https://ai.azure.com/){:target="_blank"} | 微软 Azure 旗下，提供 GPT/Llama/Phi 等模型的企业级部署 |
 
 ---
 
-# 💻 工作站
+# 💻 AI 桌面客户端
+
+面向**最终用户**的 GUI/Web 客户端，开箱即用。区别于文末 [🏠 本地部署](#本地部署) 章节的开发者向引擎。
+
+## 多模型 API 客户端
+
+仅调用云端 API（自带密钥），不运行本地模型：
 
 | 工具 | 简介 |
 |------|------|
-| [Cherry Studio](https://www.cherry-ai.com/){:target="_blank"} | 开源的AI客户端工具，支持多模型和自定义助手 |
-| [Chatbox](https://chatboxai.app/){:target="_blank"} | 轻量级多模型AI对话客户端，支持自定义API配置 |
-| [Jan](https://jan.ai/){:target="_blank"} | 开源本地AI助手，支持离线运行开源模型，隐私优先 |
-| [LM Studio](https://lmstudio.ai/){:target="_blank"} | 桌面端本地模型运行工具，可视化界面，支持模型搜索和下载 |
+| [Cherry Studio](https://www.cherry-ai.com/){:target="_blank"} | 开源多模型客户端，支持自定义助手、知识库、艺术画板 |
+| [Chatbox](https://chatboxai.app/){:target="_blank"} | 轻量级多模型对话客户端，支持自定义 API 配置，跨平台 |
+| [NextChat](https://github.com/ChatGPTNextWeb/NextChat){:target="_blank"} | 前身 ChatGPT-Next-Web，极流行的开源 Web/桌面客户端，一键部署 |
+| [LobeChat](https://lobehub.com/){:target="_blank"} | 现代设计、插件丰富、支持语音/视觉，2025-2026 年度最热门客户端 |
+| [ChatALL](https://github.com/sunner/ChatALL){:target="_blank"} | 多模型并行对比对话，同时向 ChatGPT/Claude/Gemini 等提问 |
+| [Raycast AI](https://www.raycast.com/ai){:target="_blank"} | Mac 平台效率工具集成的 AI 助手，快捷键唤起 |
+
+## 本地模型运行工具
+
+下载 GGUF 权重并本地推理，无需联网：
+
+| 工具 | 简介 |
+|------|------|
+| [LM Studio](https://lmstudio.ai/){:target="_blank"} | 桌面端本地模型运行工具，可视化界面，支持模型搜索、Hugging Face 直接下载 |
+| [Jan](https://jan.ai/){:target="_blank"} | 开源本地 AI 助手，离线运行开源模型，隐私优先 |
+| [GPT4All](https://gpt4all.io/){:target="_blank"} | Nomic AI 出品，与 LM Studio 直接竞品，强调 CPU 友好与文档聊天 |
+| [Msty](https://msty.app/){:target="_blank"} | 美观的新兴本地 AI 客户端，支持本地与云端模型混合使用 |
+| [Open WebUI](https://github.com/open-webui/open-webui){:target="_blank"} | 原 Ollama WebUI，与 Ollama 配套的事实标准 Web 界面，支持多用户 |
 
 ---
 
 # 🧠 Claude Code
 
-Claude Code是Anthropic开发的终端原生Agentic编程工具，据Anthropic报告贡献了GitHub约4%的公开提交量，SWE-bench Verified达到80.9%。支持200K上下文窗口（Opus 4.6 支持1M beta）、Agent Teams多智能体协作、MCP协议集成、Hooks生命周期自动化和CLAUDE.md分层记忆系统。
+Claude Code是Anthropic开发的终端原生Agentic编程工具，据Anthropic报告贡献了GitHub约4%的公开提交量，SWE-bench Verified达到80.9%+（Opus 4.7 进一步提升）。支持200K上下文窗口（Opus 4.7 支持1M beta）、Agent Teams多智能体协作、MCP协议集成、Hooks生命周期自动化和CLAUDE.md分层记忆系统。
 
 ---
 
@@ -293,8 +372,8 @@ Claude Code支持在工具调用前后自动执行Shell命令，实现生命周�
 | 应用 | 简介 |
 |------|------|
 | [CodeX](https://openai.com/zh-Hans-CN/codex/){:target="_blank"} | OpenAI的AI编程助手，已集成于ChatGPT |
-| [Codex CLI](https://github.com/openai/codex){:target="_blank"} | 开源终端AI编程助手（Rust开发，Apache 2.0），支持自主Agent模式 |
-| [Codex API](https://platform.openai.com/docs/guides/code){:target="_blank"} | OpenAI codex模型API |
+| [Codex CLI](https://github.com/openai/codex){:target="_blank"} | 开源终端AI编程助手（TypeScript/Rust开发，Apache 2.0），支持自主Agent模式 |
+| [Codex API](https://platform.openai.com/docs/guides/code){:target="_blank"} | OpenAI Codex 编程接口（区别于 2023 年弃用的旧 Codex 模型） |
 
 ## Skills
 
@@ -334,7 +413,7 @@ Codex Skills是模块化指令包，每个技能含 `SKILL.md`（YAML frontmatte
 
 # 🤖 hermes
 
-hermes是NousResearch开源的AI Agent框架（174K+ Stars），独特之处在于**内置学习循环**——每10次工具调用迭代触发技能提醒（nudge），促使Agent自主创建和管理技能，Curator模块7天周期自动评估、合并、修剪技能。
+hermes是NousResearch开源的AI Agent框架，社区关注度极高（项目活跃，Stars 数持续增长），独特之处在于**内置学习循环**——每10次工具调用迭代触发技能提醒（nudge），促使Agent自主创建和管理技能，Curator模块7天周期自动评估、合并、修剪技能。
 
 > **核心能力：** 20+聊天平台、自学习技能生成、70+内置工具、多Provider支持、MCP集成、插件架构。
 
@@ -369,38 +448,37 @@ hermes技能通过内置学习循环自动生成并可手动发布到市场：
 | **rtk-hermes** | Token压缩插件，500K+上下文压缩60-90%，支持11M+超长上下文 |
 | **agent-analytics** | 执行路径可视化、工具调用成功率、本地SQLite |
 
-docker配置
-```
+Docker 部署示例：
+
+```yaml
 services:
- hermes:
-  image: nousresearch/hermes-agent:latest
-  container_name: hermes
-  restart: unless-stopped
-  command: gateway run
-  ports:
-   - "8642:8642"
-  environment:
-   - PATH=/opt/hermes/.venv/bin:/usr/local/bin:/usr/bin:/bin
-  stdin_open: true
-  tty: true
-  volumes:
-   - ./.hermes:/opt/data
-  deploy:
-   resources:
-    limits:
-     memory: 4G
-     cpus: "2.0"
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    command: gateway run
+    ports:
+      - "8642:8642"
+    environment:
+      - PATH=/opt/hermes/.venv/bin:/usr/local/bin:/usr/bin:/bin
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./.hermes:/opt/data
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
 ```
 
-进入配置选择LLM，聊天通道目前支持QQ、飞书等。
-
-`hermes setup`
+容器启动后执行 `hermes setup` 进入交互配置，选择 LLM Provider 与聊天通道（QQ、飞书、Telegram 等）。
 
 ---
 
 # 🔧 PI Agent
 
-Pi是Mario Zechner（libGDX/RoboVM作者）打造的极简开源AI编程Agent工具包（TypeScript开发，58K+ Stars）。设计哲学："极度可扩展，不强迫工作流"——故意不加MCP、子Agent、权限弹窗等内置功能，全部通过扩展实现。
+Pi是Mario Zechner（libGDX/RoboVM作者）打造的极简开源AI编程Agent工具包（TypeScript开发，社区活跃）。设计哲学："极度可扩展，不强迫工作流"——故意不加MCP、子Agent、权限弹窗等内置功能，全部通过扩展实现。
 
 > **核心能力：** 四种运行模式（交互式TUI / 管道输出 / RPC进程 / SDK嵌入）、会话树形分支与分叉、25+ LLM Provider统一API、TypeScript扩展系统、Agent Skills标准支持、Pi Packages生态分发。
 
@@ -445,7 +523,7 @@ Pi支持Agent Skills标准的 `SKILL.md`，通过 `/skill:name` 调用或自动�
 
 # 🦞 OpenClaw
 
-OpenClaw是2026年最热门的开源自托管个人AI助手（37.6万+ Stars，MIT），定位"把LLM从对话式AI升级为行动式AI"。网关是控制平面，产品是助手本身。七层架构：渠道层→网关→Agent运行时→技能系统→记忆→插件→本地执行。
+OpenClaw是2026年现象级开源自托管个人AI助手（MIT 协议，社区活跃度极高），定位"把LLM从对话式AI升级为行动式AI"。网关是控制平面，产品是助手本身。七层架构：渠道层→网关→Agent运行时→技能系统→记忆→插件→本地执行。
 
 > **核心能力：** 20+聊天平台（WhatsApp/Telegram/Discord/微信/飞书/钉钉/Slack等）、200+ LLM支持、四层记忆（会话→日志→MEMORY.md→向量检索）、7×24自主运行（HEARTBEAT.md + Cron）、Commander-Worker多Agent编排、A2A通信、Docker沙箱安全执行。
 
@@ -488,14 +566,6 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 |------|------|
 | [NanoClaw](https://github.com/nanoclaw/nanoclaw){:target="_blank"} | 安全加固版，约700行TypeScript，强制容器隔离 |
 | [ZeroClaw](https://github.com/zeroclaw/zeroclaw){:target="_blank"} | Rust重写版，3.4MB二进制，<10ms启动，可树莓派Zero运行 |
-
----
-
-# 🔌 MCP
-
-| 资源 | 简介 |
-|------|------|
-| [MCP.SO](https://mcp.so/){:target="_blank"} | MCP模型上下文协议资源导航，收录各类MCP服务器和工具 |
 
 ---
 
@@ -551,13 +621,24 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 
 # 🏠 本地部署
 
+面向**开发者/运维**的引擎、推理框架与 API 服务。给最终用户的桌面 GUI 客户端见上面的 [💻 AI 桌面客户端](#ai-桌面客户端) 章节。
+
+## 本地推理引擎与服务
+
 | 工具 | 简介 |
 |------|------|
-| [Ollama](https://ollama.com/){:target="_blank"} | 本地运行大模型的工具，支持Llama、Mistral等开源模型 |
-| [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui){:target="_blank"} | 开源的Web界面工具，用于运行各种大语言模型 |
-| [LocalAI](https://localai.io/){:target="_blank"} | 自托管的AI API服务，支持本地部署多种模型 |
-| [llama.cpp](https://github.com/ggerganov/llama.cpp){:target="_blank"} | 高效的C/C++实现的LLM推理工具，支持量化加速 |
-| [vLLM](https://github.com/vllm-project/vllm){:target="_blank"} | 高性能LLM推理引擎，支持PagedAttention和连续批处理 |
+| [Ollama](https://ollama.com/){:target="_blank"} | 本地运行大模型的事实标准 CLI，支持 Llama/Mistral 等，Docker 式模型管理 |
+| [LocalAI](https://localai.io/){:target="_blank"} | 自托管 AI API 服务，OpenAI API 兼容，支持本地多种模型 |
+| [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui){:target="_blank"} | 开源 Web UI 工具，运行各种大语言模型，开发者向（"Oobabooga"） |
+
+## 推理框架与库
+
+| 工具 | 简介 |
+|------|------|
+| [llama.cpp](https://github.com/ggerganov/llama.cpp){:target="_blank"} | 高效的 C/C++ 实现 LLM 推理，支持量化加速，LM Studio/Jan/GPT4All 底层 |
+| [vLLM](https://github.com/vllm-project/vllm){:target="_blank"} | 高性能 LLM 推理引擎，支持 PagedAttention 与连续批处理，生产部署首选 |
+| [SGLang](https://github.com/sgl-project/sglang){:target="_blank"} | 新一代结构化生成推理框架，RadixAttention 加速，并发场景表现突出 |
+| [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM){:target="_blank"} | NVIDIA 官方 LLM 推理优化库，深度集成 Tensor Core，A100/H100 性能最佳 |
 
 ---
 
@@ -684,6 +765,10 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | [盘古](https://github.com/huawei-noah){:target="_blank"} | 华为盘古大模型系列，覆盖NLP/CV/多模态/科学计算 |
 | [Gemma](https://ai.google.dev/gemma){:target="_blank"} | Google开源轻量模型系列，适合端侧和本地部署 |
 | [Phi](https://azure.microsoft.com/en-us/products/phi){:target="_blank"} | 微软开源小参数模型，擅长推理和编程任务 |
+| [Kimi K2](https://platform.moonshot.cn/){:target="_blank"} | 月之暗面开源模型，长上下文（128K+）与 Agent 能力突出 |
+| [GLM 系列](https://github.com/THUDM/GLM-4){:target="_blank"} | 智谱 AI 开源 ChatGLM/GLM-4，多模态、工具调用支持完善 |
+| [MiniCPM](https://github.com/OpenBMB/MiniCPM){:target="_blank"} | 面壁智能端侧大模型，参数小、推理快，适合移动设备 |
+| [Yi 系列](https://github.com/01-ai/Yi){:target="_blank"} | 零一万物（李开复）开源模型，中英双语表现优秀 |
 
 ---
 
@@ -722,6 +807,11 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | [Devin](https://devin.ai/){:target="_blank"} | Cognition推出的AI软件工程师，可独立完成复杂编程任务 |
 | [Augment Code](https://www.augmentcode.com/){:target="_blank"} | 面向大型代码库的AI编程助手，深度理解项目上下文 |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli){:target="_blank"} | Google推出的开源终端AI编程工具，基于Gemini模型 |
+| [通义灵码](https://tongyi.aliyun.com/lingma){:target="_blank"} | 阿里出品的 AI 编程助手，深度支持 Java/Go/Python，IDE 集成完善 |
+| [CodeGeeX](https://codegeex.cn/){:target="_blank"} | 智谱 AI 开源的多语言代码生成模型，支持 VS Code/JetBrains 全家桶 |
+| [Trae](https://www.trae.cn/){:target="_blank"} | 字节跳动出品的 AI IDE（基于 VS Code 二次开发），免费使用 |
+| [CodeBuddy](https://copilot.tencent.com/){:target="_blank"} | 腾讯云 AI 代码助手，企业级，支持代码审查与安全扫描 |
+| [Baidu Comate](https://comate.baidu.com/){:target="_blank"} | 百度智能代码助手，深度文心一言，支持多语言 |
 
 ---
 
@@ -732,9 +822,27 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | 工具 | 简介 |
 |------|------|
 | [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview){:target="_blank"} | Anthropic终端Agent，SWE-bench 80.9%，支持MCP/Hooks/Skills |
-| [Codex CLI](https://github.com/openai/codex){:target="_blank"} | OpenAI开源终端Agent（Rust），支持沙箱执行 |
+| [Codex CLI](https://github.com/openai/codex){:target="_blank"} | OpenAI开源终端Agent（TypeScript/Rust），支持沙箱执行 |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli){:target="_blank"} | Google开源终端Agent，基于Gemini模型，免费额度较多 |
 | [Aider](https://github.com/Aider-AI/aider){:target="_blank"} | 开源终端AI编程助手，支持Git集成和多模型切换 |
 | [OpenCode](https://github.com/opencode-ai/opencode){:target="_blank"} | 开源终端AI编程工具，支持多种LLM Provider |
 
 ---
+
+# 📌 工具选型建议
+
+按场景给出个人推荐（仅供参考，具体选型需结合团队/项目实际）：
+
+| 场景 | 推荐工具 | 备注 |
+|------|----------|------|
+| 日常编程（IDE 内） | Cursor / Windsurf / 通义灵码 | IDE 集成度高，国内访问通义灵码稳定 |
+| 终端 Agent 编程 | Claude Code / Codex CLI | Claude Code 综合能力强；Codex CLI 沙箱执行更安全 |
+| 国产模型 API 调用 | DeepSeek / 智谱 / 硅基流动 | 性价比高，硅基流动聚合多模型 |
+| 本地离线运行 | Ollama + Cherry Studio | 隐私优先，无网络环境友好 |
+| 知识库 / RAG | AnythingLLM / RAGFlow | RAGFlow 文档解析更细致 |
+| AI 出海/建站 | bolt.new / v0 / Lovable | 全栈快速生成 |
+| 多平台消息助手 | OpenClaw / hermes | 自托管、20+ 渠道集成 |
+
+> **AI 工具更迭极快，本文档每季度回顾一次。**如发现链接失效、项目停止维护或更优替代品，及时更新。
+
+
