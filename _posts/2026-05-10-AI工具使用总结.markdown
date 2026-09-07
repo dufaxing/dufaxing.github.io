@@ -40,60 +40,33 @@ mathjax: false
 
 | 平台 | 简介 |
 |------|------|
-| [DeepSeek 开放平台](https://platform.deepseek.com/usage){:target="_blank"} | 深度求索官方平台，DeepSeek-V3/R1 等，性价比极高 |
-| [智谱开放平台](https://open.bigmodel.cn/console/overview){:target="_blank"} | GLM-4/4-Plus/4V 全系，含 CogViewX 文生图、CodeGeeX |
-| [MiniMax 开放平台](https://platform.minimaxi.com/user-center/basic-information/){:target="_blank"} | MiniMax 大模型，含语音合成（含 emotion 控制）、视频生成 |
-| [月之暗面 Kimi](https://platform.moonshot.cn/){:target="_blank"} | Kimi K2 长上下文（128K+），文档解析与 Agent 能力突出 |
-| [阿里云百炼](https://bailian.console.aliyun.com/){:target="_blank"} | 阿里通义千问系列，Qwen-Max/Plus/Turbo/Flash 全覆盖，支持微调 |
-| [百度千帆](https://qianfan.cloud.baidu.com/){:target="_blank"} | 文心一言/ERNIE 系列，企业级，含模型精调、Prompt 编排 |
-| [腾讯混元](https://cloud.tencent.com/product/hunyuan){:target="_blank"} | 腾讯混元大模型，深度集成微信生态，多模态能力 |
-| [火山方舟（豆包）](https://www.volcengine.com/product/doubao){:target="_blank"} | 字节跳动豆包大模型，价格激进，含 SeedEdit 图像编辑等 |
+| [DeepSeek 开放平台](https://platform.deepseek.com/usage){:target="_blank"} | 深度求索官方平台，DeepSeek 系列，Agent 与推理能力强，API 性价比极高 |
+| [智谱开放平台](https://open.bigmodel.cn/console/overview){:target="_blank"} | GLM 系列全系，Coding/Agent 能力突出，含 CogView 文生图、CodeGeeX 代码模型 |
+| [MiniMax 开放平台](https://platform.minimaxi.com/user-center/basic-information/){:target="_blank"} | MiniMax 系列，主打 Agent 与编程，含 Hailuo 视频生成、高质量语音合成 |
+| [月之暗面 Kimi](https://platform.kimi.com/){:target="_blank"} | Kimi 系列，长上下文与 Agent 能力突出，文档解析强 |
+| [阿里云百炼](https://bailian.console.aliyun.com/){:target="_blank"} | 阿里通义千问 Qwen 系列，旗舰与开源全尺寸覆盖，支持微调，含 Wan 视频生成 |
+| [百度千帆](https://qianfan.cloud.baidu.com/){:target="_blank"} | 文心/ERNIE 系列，原生全模态，企业级，含模型精调、Prompt 编排 |
+| [腾讯混元](https://cloud.tencent.com/product/hunyuan){:target="_blank"} | 腾讯混元系列，深度集成微信生态，多模态能力强 |
+| [火山方舟（豆包）](https://www.volcengine.com/product/doubao){:target="_blank"} | 字节跳动豆包大模型，价格激进，含图像编辑、视频生成等多模态能力 |
 
 
 ## 海外大模型平台
 
 | 平台 | 简介 |
 |------|------|
-| [Anthropic API](https://www.anthropic.com/api){:target="_blank"} | Claude Opus/Sonnet/Haiku 全系官方 API |
-| [OpenAI Platform](https://platform.openai.com/){:target="_blank"} | GPT/o 系列模型 API，含 Playground、Tokenizer、Evals |
-| [Google AI Studio](https://aistudio.google.com/){:target="_blank"} | Gemini 模型官方开发平台，免费额度较多 |
-| [Mistral La Plateforme](https://console.mistral.ai/){:target="_blank"} | Mistral 官方平台，含 Large/Small/Ministral 系列 |
-| [Cohere Platform](https://dashboard.cohere.com/){:target="_blank"} | Command R/R+ 模型，企业检索与 RAG 优化 |
-| [xAI Console](https://console.x.ai/){:target="_blank"} | Grok 模型 API，X 平台实时数据接入 |
-| [Perplexity API](https://www.perplexity.ai/hub/blog/introducing-pplx-api){:target="_blank"} | 在线 LLM API，集成实时网络搜索 |
-| [Hugging Face](https://huggingface.co/){:target="_blank"} | 模型仓库 + Inference Endpoints，开源模型一站式服务 |
+| [OpenAI Platform](https://platform.openai.com/){:target="_blank"} | GPT 系列模型官方 API，含 Playground、Evals 等开发者工具 |
+| [Anthropic API](https://www.anthropic.com/api){:target="_blank"} | Claude 系列（Opus/Sonnet/Haiku）官方 API，Coding/Agent 能力强 |
+| [Google AI Studio](https://aistudio.google.com/){:target="_blank"} | Gemini 系列官方开发平台，免费额度较多 |
+| [xAI Console](https://console.x.ai/){:target="_blank"} | Grok 系列模型 API，X 平台实时数据接入 |
+| [Mistral La Plateforme](https://console.mistral.ai/){:target="_blank"} | Mistral 系列官方平台，开源与商用并重 |
+| [Hugging Face](https://huggingface.co/){:target="_blank"} | 开源模型仓库 + Inference 服务，一站式发现与调用开源模型 |
 
-## 模型聚合 / 推理加速平台
+## 模型聚合平台
 
 | 平台 | 简介 |
 |------|------|
-| [OpenRouter](https://openrouter.ai/){:target="_blank"} | 统一 API 接入 200+ 模型，支持自动路由和价格比较 |
-| [硅基流动 SiliconFlow](https://siliconflow.cn/){:target="_blank"} | 国内推理聚合，提供主流开源模型 API，价格实惠 |
-| [Together AI](https://www.together.ai/){:target="_blank"} | 海外开源模型推理平台，支持 fine-tuning 与 Serverless |
-| [GroqCloud](https://console.groq.com/){:target="_blank"} | 基于 LPU 的极速推理（数百 token/s），Llama/Mixtral 等 |
-| [Replicate](https://replicate.com/){:target="_blank"} | 按调用计费的模型托管，覆盖语言、图像、视频、音频 |
-| [Fal.ai](https://fal.ai/){:target="_blank"} | 极低延迟的生成式模型（图像/视频/音频）推理平台 |
-| [Fireworks AI](https://fireworks.ai/){:target="_blank"} | 开源模型 Serverless 推理，支持 vLLM 后端、fine-tuning |
-| [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/){:target="_blank"} | 边缘推理，与 Cloudflare 生态无缝集成 |
-
-## 企业级云厂商 AI 平台
-
-| 平台 | 简介 |
-|------|------|
-| [Azure AI Foundry](https://ai.azure.com/){:target="_blank"} | 微软 Azure 旗下，提供 GPT/Llama/Phi 等模型的企业级部署 |
-| [AWS Bedrock](https://aws.amazon.com/bedrock/){:target="_blank"} | 亚马逊托管 Claude/Llama/Titan 等，含 Knowledge Base、Guardrails |
-| [Vertex AI](https://cloud.google.com/vertex-ai){:target="_blank"} | Google Cloud 的 MLOps 平台，Gemini + 开源模型一站式 |
-| [阿里云 PAI](https://www.aliyun.com/product/bigdata/learnai/pai){:target="_blank"} | 机器学习平台，含模型训练、部署、精调全流程 |
-| [华为云 ModelArts](https://www.huaweicloud.com/product/modelarts.html){:target="_blank"} | 华为云 AI 开发平台，深度支持盘古系列模型 |
-
-## 主流大模型 API 控制台直达
-
-| 平台 | 简介 |
-|------|------|
-| [Anthropic Console](https://console.anthropic.com/){:target="_blank"} | Claude 模型官方 API 控制台，支持 prompt caching、batch、files 等 |
-| [OpenAI Platform](https://platform.openai.com/){:target="_blank"} | GPT/o 系列模型 API，含 Playground、Tokenizer、Evals |
-| [Google AI Studio](https://aistudio.google.com/){:target="_blank"} | Gemini 模型官方开发平台，免费额度较多 |
-| [Azure AI Foundry](https://ai.azure.com/){:target="_blank"} | 微软 Azure 旗下，提供 GPT/Llama/Phi 等模型的企业级部署 |
+| [OpenRouter](https://openrouter.ai/){:target="_blank"} | 统一 API 接入数百个模型，支持自动路由和价格比较 |
+| [硅基流动 SiliconFlow](https://siliconflow.cn/){:target="_blank"} | 国内模型聚合，提供主流开源模型 API，价格实惠 |
 
 ---
 
@@ -110,8 +83,8 @@ mathjax: false
 | [Cherry Studio](https://www.cherry-ai.com/){:target="_blank"} | 开源多模型客户端，支持自定义助手、知识库、艺术画板 |
 | [Chatbox](https://chatboxai.app/){:target="_blank"} | 轻量级多模型对话客户端，支持自定义 API 配置，跨平台 |
 | [NextChat](https://github.com/ChatGPTNextWeb/NextChat){:target="_blank"} | 前身 ChatGPT-Next-Web，极流行的开源 Web/桌面客户端，一键部署 |
-| [LobeChat](https://lobehub.com/){:target="_blank"} | 现代设计、插件丰富、支持语音/视觉，2025-2026 年度最热门客户端 |
-| [ChatALL](https://github.com/sunner/ChatALL){:target="_blank"} | 多模型并行对比对话，同时向 ChatGPT/Claude/Gemini 等提问 |
+| [LobeChat](https://lobehub.com/){:target="_blank"} | 现代设计、插件丰富、支持语音/视觉 |
+| [ChatALL](https://github.com/ai-shifu/ChatALL){:target="_blank"} | 多模型并行对比对话，同时向 ChatGPT/Claude/Gemini 等提问 |
 | [Raycast AI](https://www.raycast.com/ai){:target="_blank"} | Mac 平台效率工具集成的 AI 助手，快捷键唤起 |
 
 ## 本地模型运行工具
@@ -130,7 +103,7 @@ mathjax: false
 
 # 🧠 Claude Code
 
-Claude Code是Anthropic开发的终端原生Agentic编程工具，据Anthropic报告贡献了GitHub约4%的公开提交量，SWE-bench Verified达到80.9%+（Opus 4.7 进一步提升）。支持200K上下文窗口（Opus 4.7 支持1M beta）、Agent Teams多智能体协作、MCP协议集成、Hooks生命周期自动化和CLAUDE.md分层记忆系统。
+Claude Code是Anthropic开发的终端原生Agentic编程工具，终端Agent编程的事实标准之一，SWE-bench 等编程基准长期处于第一梯队（具体数据随版本迭代，请以官方为准）。支持长上下文窗口、Agent Teams多智能体协作、MCP协议集成、Hooks生命周期自动化和CLAUDE.md分层记忆系统。
 
 ---
 
@@ -387,8 +360,8 @@ Codex Skills是模块化指令包，每个技能含 `SKILL.md`（YAML frontmatte
 
 | 资源 | 简介 |
 |------|------|
-| [awesome-codex-skills](https://github.com/ComposioHQ/awesome-codex-skills){:target="_blank"} | 40+精选技能合集 |
-| [Everything Claude Code](https://github.com/affaan-m/everything-claude-code){:target="_blank"} | 182个技能包（TDD/安全/代码审查/架构） |
+| [awesome-codex-skills](https://github.com/composio-community/awesome-codex-skills){:target="_blank"} | 40+精选技能合集 |
+| [Everything Claude Code](https://github.com/affaan-m/ECC){:target="_blank"} | 182个技能包（TDD/安全/代码审查/架构） |
 
 > 技能存放路径：`~/.codex/skills/`（全局）或 `.codex/skills/`（项目级）
 
@@ -401,7 +374,7 @@ Codex Skills是模块化指令包，每个技能含 `SKILL.md`（YAML frontmatte
 | `codex plugin marketplace add <源>` | 添加市场 |
 | `codex plugin install <发布者/名称>` | 安装插件 |
 | [skillpp](https://pypi.org/project/skillpp/){:target="_blank"} | 跨平台技能/插件管理器（Codex/Claude/Copilot） |
-| [skillporter](https://github.com/keithmackay/skillporter){:target="_blank"} | 跨平台技能移植工具 |
+| [port-skill](https://github.com/keithmackay/port-skill){:target="_blank"} | 跨平台技能移植工具 |
 
 ## 增强工具
 
@@ -432,7 +405,6 @@ hermes技能通过内置学习循环自动生成并可手动发布到市场：
 | 市场/资源 | 简介 |
 |-----------|------|
 | [AgentSkills.io](https://agentskills.io/){:target="_blank"} | 开源标准技能市场，跨工具兼容（Claude/OpenClaw/Codex） |
-| [SkillHub](https://github.com/CodeSigils/hermes-skill-hq){:target="_blank"} | hermes技能知识库与市场导航 |
 | [HermesNest](https://hermesnest.ai/){:target="_blank"} | Agent-only技能市场，密码学验证管道 |
 | Shopify官方技能 | 电商运营（产品管理/订单/库存） |
 | 753+ 网络安全技能 | MITRE ATT&CK映射安全技能集 |
@@ -532,7 +504,6 @@ OpenClaw是2026年现象级开源自托管个人AI助手（MIT 协议，社区�
 | 资源 | 简介 |
 |------|------|
 | [OpenClaw](https://github.com/openclaw/openclaw){:target="_blank"} | 开源自托管AI助手 |
-| [awesome-openclaw](https://github.com/SamurAIGPT/awesome-openclaw){:target="_blank"} | 资源、技能、教程汇总 |
 | [中文文档](https://github.com/liyupi/openclaw-guide){:target="_blank"} | OpenClaw中文指南，程序员鱼皮维护 |
 
 ## ClawHub 技能市场
@@ -560,13 +531,6 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | `/btw` | 侧边提问命令，不污染主对话上下文 |
 | **Multi-browser** | 支持Brave、Edge等浏览器自动化 |
 
-## 安全生态
-
-| 项目 | 简介 |
-|------|------|
-| [NanoClaw](https://github.com/nanoclaw/nanoclaw){:target="_blank"} | 安全加固版，约700行TypeScript，强制容器隔离 |
-| [ZeroClaw](https://github.com/zeroclaw/zeroclaw){:target="_blank"} | Rust重写版，3.4MB二进制，<10ms启动，可树莓派Zero运行 |
-
 ---
 
 # 🔍 AI搜索
@@ -574,11 +538,10 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | 工具 | 简介 |
 |------|------|
 | [Perplexity](https://www.perplexity.ai/){:target="_blank"} | AI驱动的搜索引擎，实时获取网络信息并标注来源 |
-| [Phind](https://www.phind.com/){:target="_blank"} | 专为开发者设计的AI搜索工具，支持代码和技术问题 |
 | [博查AI搜索](https://bocha.ai/){:target="_blank"} | 国内AI搜索平台，支持多模型切换 |
 | [Exa](https://exa.ai/){:target="_blank"} | 原名Metaphor，基于语义的AI搜索引擎，通过Transformer模型理解含义而非关键词匹配 |
 | [Tavily](https://tavily.com/){:target="_blank"} | 面向AI Agent的搜索API，优化LLM友好的结构化结果返回 |
-| [Kimi](https://kimi.moonshot.cn/){:target="_blank"} | 月之暗面推出的AI助手，支持长文本和联网搜索 |
+| [Kimi](https://www.kimi.com/){:target="_blank"} | 月之暗面推出的AI助手，支持长文本和联网搜索 |
 
 ---
 
@@ -629,13 +592,13 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 |------|------|
 | [Ollama](https://ollama.com/){:target="_blank"} | 本地运行大模型的事实标准 CLI，支持 Llama/Mistral 等，Docker 式模型管理 |
 | [LocalAI](https://localai.io/){:target="_blank"} | 自托管 AI API 服务，OpenAI API 兼容，支持本地多种模型 |
-| [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui){:target="_blank"} | 开源 Web UI 工具，运行各种大语言模型，开发者向（"Oobabooga"） |
+| [Text Generation WebUI](https://github.com/oobabooga/textgen){:target="_blank"} | 开源 Web UI 工具，运行各种大语言模型，开发者向（现更名 textgen） |
 
 ## 推理框架与库
 
 | 工具 | 简介 |
 |------|------|
-| [llama.cpp](https://github.com/ggerganov/llama.cpp){:target="_blank"} | 高效的 C/C++ 实现 LLM 推理，支持量化加速，LM Studio/Jan/GPT4All 底层 |
+| [llama.cpp](https://github.com/ggml-org/llama.cpp){:target="_blank"} | 高效的 C/C++ 实现 LLM 推理，支持量化加速，LM Studio/Jan/GPT4All 底层 |
 | [vLLM](https://github.com/vllm-project/vllm){:target="_blank"} | 高性能 LLM 推理引擎，支持 PagedAttention 与连续批处理，生产部署首选 |
 | [SGLang](https://github.com/sgl-project/sglang){:target="_blank"} | 新一代结构化生成推理框架，RadixAttention 加速，并发场景表现突出 |
 | [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM){:target="_blank"} | NVIDIA 官方 LLM 推理优化库，深度集成 Tensor Core，A100/H100 性能最佳 |
@@ -660,8 +623,8 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 |------|------|
 | [Midjourney](https://www.midjourney.com/){:target="_blank"} | 专注于艺术风格的AI图像生成工具，生成质量极高 |
 | [Stable Diffusion](https://stability.ai/){:target="_blank"} | 开源的AI图像生成模型，支持本地部署和社区模型 |
-| [DALL-E](https://openai.com/index/dall-e-3/){:target="_blank"} | OpenAI开发的AI图像生成模型，支持自然语言理解和图像编辑 |
-| [Flux](https://blackforestlabs.ai/){:target="_blank"} | Black Forest Labs开发，由Stable Diffusion原团队打造，支持pro/dev/schnell系列 |
+| [OpenAI 生图](https://chatgpt.com/){:target="_blank"} | GPT系列原生图像生成，支持自然语言理解和图像编辑（DALL-E已由其取代） |
+| [Flux](https://bfl.ai/){:target="_blank"} | Black Forest Labs开发，由Stable Diffusion原团队打造，支持pro/dev/schnell系列 |
 | [Leonardo.ai](https://leonardo.ai/){:target="_blank"} | 游戏资产和概念艺术AI生成平台，支持实时预览和编辑 |
 | [Ideogram](https://ideogram.ai/){:target="_blank"} | 文字渲染能力突出的AI图像生成工具，海报和Logo设计首选 |
 
@@ -707,7 +670,7 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 |------|------|
 | [bolt.new](https://bolt.new/){:target="_blank"} | StackBlitz推出，自然语言描述即可生成全栈Web应用，支持在线预览和部署 |
 | [Lovable](https://lovable.dev/){:target="_blank"} | "Vibe coding"理念的AI应用构建器，从英文描述生成完整React应用，支持Supabase后端 |
-| [v0](https://v0.dev/){:target="_blank"} | Vercel推出的AI UI生成工具，专注React/Tailwind组件，生成的代码可直接用于生产 |
+| [v0](https://v0.app/){:target="_blank"} | Vercel推出的AI UI生成工具，专注React/Tailwind组件，生成的代码可直接用于生产 |
 | [Replit Agent](https://replit.com/ai){:target="_blank"} | Replit推出的AI开发Agent，从描述到部署全流程自动化 |
 | [Create](https://www.create.xyz/){:target="_blank"} | 用自然语言描述即可生成Web应用，支持React和多种API集成 |
 
@@ -727,7 +690,7 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 
 | 工具 | 简介 |
 |------|------|
-| [ComfyUI](https://github.com/comfyanonymous/ComfyUI){:target="_blank"} | 节点式AI图像/视频/3D生成工作流工具，82K+ Stars，目前最活跃的生成式AI开源项目之一 |
+| [ComfyUI](https://github.com/Comfy-Org/ComfyUI){:target="_blank"} | 节点式AI图像/视频/3D生成工作流工具，目前最活跃的生成式AI开源项目之一 |
 | [ComfyUI Desktop](https://comfy.org/){:target="_blank"} | ComfyUI官方桌面应用，安装和管理更便捷 |
 | [Efficiency Nodes](https://github.com/jags111/efficiency-nodes-comfyui){:target="_blank"} | 热门节点插件，将工作流节点数减少70%+，支持平铺超分生成4K+图像 |
 | [WAS Node Suite](https://github.com/WASasquatch/was-node-suite-comfyui){:target="_blank"} | 210+节点扩展包，覆盖图像处理、文本处理、SAM分割、深度估计等 |
@@ -738,7 +701,7 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 
 | 工具 | 简介 |
 |------|------|
-| [Tripo 3.1](https://www.tripo3d.ai/){:target="_blank"} | 图片/文字转3D模型，生产级质量，已集成入ComfyUI |
+| [Tripo](https://www.tripo3d.ai/){:target="_blank"} | 图片/文字转3D模型，生产级质量，已集成入ComfyUI |
 | [Meshy](https://www.meshy.ai/){:target="_blank"} | AI 3D资产生成，支持文字转3D、图片转3D、纹理生成 |
 | [Luma AI](https://lumalabs.ai/){:target="_blank"} | AI 3D扫描与生成，支持手机拍摄转3D模型（NeRF/高斯泼溅技术） |
 
@@ -749,7 +712,7 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | 工具 | 简介 |
 |------|------|
 | [Julius AI](https://julius.ai/){:target="_blank"} | AI数据分析师，上传CSV/Excel即可自动分析并生成可视化图表 |
-| [ChatGPT Code Interpreter](https://chatgpt.com/){:target="_blank"} | ChatGPT内置的数据分析工具，支持Python代码执行和文件上传 |
+| [ChatGPT 数据分析](https://chatgpt.com/){:target="_blank"} | ChatGPT内置的数据分析工具（原Code Interpreter），支持Python代码执行和文件上传 |
 | [Documind](https://documind.chat/){:target="_blank"} | PDF/文档AI分析工具，支持批量处理和结构化提取 |
 
 ---
@@ -761,12 +724,12 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | [DeepSeek](https://github.com/deepseek-ai){:target="_blank"} | 深度求索开源模型系列，DeepSeek-V3/R1等，性能比肩GPT-4 |
 | [Qwen](https://github.com/QwenLM/Qwen){:target="_blank"} | 阿里通义千问开源模型系列，Qwen3/Max，多尺寸覆盖 |
 | [Llama](https://github.com/meta-llama){:target="_blank"} | Meta开源大模型系列，Llama 4支持多模态 |
-| [Mistral](https://mistral.ai/){:target="_blank"} | 法国AI公司，开源Mistral Large等高性能模型 |
+| [Mistral](https://mistral.ai/){:target="_blank"} | 法国AI公司，开源与商用并重，开源系列适合本地部署 |
 | [盘古](https://github.com/huawei-noah){:target="_blank"} | 华为盘古大模型系列，覆盖NLP/CV/多模态/科学计算 |
 | [Gemma](https://ai.google.dev/gemma){:target="_blank"} | Google开源轻量模型系列，适合端侧和本地部署 |
 | [Phi](https://azure.microsoft.com/en-us/products/phi){:target="_blank"} | 微软开源小参数模型，擅长推理和编程任务 |
-| [Kimi K2](https://platform.moonshot.cn/){:target="_blank"} | 月之暗面开源模型，长上下文（128K+）与 Agent 能力突出 |
-| [GLM 系列](https://github.com/THUDM/GLM-4){:target="_blank"} | 智谱 AI 开源 ChatGLM/GLM-4，多模态、工具调用支持完善 |
+| [Kimi K2](https://platform.kimi.com/){:target="_blank"} | 月之暗面开源模型，长上下文与 Agent 能力突出 |
+| [GLM 系列](https://github.com/zai-org/GLM-4){:target="_blank"} | 智谱 AI 开源 ChatGLM/GLM 系列，多模态、工具调用支持完善 |
 | [MiniCPM](https://github.com/OpenBMB/MiniCPM){:target="_blank"} | 面壁智能端侧大模型，参数小、推理快，适合移动设备 |
 | [Yi 系列](https://github.com/01-ai/Yi){:target="_blank"} | 零一万物（李开复）开源模型，中英双语表现优秀 |
 
@@ -801,10 +764,8 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | 工具 | 简介 |
 |------|------|
 | [Cursor](https://cursor.com/){:target="_blank"} | AI代码编辑器，基于VS Code打造，支持代码补全和智能问答 |
-| [Windsurf](https://windsurf.com/){:target="_blank"} | Codeium推出的AI代码编辑器，支持多文件分析和智能重构 |
-| [Codeium](https://codeium.com/){:target="_blank"} | 免费AI代码补全工具，支持多种主流编程语言 |
 | [Copilot](https://github.com/features/copilot){:target="_blank"} | GitHub推出的AI编程助手，深度集成于VS Code |
-| [Devin](https://devin.ai/){:target="_blank"} | Cognition推出的AI软件工程师，可独立完成复杂编程任务 |
+| [Devin / Devin Desktop](https://devin.ai/){:target="_blank"} | Cognition出品的AI软件工程师及同源IDE（原Windsurf，2026年更名Devin Desktop），可独立完成复杂编程任务 |
 | [Augment Code](https://www.augmentcode.com/){:target="_blank"} | 面向大型代码库的AI编程助手，深度理解项目上下文 |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli){:target="_blank"} | Google推出的开源终端AI编程工具，基于Gemini模型 |
 | [通义灵码](https://tongyi.aliyun.com/lingma){:target="_blank"} | 阿里出品的 AI 编程助手，深度支持 Java/Go/Python，IDE 集成完善 |
@@ -821,7 +782,7 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 
 | 工具 | 简介 |
 |------|------|
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview){:target="_blank"} | Anthropic终端Agent，SWE-bench 80.9%，支持MCP/Hooks/Skills |
+| [Claude Code](https://code.claude.com/docs/en/overview){:target="_blank"} | Anthropic终端Agent，编程能力第一梯队，支持MCP/Hooks/Skills |
 | [Codex CLI](https://github.com/openai/codex){:target="_blank"} | OpenAI开源终端Agent（TypeScript/Rust），支持沙箱执行 |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli){:target="_blank"} | Google开源终端Agent，基于Gemini模型，免费额度较多 |
 | [Aider](https://github.com/Aider-AI/aider){:target="_blank"} | 开源终端AI编程助手，支持Git集成和多模型切换 |
@@ -835,7 +796,7 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 
 | 场景 | 推荐工具 | 备注 |
 |------|----------|------|
-| 日常编程（IDE 内） | Cursor / Windsurf / 通义灵码 | IDE 集成度高，国内访问通义灵码稳定 |
+| 日常编程（IDE 内） | Cursor / Devin Desktop / 通义灵码 | IDE 集成度高，国内访问通义灵码稳定 |
 | 终端 Agent 编程 | Claude Code / Codex CLI | Claude Code 综合能力强；Codex CLI 沙箱执行更安全 |
 | 国产模型 API 调用 | DeepSeek / 智谱 / 硅基流动 | 性价比高，硅基流动聚合多模型 |
 | 本地离线运行 | Ollama + Cherry Studio | 隐私优先，无网络环境友好 |
@@ -843,6 +804,6 @@ OpenClaw插件架构分为四类：Channel / Memory / Tool / Provider：
 | AI 出海/建站 | bolt.new / v0 / Lovable | 全栈快速生成 |
 | 多平台消息助手 | OpenClaw / hermes | 自托管、20+ 渠道集成 |
 
-> **AI 工具更迭极快，本文档每季度回顾一次。**如发现链接失效、项目停止维护或更优替代品，及时更新。
+
 
 
